@@ -1,0 +1,134 @@
+@charset "UTF-8";
+
+#content > form > input[name="search"] {
+    display: block;
+    width: 70%;
+    height: 50px;
+    margin: 30px auto;
+    border: none;
+    background-color: #e6e6e6;
+    border-radius: 5px;
+    padding-left: 60px;
+    box-sizing: border-box;
+    font-size: 16px;
+
+    background-image: url("../icons/magnifying-glass-solid.svg");
+    background-repeat: no-repeat;
+    background-size: 25px;
+    background-position: 20px center;
+
+    position: relative;
+}
+
+#content > form {
+    position: relative;
+}
+
+/* 검색창 드롭다운 */
+#search_dropdown {
+    display: none;
+
+    background-color: white;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    position: absolute;
+    width: 70%;
+    top: 100%;
+    left:15%;
+    z-index: 1;
+}
+
+#search_dropdown > p {
+    margin: 30px 0 20px 0;
+    padding: 0 50px;
+}
+
+#search_dropdown > p > span {
+    font-weight: 500;
+}
+
+#search_dropdown > ul {
+    margin-bottom: 20px;
+}
+
+#search_dropdown > ul > li > a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 50px;
+    cursor: pointer;
+
+    text-decoration: none;
+    color: black;
+}
+
+#search_dropdown > ul > li > a:hover {
+    background-color: #f1f1f1;
+}
+
+#search_dropdown > ul > li > a > div:first-child {
+    display: flex;
+    flex-direction: column;
+}
+
+#search_dropdown > ul > li > a > div > span:last-child {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #666;
+}
+
+#search_dropdown > ul > li > a > div:last-child > img {
+    width: 15px;
+    height: 15px;
+}
+
+/* 검색 결과 */
+
+#search_result {
+    display: flex;
+    margin-bottom: 25px;
+    align-items: center;
+}
+
+#search_result > p {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#search_result > div {
+    margin-left: auto;
+    font-size: 14px;
+    color: #666;
+}
+
+#search_result > div > span:first-child {
+    margin-right: 20px;
+}
+
+/* 검색창 삭제 버튼 */
+#search_delete {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 17%;
+
+    border: none;
+    background-image: url("../icons/xmark-solid.svg");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: center;
+    background-color: transparent;
+    cursor: pointer;
+    opacity: .2;
+}
+
+#search_delete > span {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}

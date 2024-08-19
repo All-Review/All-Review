@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+/* 1500px 이하 화면 크기일 때 */
+/* 1500px 이하 화면 크기일 때 */
+@media screen and (max-width: 1500px) {
+    #popular {
+        display: none;
+    }
+
+    #content {
+        width: 80%;
+        margin: 0 auto;
+        padding-left: 15%;
+    }
+}
+
+/* 1100px 이하 화면 크기일 때 */
+@media screen and (max-width: 1100px) {
+    #popular {
+        display: none;
+    }
+
+    #content {
+        width: 90%;
+        margin: 0 auto;
+        padding-left: 10%;
+    }
+
+    #sidebar {
+        width: 10%;
+        padding: 0;
+    }
+    
+    #sidebar > ul > li > a > span {
+    position: absolute;
+    display: block;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+}

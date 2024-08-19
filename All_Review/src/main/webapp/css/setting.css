@@ -1,0 +1,166 @@
+@charset "UTF-8";
+
+#setting_container {
+    position: fixed;
+
+    width: 100%;
+    height: 100%;
+
+    top: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    background-color: rgba(0, 0, 0, 0.7);
+
+    display: none;
+}
+
+#setting_container.on {
+    display: flex;
+}
+
+#settingBox {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    margin: 200px auto 30px;
+    padding: 0 50px;
+    width: 500px;
+    border-radius: 4px;
+    background-color: white;
+
+    position: relative;
+}
+
+#settingBox > h1 {
+    display: block;
+
+    width: 50px;
+    height: 50px;
+    margin: 50px auto;
+    transform: translateX(-50px);
+
+    background: url('icons/icon_setting.png') no-repeat;
+    background-size: contain;
+}
+
+#settingBox > h1 > p {
+    margin-left: 60px;
+    width: 100px;
+
+    line-height: 50px;
+    
+    font-weight: 400;
+    font-size: 30px;
+}
+
+#settingBox > h1 > span {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+#switchBox > label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#switchBox > label > input {
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+#alertSwitch {
+    appearance: none;
+    position: relative;
+    border: solid 2px gray;
+    border-radius: 10px;
+
+    width: 40px;
+    height: 20px;
+}
+
+#alertSwitch::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 1px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: gray;
+    transition: left 250ms linear;
+}
+
+#alertSwitch:checked {
+    background-color: #76c100;
+    border-color: #76c100;
+}
+
+#alertSwitch:checked::before {
+    background-color: white;
+    left: 21px;
+}
+
+#alertSwitch:enabled:hover {
+    box-shadow: 0 0 4px 2px #76c100;
+}
+
+#switchContainer {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#switchBox {
+    border: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#setBox {
+    margin-bottom: 30px;
+}
+
+.close {
+	background-image: url('https://i.imgur.com/BRdH9in.png');
+	
+	background-repeat: no-repeat;
+	background-size: 40px 40px;
+	
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	
+	width: 40px;
+	height: 40px;
+	
+	border: none;
+	outline: none;
+	padding: 0;
+	
+	cursor: pointer;
+	
+	background-color: transparent;
+}
+
+.close > span {
+	display: block;
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+}

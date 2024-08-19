@@ -1,0 +1,147 @@
+@charset "UTF-8";
+
+#join_container {
+    position: fixed;
+
+    width: 100%;
+    height: 100%;
+
+    top: 0;
+    left: 0;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+#join_mainBox {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    margin: 200px auto 30px;
+    padding: 0 50px;
+    width: 500px;
+    border: solid 2px #76c100;
+    border-radius: 4px;
+    background-color: white;
+
+    position: relative;
+}
+
+#joinBox {
+    position: relative;
+
+    width: 100%;
+}
+
+#join_mainBox > a {
+    display: block;
+
+    width: 100px;
+    height: 120px;
+    margin: 50px auto;
+
+    background: url("../images/all_review_logo_ver3.png") no-repeat;
+    background-size: contain;
+}
+
+#join_mainBox > a > span {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.account {
+    box-sizing: border-box;
+    display: block;
+
+    width: 360px;
+    padding: 10px 40px;
+    margin: 10px 20px;
+    border-radius: 4px;
+}
+
+.account:not(:last-child) {
+    background-repeat: no-repeat;
+    background-position: 2% 50%;
+    border: solid 1px grey;
+}
+
+.account:last-child {
+    margin-top: 60px;
+}
+
+.account:focus {
+    outline: none;
+}
+
+#id {
+    background-image: url('https://i.imgur.com/aHTKfSr.png');
+}
+
+#password {
+    background-image: url('https://i.imgur.com/wC7Z1tm.png');
+}
+
+#email {
+    background-image: url('https://i.imgur.com/aHTKfSr.png');
+}
+
+
+#userJoin {
+    background-color: #4781cc;
+    border: none;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+
+    margin-bottom: 50px;
+
+    cursor: pointer;
+}
+
+#link_account > ul {
+    display: flex;
+}
+
+#link_account > ul > li {
+    display: flex;
+
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+
+    width: 40px;
+    height: 40px;
+
+    margin: 10px 20px;
+    margin-bottom: 50px;
+
+    cursor: pointer;
+}
+
+#link_account > ul > li:first-child {
+    background-image: url("../icons/icon_google.png");
+}
+
+#link_account > ul > li:nth-child(2) {
+    background-image: url("../icons/icon_naver.png");
+}
+
+#link_account > ul > li:nth-child(3) {
+    background-image: url("../icons/icon_kakao.png");
+}
+
+#link_account > ul > li > a > span {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}

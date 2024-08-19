@@ -1,0 +1,172 @@
+@charset "UTF-8";
+
+#content > a {
+    text-decoration: none;
+}
+
+#content > a > h3 {
+    font-size: 20px;
+    padding: 25px 18px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color: black;
+    background: url("../icons/icon_left.png") no-repeat;
+    background-size: 10px;
+    background-position: left center;
+
+    position: relative;
+}
+
+#content > a > h3::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    background-color: #dadada;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+}
+
+/* 컨텐츠 영역 */
+#content > .content_container {
+    flex-direction: column;
+}
+
+#content > .content_container > div {
+    width: 100%;
+}
+
+/* 프로필 영역 */
+#content > .content_container > div > .profile_box > div {
+    margin-left: 6px;
+}
+
+#content > .content_container > div > .profile_box > div > span {
+    font-size: 15px;
+    color: black;
+}
+
+#content > .content_container > div > .profile_box > div > span:first-child {
+    font-size: 16px;
+}
+
+#content > .content_container > div > .profile_box > div > span:last-child {
+    margin-left: 6px;
+}
+
+/* 게시물 글 내용 영역 */
+#content > .content_container > div > p::after {
+    display: none;
+}
+
+#content > .content_container > div > p {
+    line-height: 23px;
+    margin-bottom: 30px;
+}
+
+/* 이미지 영역 */
+#content > .content_container > div > img {
+    /* width: 90%; */
+    width: auto;
+    margin: auto auto 30px auto;
+    display: block;
+}
+
+/* 태그, 시간 영역 */
+#content > .content_container > div > #tag_container {
+    color: gray;
+    display: flex;
+    font-size: 14px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+#content > .content_container > div > #tag_container::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    background-color: #dadada;
+    left: 0;
+    right: 0;
+    bottom: -20px;
+}
+
+#content > .content_container > div > #tag_container > span {
+    margin-left: auto;
+}
+
+#content > .content_container > div > .like_container {
+    margin-bottom: 40px;
+}
+
+/* 댓글 쓰기 영역 */
+#content > .content_container > div > form[id="comment_form"] {
+    display: flex;
+    margin-bottom: 25px;
+}
+
+#content > .content_container > div > form[id="comment_form"] > img {
+    width: 60px;
+    margin-right: 5px;
+    object-fit: contain;
+}
+
+#content > .content_container > div > form[id="comment_form"] > input {
+    width: 92%;
+    height: 60px;
+    margin-right: 5px;
+    box-sizing: border-box;
+}
+
+#content > .content_container > div > form[id="comment_form"] > button {
+    width: 8%;
+    height: 60px;
+    background-color: transparent;
+    border: none;
+    font-size: 16.5px;
+    color: #76c100;
+    cursor: pointer;
+}
+
+#content > .content_container > div > form[id="comment_form"] > button:hover {
+    color: #3d9929;
+    font-weight: bold;
+}
+
+/* 댓글 영역 */
+#content > .content_container > div > .comment_box > .profile_box > div {
+    flex-direction: column;
+    align-items: first baseline;
+    margin: 0 0 18px 12px;
+}
+
+.content_container > div > .comment_box > div::after {
+    bottom: 0px;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div:first-child {
+    margin-bottom: 10px;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div:first-child > span:nth-child(1) {
+    font-weight: 600;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div:first-child > span:nth-child(2),
+#content > .content_container > div > .comment_box > .profile_box > div > div:first-child > span:nth-child(3)
+{
+    font-size: 14px;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div:first-child > span:nth-child(3) {
+    margin-left: 40px;
+    color: gray;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > span {
+    margin: 0;
+    font-size: 15px;
+    color: black;
+    line-height: 19px;
+    margin-bottom: 10px;
+}

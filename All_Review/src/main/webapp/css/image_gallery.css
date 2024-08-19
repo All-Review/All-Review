@@ -1,0 +1,92 @@
+@charset "UTF-8";
+
+#content > .image_box {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#content > .image_box > div {
+    width: calc(100% / 3 - 6px);
+    position: relative;
+}
+
+#content > .image_box > div > img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+/* 마우스오버 시 별점, 좋아요, 댓글 수 표시 */
+#content > .image_box > div > a {
+    display: none;
+    text-decoration: none;
+}
+
+#content > .image_box > div > .image_overlay > div > div > span:first-child {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+#content > .image_box > div > .image_overlay {
+    /* display: none; */
+    display: flex;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+#content > .image_box > div > .image_overlay > div {
+    display: flex;
+}
+
+#content > .image_box > div > .image_overlay > div > div {
+    color: white;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#content > .image_box > div > .image_overlay > div > div:first-child {
+    margin-right: 15px;
+}
+
+#content > .image_box > div > .image_overlay > div > img {
+    margin-left: 2px;
+    margin-bottom: 15px;
+}
+
+#content > .image_box > div > .image_overlay > div > div:nth-child(1) {
+    background-image: url("../icons/icon_heart_white.png");
+}
+
+#content > .image_box > div > .image_overlay > div > div:nth-child(2) {
+    background-image: url("../icons/icon_comment_white.png");
+}
+
+#content > .image_box > div > .image_overlay > div > div > span {
+    margin-left: 23px;
+}
+
+.gallery_overlay {
+    cursor: pointer;
+}
+
+/* 검색 결과 없을 시 */
+#content > .image_box > p {
+    margin-top: 20px;
+}
