@@ -8,6 +8,7 @@
     pageEncoding="UTF-8"%>
     
 <% 
+// test
 	PostDAO dao = new PostDAO();
 	List<Post> postList = dao.readAllPosts();
 
