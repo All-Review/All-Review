@@ -9,6 +9,7 @@
     
 <% 
 // test
+// test2
 	PostDAO dao = new PostDAO();
 	List<Post> postList = dao.readAllPosts();
 
