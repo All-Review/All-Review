@@ -59,4 +59,50 @@ public class PostCommentDAO {
 		
 		return result;
 	}
+	
+	// 댓글 하나 찾기
+	public PostComment readOneComment (int commentNum) {
+    	String sql = "select * from comments where comment_num=?";
+    	PostComment comment = new PostComment();
+    	try {
+    		Connection conn = DatabaseUtil.getConnection();
+    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		pstmt.setInt(1, commentNum);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if(rs.next()) {
+                comment = new PostComment(
+                		rs.getInt(1),
+                		rs.getInt(2),
+                		rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getDouble(7),
+                        rs.getString(8)
+                );
+            }
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return comment;
+	}
+	
+	// 댓글 수정
+	public int updateComment (int commentNum, String commentContent, double commentRate) {
+		String sql = "update comments set comment_content=?, comment_rate=? where comment_num=?";
+		try {
+    		Connection conn = DatabaseUtil.getConnection();
+    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		pstmt.setString(1, commentContent);
+    		pstmt.setDouble(2, commentRate);
+    		pstmt.setInt(3, commentNum);
+    		return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 }
