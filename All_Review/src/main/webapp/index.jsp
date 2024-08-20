@@ -30,6 +30,7 @@
 			String userID = (String) session.getAttribute("userID");	
 		%>
     <!-- 왼쪽 네비게이션 바 -->
+    <!-- test temp branch -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
