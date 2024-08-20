@@ -170,3 +170,47 @@
     line-height: 19px;
     margin-bottom: 10px;
 }
+
+/* 댓글 ... 메뉴 */
+#content > .content_container > div > .comment_box > .profile_box > div > div > .comment_menu {
+    position: absolute;
+    background: url("../icons/ellipsis-solid.svg") no-repeat center;
+    right: 0;
+    top: 0;
+    width: 30px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div > .comment_menu > span {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div > .comment_menu > ul {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 35px;
+    white-space: nowrap;
+    border: 1px solid #dadada;
+    border-radius: 5px;
+    color: #ff335a;
+    padding: 5px 0;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div > .comment_menu > ul > li {
+    padding: 10px 20px;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div > .comment_menu > ul > li:nth-child(2) {
+    color: black;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div > .comment_menu > ul > li:hover {
+    font-weight: bold;
+}

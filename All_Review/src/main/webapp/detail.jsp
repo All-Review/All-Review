@@ -3,6 +3,7 @@
 <%@page import="Search.*"%>
 <%@page import="util.*"%>
 <%@page import="user.*" %>
+<%@page import="comment.*" %>
 <%@page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -11,8 +12,13 @@
 	int postNum = Integer.parseInt(request.getParameter("postNum"));
 	Post post = dao.readOnePost(postNum);
 	
+	// 실시간 검색어
 	SearchHistoryDAO searchDao = new SearchHistoryDAO();
 	List<SearchHistoryAll> searchListAll = searchDao.readSearchListsAllDesc();
+	
+	// 댓글
+	PostCommentDAO commentDao = new PostCommentDAO();
+	List<PostComment> commentList = commentDao.readAllPostComments(postNum);
 %>
 <!DOCTYPE html>
 <html>
@@ -129,258 +135,43 @@
 
                 <!-- 댓글영역 -->
                 <div class="comment_box">
+                <% for(PostComment comment : commentList) { %>
                     <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
+                        <img src="<%= comment.getUserImgUrl() %>">
                         <div>
 
                             <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
+                                <span><%= comment.getNickname() %></span>
+                                <span><%= comment.getUserId() %></span>
+                                <span><%= comment.getCommentCreateAt() %></span>
+                                <div class="comment_menu">
+                                    <span>더보기</span>
+                                    <ul>
+                                        <li onClick="location.href='deleteComment.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentNum() %>'">삭제하기</li>
+                                        <li onClick="location.href='updateCommentForm.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentNum() %>'">수정하기</li>
+                                    </ul>
+                                </div>
                             </div>
     
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
+                            <span><%= comment.getCommentContent() %></span>
 
                             <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
+                    			<% for (int i = 0; i < (int)comment.getCommentRate(); i++) { %>
+                    			    <img src="icons/star_colored.png">
+                    			<% }
+                    				if (comment.getCommentRate() % 1 != 0.0) { %>
+                    				<img src="icons/star_half.png">
+                    			<% } else { %>
+                    				<img src="icons/star_gray.png">
+                    			<% } 
+                    				for (int i = 0; i < 4 - (int)comment.getCommentRate(); i++) { %>
+                    			    <img src="icons/star_gray.png">
+                    			<% } %>
                             </div>
 
                         </div>
                     </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 한 줄일 때는 이런 느낌 한 줄일 때는 이런 느낌 한 줄일 때는 이런 느낌</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움 다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩 다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-
-                            <div>
-                                <span>농담곰</span>
-                                <span>nongdams_review</span>
-                                <span>3시간</span>
-                            </div>
-    
-                            <span>도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다. 도움이 됩니다.</span>
-
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-
-                        </div>
-                    </div>
+				<% } %>
                 </div>
                 <!-- /댓글 -->
             </div>
