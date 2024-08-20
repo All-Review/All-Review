@@ -1,5 +1,4 @@
-@charset "UTF-8";
-
+/* '게시물' 버튼 영역 */
 #content > a {
     text-decoration: none;
 }
@@ -102,7 +101,10 @@
 /* 댓글 쓰기 영역 */
 #content > .content_container > div > form[id="comment_form"] {
     display: flex;
+    align-items: center;
     margin-bottom: 25px;
+    /* 경고창 위치기준 */
+    position: relative;
 }
 
 #content > .content_container > div > form[id="comment_form"] > img {
@@ -112,7 +114,7 @@
 }
 
 #content > .content_container > div > form[id="comment_form"] > input {
-    width: 92%;
+    width: 72%;
     height: 60px;
     margin-right: 5px;
     box-sizing: border-box;
@@ -121,6 +123,7 @@
 #content > .content_container > div > form[id="comment_form"] > button {
     width: 8%;
     height: 60px;
+    margin-left: auto;
     background-color: transparent;
     border: none;
     font-size: 16.5px;
@@ -132,6 +135,73 @@
     color: #3d9929;
     font-weight: bold;
 }
+
+/* 댓글창 별점 선택 부분 */
+.starpoint_wrap {
+    display:inline-block;
+}
+
+.star_radio {
+    display: flex;
+    margin-left: auto;
+    width: 98px;
+    height: 18px;
+    position:relative;
+    background:url("../icons/star_five.png") 0 0 ;
+    font-size:0;
+}
+
+.star_radio > .star_rate_bg {
+    display:block;
+    position:absolute;
+    top:0;
+    left:0;
+    height:18px;
+    background:url("../icons/star_five.png") 0 -20px no-repeat;
+    pointer-events:none;
+}
+
+.star_radio > .label_star {
+    display:inline-block;
+    width:10px;
+    height:18px;
+    box-sizing:border-box;
+    cursor: pointer;
+}
+
+.star_radio > input[name="star_rate"] {
+    opacity:0;width:0;height:0;position:absolute;
+}
+
+.star_radio > input[name="star_rate"]:nth-of-type(1):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(1):checked ~ .star_rate_bg {width:10%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(2):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(2):checked ~ .star_rate_bg {width:20%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(3):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(3):checked ~ .star_rate_bg {width:30%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(4):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(4):checked ~ .star_rate_bg {width:40%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(5):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(5):checked ~ .star_rate_bg {width:50%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(6):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(6):checked ~ .star_rate_bg {width:60%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(7):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(7):checked ~ .star_rate_bg {width:70%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(8):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(8):checked ~ .star_rate_bg {width:80%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(9):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(9):checked ~ .star_rate_bg {width:90%;}
+
+.star_radio > input[name="star_rate"]:nth-of-type(10):hover ~ .star_rate_bg,
+.star_radio > input[name="star_rate"]:nth-of-type(10):checked ~ .star_rate_bg {width:100%;}
 
 /* 댓글 영역 */
 #content > .content_container > div > .comment_box > .profile_box > div {
@@ -213,4 +283,21 @@
 
 #content > .content_container > div > .comment_box > .profile_box > div > div > .comment_menu > ul > li:hover {
     font-weight: bold;
+}
+
+/* 스크롤 위로 올리기 버튼 */
+#top_button {
+    position: fixed;
+    right: 385px;
+    bottom: 30px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #76c100;
+    border: none;
+    background-color: transparent;
+}
+
+#top_button:hover {
+    color: #3d9929;
 }
