@@ -28,16 +28,6 @@ $(function () {
     $top_button.on('click', function () {
         $html.animate({scrollTop : 0}, 300);
     });
-    console.log ($(window).scrollHeight);
-
-    // 댓글 입력 시 스크롤 맨아래로
-    $comment_form.on('submit', function () {
-        window.setTimeout(function () {
-            $html.animate({scrollTop : 9999}, 300);
-            console.log('click');
-        }, 100);
-
-    });
 
     // 댓글 더보기(...)버튼 클릭
     const $comment_menu_list = $('.comment_menu > ul');

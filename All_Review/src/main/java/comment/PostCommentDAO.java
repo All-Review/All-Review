@@ -105,4 +105,19 @@ public class PostCommentDAO {
 		return -1;
 	}
 	
+	// 댓글 삭제
+	public int deleteComment (int postNum, int commentNum) {
+		String sql = "delete from comments where post_num=? and comment_num=?";
+		try {
+    		Connection conn = DatabaseUtil.getConnection();
+    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		pstmt.setInt(1, postNum);
+    		pstmt.setInt(2, commentNum);
+    		return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 }
