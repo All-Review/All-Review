@@ -110,5 +110,25 @@ public class PostDAO {
 		
 		return result;
 	}
+	
+	// 댓글 입력 시 게시물의 댓글개수 업데이트
+	public int updateCommentNum (int postNum, Post post, boolean isDelete) {
+		String sql = "update post set comment_num=? where post_num=?";
+		try {
+    		Connection conn = DatabaseUtil.getConnection();
+    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		// 댓글 삭제면 -1, 댓글 추가면 +1
+    		if (isDelete) {
+        		pstmt.setInt(1, post.getCommentNum() - 1);
+    		} else {
+        		pstmt.setInt(1, post.getCommentNum() + 1);
+    		}
+    		pstmt.setInt(2, postNum);
+    		return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 
 }

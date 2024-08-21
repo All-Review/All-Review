@@ -21,7 +21,7 @@ public class Post {
 		this.likeNum = likeNum;
 	}
 	
-	public Post(int postNum, String content, String postTag, String postUrl, double rate, int commentNum, int likeNum) {
+	public Post(int postNum, String content, String postUrl, String postTag, double rate, int commentNum, int likeNum) {
 		super();
 		this.postNum = postNum;
 		this.content = content;

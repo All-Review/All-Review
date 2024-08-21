@@ -1,0 +1,12 @@
+/* 댓글 내용 없을 시 알람 */
+#comment_alert {
+    display: none;
+    background-color: #ff335a;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+}
