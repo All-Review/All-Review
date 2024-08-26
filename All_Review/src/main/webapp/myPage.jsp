@@ -6,6 +6,11 @@
 <%
 	String userID = (String) session.getAttribute("userID");
 
+	// 로그인 안되어있으면 로그인페이지로
+	if (userID == null) {
+		response.sendRedirect(request.getContextPath() + "/userLogin.jsp");
+	}
+
 	PostDAO dao = new PostDAO();
 	List<Post> postList = dao.readAllPostsByUser(userID);
 
@@ -54,7 +59,7 @@
             <li><a href="search.jsp"><span>검색</span></a></li>
             <li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="#"><span>프로필</span></a></li>
+            <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
         </ul>
         <ul id="sidebarUserIcon">
