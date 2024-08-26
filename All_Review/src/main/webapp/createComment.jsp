@@ -24,7 +24,7 @@
 	
 	// 댓글 작성
 	//System.out.println(now.toString());
-    PostComment comment = new PostComment(postNum, "test_id_test", "테스트용닉네임", "images/15fd24a290e3154d44f486b0720b0692_res.jpeg", commentContent, commentRate, format1.format(date));
+    PostComment comment = new PostComment(postNum, (String) session.getAttribute("userID"), "테스트용닉네임", "images/15fd24a290e3154d44f486b0720b0692_res.jpeg", commentContent, commentRate, format1.format(date));
     PostCommentDAO commentDao = new PostCommentDAO();
     int result = commentDao.createComment(comment);
     
