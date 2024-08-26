@@ -28,11 +28,12 @@ public class PostDAO {
                 p = new Post(
                 		rs.getInt(1),
                 		rs.getString(2),
-                        rs.getString(3),
+                		rs.getString(3),
                         rs.getString(4),
-                        rs.getDouble(5),
-                        rs.getInt(6),
-                        rs.getInt(7)
+                        rs.getString(5),
+                        rs.getDouble(6),
+                        rs.getInt(7),
+                        rs.getInt(8)
                 );
             }
     		
@@ -55,11 +56,43 @@ public class PostDAO {
             while(rs.next()) {
                 Post p = new Post(
                 		rs.getInt(1),
-                		rs.getString(3),
+                		rs.getString(2),
                 		rs.getString(4),
-                        rs.getDouble(5),
-                        rs.getInt(6),
-                        rs.getInt(7)
+                		rs.getString(5),
+                        rs.getDouble(6),
+                        rs.getInt(7),
+                        rs.getInt(8)
+                );
+                result.add(p);
+            }
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	// 특정 유저의 모든 게시물 찾기
+	public List<Post> readAllPostsByUser(String userID) {
+		String sql = "select * from post where userID=?";
+		List<Post> result = new ArrayList<>();
+		
+    	try {
+    		Connection conn = DatabaseUtil.getConnection();
+    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		pstmt.setString(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+                Post p = new Post(
+                		rs.getInt(1),
+                		rs.getString(2),
+                		rs.getString(4),
+                		rs.getString(5),
+                        rs.getDouble(6),
+                        rs.getInt(7),
+                        rs.getInt(8)
                 );
                 result.add(p);
             }
@@ -95,11 +128,12 @@ public class PostDAO {
             while(rs.next()) {
                 Post p = new Post(
                 		rs.getInt(1),
-                		rs.getString(3),
+                		rs.getString(2),
                 		rs.getString(4),
-                        rs.getDouble(5),
-                        rs.getInt(6),
-                        rs.getInt(7)
+                		rs.getString(5),
+                        rs.getDouble(6),
+                        rs.getInt(7),
+                        rs.getInt(8)
                 );
                 result.add(p);
             }

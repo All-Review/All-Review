@@ -2,6 +2,7 @@ package post;
 
 public class Post {
 	private int postNum;
+	private String userID;
 	private String content;
 	private String postUrl;
 	private String postTag;
@@ -11,8 +12,9 @@ public class Post {
 	
 	public Post() {}
 	
-	public Post(int postNum, String postUrl, String postTag, double rate, int commentNum, int likeNum) {
+	public Post(int postNum, String userID, String postUrl, String postTag, double rate, int commentNum, int likeNum) {
 		super();
+		this.userID = userID;
 		this.postNum = postNum;
 		this.postUrl = postUrl;
 		this.postTag = postTag;
@@ -21,9 +23,10 @@ public class Post {
 		this.likeNum = likeNum;
 	}
 	
-	public Post(int postNum, String content, String postUrl, String postTag, double rate, int commentNum, int likeNum) {
+	public Post(int postNum, String userID, String content, String postUrl, String postTag, double rate, int commentNum, int likeNum) {
 		super();
 		this.postNum = postNum;
+		this.userID = userID;
 		this.content = content;
 		this.postUrl = postUrl;
 		this.postTag = postTag;
@@ -35,6 +38,11 @@ public class Post {
 	public int getPostNum () {
 		return postNum;
 	}
+	
+	public String getUserID() {
+		return userID;
+	}
+	
 	public String getContent () {
 		return content;
 	}
