@@ -128,7 +128,11 @@
                 </div>
 
                 <!-- 댓글 쓰기 -->
-                 <form action="./createComment.jsp?postNum=<%= postNum %>" method="post" id="comment_form">
+                <% if (userID == null) { %>
+                	<form action="./userLogin.jsp" id="comment_form">
+                <% } else { %>
+                	<form action="./createComment.jsp?postNum=<%= postNum %>" method="post" id="comment_form">
+                <% } %>
                     <img src="images/KakaoTalk_20240503_135834006.jpg">
                     <input name="comment" type="text" placeholder="댓글 쓰기" autocomplete="off">
                     <div class="star_radio">
@@ -169,6 +173,7 @@
                                 <span><%= comment.getNickname() %></span>
                                 <span><%= comment.getUserId() %></span>
                                 <span><%= comment.getCommentCreateAt() %></span>
+                                <% if(comment.getUserId().equals(userID)) { %>
                                 <div class="comment_menu">
                                     <span>더보기</span>
                                     <ul>
@@ -176,6 +181,7 @@
                                         <li onClick="location.href='updateCommentForm.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentNum() %>'">수정하기</li>
                                     </ul>
                                 </div>
+                                <% } %>
                             </div>
     
                             <span><%= comment.getCommentContent() %></span>
