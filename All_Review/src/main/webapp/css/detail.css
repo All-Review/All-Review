@@ -40,6 +40,10 @@
     margin-left: 6px;
 }
 
+#content > .content_container > div > .profile_box > img {
+	border-radius: 50%;
+}
+
 #content > .content_container > div > .profile_box > div > span {
     font-size: 15px;
     color: black;
@@ -111,6 +115,7 @@
     width: 60px;
     margin-right: 5px;
     object-fit: contain;
+    border-radius: 50%;
 }
 
 #content > .content_container > div > form[id="comment_form"] > input {
@@ -212,6 +217,10 @@
 
 .content_container > div > .comment_box > div::after {
     bottom: 0px;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > img {
+	border-radius: 50%;
 }
 
 #content > .content_container > div > .comment_box > .profile_box > div > div:first-child {
