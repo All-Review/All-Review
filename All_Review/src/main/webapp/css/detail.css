@@ -290,8 +290,10 @@
     bottom: 0px;
 }
 
-#content > .content_container > div > .comment_box > .profile_box > img {
+#content > .content_container > div > .comment_box > .profile_box > a > img {
 	border-radius: 50%;
+	width: 45px;
+    height: 45px;
 }
 
 #content > .content_container > div > .comment_box > .profile_box > div > div:first-child {
@@ -319,6 +321,12 @@
     color: black;
     line-height: 19px;
     margin-bottom: 10px;
+}
+
+#content > .content_container > div > .comment_box > .profile_box > div > div > a > span {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
 }
 
 /* 댓글 ... 메뉴 */
