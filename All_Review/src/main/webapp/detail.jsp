@@ -19,6 +19,8 @@
 	// 댓글
 	PostCommentDAO commentDao = new PostCommentDAO();
 	List<PostComment> commentList = commentDao.readAllPostComments(postNum);
+	
+	List<String> imageList = dao.splitImages(post.getPostUrl());
 %>
 <!DOCTYPE html>
 <html>
@@ -105,7 +107,23 @@
                 <!-- 글 내용 -->
                 <p><%= post.getContent() %></p>
                 
-                <img src="<%= post.getPostUrl() %>">
+                <div id="image_list">
+                    <button><span>left</span></button>
+                    <button><span>right</span></button>
+                    <ul>
+                    <% for (int i = 0; i < imageList.size(); i++) { %>
+                        <li>
+                            <img src="<%= imageList.get(i) %>">
+                        </li>
+                    <% } %>
+                    </ul>
+
+                    <ol>
+                    <% for (int i = 0; i < imageList.size(); i++) { %>
+                    	<li class="on"><span><%= i + 1 %></span></li>
+                    <% } %>
+                    </ol>
+                </div>
                 
                 <div id="tag_container">
                     <div>
