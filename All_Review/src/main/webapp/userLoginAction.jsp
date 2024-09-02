@@ -4,16 +4,16 @@
 <%@ page import="java.io.PrintWriter"%>
 <%
 	request.setCharacterEncoding("UTF-8");
-	String userID = null;
-	String userPassword = null;
+	String user_id = null;
+	String user_password = null;
 	
-	if(request.getParameter("userID") != null) {
-		userID = request.getParameter("userID");
+	if(request.getParameter("user_id") != null) {
+		user_id = request.getParameter("user_id");
 	}
-	if(request.getParameter("userPassword") != null) {
-		userPassword = request.getParameter("userPassword");
+	if(request.getParameter("user_password") != null) {
+		user_password = request.getParameter("user_password");
 	}
-	if(userID == null || userPassword == null) {
+	if(user_id == null || user_password == null) {
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
 		script.println("alert('입력이 안 된 사항이 있습니다.')");
@@ -23,9 +23,9 @@
 		return;
 	}
 	UserDAO userDAO = new UserDAO();
-	int result = userDAO.login(userID, userPassword);
+	int result = userDAO.login(user_id, user_password);
 	if(result == 1) {
-		session.setAttribute("userID", userID);
+		session.setAttribute("user_id", user_id);
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
 		script.println("location.href = 'index.jsp'");

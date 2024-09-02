@@ -20,8 +20,8 @@
                 <a href="index.jsp"><span>Log in</span></a>
 
                 <form method="post" action="./userLoginAction.jsp" id="loginBox">
-                    <input type="text" name="userID" id="id" class="account" placeholder="아이디">
-                    <input type="password" name="userPassword" id="password" class="account" placeholder="비밀번호">
+                    <input type="text" name="user_id" id="id" class="account" placeholder="아이디">
+                    <input type="password" name="user_password" id="password" class="account" placeholder="비밀번호">
                     <label><input type="checkbox" id="checkbox" class="account"><span>로그인 정보 저장</span></label>
                     <button type="submit" id="LogIn" class="account">로그인</button>
                 </form>
