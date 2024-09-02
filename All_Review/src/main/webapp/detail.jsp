@@ -60,10 +60,17 @@
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
-            <li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+        <% if (userID == null) { %>
+            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
+            <li><a href="userLogin.jsp"><span>프로필</span></a></li>
+            <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
+         <% } else { %>
+        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="#"><span>프로필</span></a></li>
+            <li><a href="myProfile.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
+         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
@@ -148,10 +155,12 @@
                 <!-- 댓글 쓰기 -->
                 <% if (userID == null) { %>
                 	<form action="./userLogin.jsp" id="comment_form">
+                	<img src="images/user_default_profile.png">
                 <% } else { %>
                 	<form action="./createComment.jsp?postNum=<%= postNum %>" method="post" id="comment_form">
+                	<img src="images/KakaoTalk_20240503_135834006.jpg">
                 <% } %>
-                    <img src="images/KakaoTalk_20240503_135834006.jpg">
+                    
                     <input name="comment" type="text" placeholder="댓글 쓰기" autocomplete="off">
                     <div class="star_radio">
                         <label for="star_rate_1" class="label_star" title="0.5"></label>
