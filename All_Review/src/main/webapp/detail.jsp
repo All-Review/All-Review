@@ -19,6 +19,8 @@
 	// 댓글
 	PostCommentDAO commentDao = new PostCommentDAO();
 	List<PostComment> commentList = commentDao.readAllPostComments(postNum);
+	
+	List<String> imageList = dao.splitImages(post.getPostUrl());
 %>
 <!DOCTYPE html>
 <html>
@@ -58,10 +60,17 @@
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
-            <li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+        <% if (userID == null) { %>
+            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
+            <li><a href="userLogin.jsp"><span>프로필</span></a></li>
+            <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
+         <% } else { %>
+        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="#"><span>프로필</span></a></li>
+            <li><a href="myProfile.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
+         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
@@ -105,7 +114,23 @@
                 <!-- 글 내용 -->
                 <p><%= post.getContent() %></p>
                 
-                <img src="<%= post.getPostUrl() %>">
+                <div id="image_list">
+                    <button><span>left</span></button>
+                    <button><span>right</span></button>
+                    <ul>
+                    <% for (int i = 0; i < imageList.size(); i++) { %>
+                        <li>
+                            <img src="<%= imageList.get(i) %>">
+                        </li>
+                    <% } %>
+                    </ul>
+
+                    <ol>
+                    <% for (int i = 0; i < imageList.size(); i++) { %>
+                    	<li class="on"><span><%= i + 1 %></span></li>
+                    <% } %>
+                    </ol>
+                </div>
                 
                 <div id="tag_container">
                     <div>
@@ -130,10 +155,12 @@
                 <!-- 댓글 쓰기 -->
                 <% if (userID == null) { %>
                 	<form action="./userLogin.jsp" id="comment_form">
+                	<img src="images/user_default_profile.png">
                 <% } else { %>
                 	<form action="./createComment.jsp?postNum=<%= postNum %>" method="post" id="comment_form">
+                	<img src="images/KakaoTalk_20240503_135834006.jpg">
                 <% } %>
-                    <img src="images/KakaoTalk_20240503_135834006.jpg">
+                    
                     <input name="comment" type="text" placeholder="댓글 쓰기" autocomplete="off">
                     <div class="star_radio">
                         <label for="star_rate_1" class="label_star" title="0.5"></label>
@@ -166,11 +193,11 @@
                 <div class="comment_box">
                 <% for(PostComment comment : commentList) { %>
                     <div class="profile_box">
-                        <img src="<%= comment.getUserImgUrl() %>">
+                        <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><img src="<%= comment.getUserImgUrl() %>"></a>
                         <div>
 
                             <div>
-                                <span><%= comment.getNickname() %></span>
+                                <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><span><%= comment.getNickname() %></span></a>
                                 <span><%= comment.getUserId() %></span>
                                 <span><%= comment.getCommentCreateAt() %></span>
                                 <% if(comment.getUserId().equals(userID)) { %>

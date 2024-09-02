@@ -164,5 +164,24 @@ public class PostDAO {
 		}
 		return -1;
 	}
+	
+	// 게시물 이미지 여러장일 때 각각의 배열에 넣기
+	public List<String> splitImages (String str) {
+		String[] arr = str.split("");
+		ArrayList<String> lists = new ArrayList<>();
+		String temp = "";
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].equals(",")) {
+                lists.add(temp);
+                temp = "";
+            } else {
+                temp += arr[i];
+            }
+            if (i == arr.length - 1) {
+                lists.add(temp);
+            }
+        }
+        return lists;
+	}
 
 }
