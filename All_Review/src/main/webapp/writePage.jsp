@@ -14,7 +14,7 @@
 <%
     String userID = (String) session.getAttribute("userID");
     if (userID == null) {
-        response.sendRedirect("userLogin.jsp"); // 로그인되지 않은 사용자는 로그인 페이지
+        response.sendRedirect("userLogin.jsp"); // 로그인되지 않은 사용자는 로그인 페이지로
         return;
     }
 %>
@@ -27,11 +27,11 @@
             </div>
             <div class="form-group">
                 <label for="title">제목</label>
-                <input type="text" name="title" id="title" placeholder=" 제목" required />
+                <input type="text" name="title" id="title" placeholder="제목" required />
             </div>
             <div class="form-group">
                 <label for="image">이미지 업로드</label>
-                <input type="file" name="file" id="image" accept="image/*" onchange="handleChange(event)" />
+                <input type="file" name="files" id="image" accept="image/*" multiple onchange="handleChange(event)" />
             </div>
             <div class="form-group">
                 <label for="caption">설명</label>
@@ -57,16 +57,24 @@
 </div>
 
 <script>
-
 function handleChange(event) {
-    var reader = new FileReader();
-    reader.onload = function(){
-        var output = document.getElementById('preview');
-        output.src = reader.result;
-    };
-    reader.readAsDataURL(event.target.files[0]);
+    var files = event.target.files;
+    var previewDiv = document.getElementById('image_preview');
+    previewDiv.innerHTML = ''; 
+    Array.from(files).forEach(file => {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var img = document.createElement('img');
+            img.src = e.target.result;
+            img.style.maxWidth = '150px';
+            img.style.marginRight = '10px';
+            previewDiv.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    });
 }
 </script>
 
 </body>
 </html>
+
