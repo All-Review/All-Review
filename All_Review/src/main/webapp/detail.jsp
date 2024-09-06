@@ -68,7 +68,7 @@
          <% } else { %>
         	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="myProfile.jsp"><span>프로필</span></a></li>
+            <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
          <% } %>
         </ul>
@@ -115,7 +115,8 @@
                 <p><%= post.getContent() %></p>
                 
                 <div id="image_list">
-                    <button><span>left</span></button>
+                <% if (post.getIsMultipleImg()) { %>
+                	<button><span>left</span></button>
                     <button><span>right</span></button>
                     <ul>
                     <% for (int i = 0; i < imageList.size(); i++) { %>
@@ -130,6 +131,16 @@
                     	<li class="on"><span><%= i + 1 %></span></li>
                     <% } %>
                     </ol>
+                <% } else { %>
+                	<ul>
+                    
+                        <li>
+                            <img src="<%= post.getPostUrl() %>">
+                        </li>
+                    
+                    </ul>
+                <% } %>
+                    
                 </div>
                 
                 <div id="tag_container">
@@ -193,7 +204,7 @@
                 <div class="comment_box">
                 <% for(PostComment comment : commentList) { %>
                     <div class="profile_box">
-                        <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><img src="<%= comment.getUserImgUrl() %>"></a>
+                        <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><img src="<%= comment.getUserProfileImage() %>"></a>
                         <div>
 
                             <div>
@@ -204,8 +215,8 @@
                                 <div class="comment_menu">
                                     <span>더보기</span>
                                     <ul>
-                                        <li onClick="location.href='deleteComment.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentNum() %>'">삭제하기</li>
-                                        <li onClick="location.href='updateCommentForm.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentNum() %>'">수정하기</li>
+                                        <li onClick="location.href='deleteComment.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentIndex() %>'">삭제하기</li>
+                                        <li onClick="location.href='updateCommentForm.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentIndex() %>'">수정하기</li>
                                     </ul>
                                 </div>
                                 <% } %>
