@@ -1,3 +1,4 @@
+<%@page import="like.LikeDAO"%>
 <%@page import="java.util.Collections"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
@@ -19,6 +20,9 @@
 	// 댓글
 	PostCommentDAO commentDao = new PostCommentDAO();
 	List<PostComment> commentList = commentDao.readAllPostComments(postNum);
+	
+	// 좋아요
+	LikeDAO likeDao = new LikeDAO();
 	
 	List<String> imageList = dao.splitImages(post.getPostUrl());
 %>
@@ -152,8 +156,16 @@
 
                 <!-- 좋아요, 댓글, 공유 -->
                 <div class="like_container">
-                    <div>
-                        <span>like</span><span><%= post.getLikeNum() %></span>
+                <% if (likeDao.isLiked(postNum, userID).getUserId() == null) { %>
+                	<div style="background-image: url('icons/heart-regular.svg')">
+                <% } else { %>
+                	<div style="background-image: url('icons/icon_heart_red.png')">
+                <% } %>
+                    <% if (userID == null) { %>
+                    	<a href="userLogin.jsp"><span>like</span><span><%= post.getLikeNum() %></span></a>
+                    <% } else { %>
+                    	<a href="likeAction.jsp?postNum=<%= postNum %>"><span>like</span><span><%= post.getLikeNum() %></span></a>
+                    <% } %>
                     </div>
                     <div>
                         <span>comment</span><span><%= post.getCommentNum() %></span>

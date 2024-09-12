@@ -173,6 +173,20 @@
     margin-bottom: 40px;
 }
 
+/* 좋아요 버튼 a 태그로 감쌈 (기존 스타일 - main_content.css) */
+.content_container .like_container > div > a > span:first-child {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.content_container .like_container > div > a > span {
+    margin-left: 23px;
+}
+
 /* 댓글 쓰기 영역 */
 #content > .content_container > div > form[id="comment_form"] {
     display: flex;
