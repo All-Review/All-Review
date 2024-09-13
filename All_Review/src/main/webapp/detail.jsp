@@ -50,7 +50,34 @@
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/detail.js"></script>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script>
+    $(function () {
+  	  $('#share').on('click', function () {
+	      shareKakao();
+	  });
+
+	  function shareKakao(id) {
+	      // Kakao Javascript key
+	      Kakao.init('667e3ef354b2246f627c0e2295367de5');
+	     
+	      // 카카오링크 버튼 생성
+	      Kakao.Link.createDefaultButton({
+	        container: '#share',
+	        objectType: 'feed',
+	        content: {
+	          title: "All Review",
+	          description: "<%= post.getContent() %>",
+	          imageUrl: "<%= post.getPostUrl() %>",
+	          link: {
+	        	  mobileWebUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostNum() %>",
+		             webUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostNum() %>"
+	          }
+	        }
+	      });
+	    }
+    
+    });
     </script>
 </head>
 
@@ -172,6 +199,7 @@
                     </div>
                     <div>
                         <span>share</span>
+                        <div id="share">카카오톡으로 공유하기</div>
                     </div>
                 </div>
 
