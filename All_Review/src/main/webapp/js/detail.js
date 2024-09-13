@@ -40,6 +40,12 @@ $(function () {
 	      }
 	      $indicators.eq(index).addClass('on');
 	  }
+	
+	  // 공유하기 버튼
+	  const $share = $('.like_container > div:nth-child(3)');
+	  $share.on('click', function () {
+	      $share.children().toggle();
+	  });
 	  
     // 댓글 내용 없을 시 경고창
     const $comment_form = $('#comment_form');

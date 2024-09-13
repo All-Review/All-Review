@@ -1,3 +1,4 @@
+<%@page import="like.LikeDAO"%>
 <%@page import="java.util.Collections"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
@@ -19,6 +20,9 @@
 	// 댓글
 	PostCommentDAO commentDao = new PostCommentDAO();
 	List<PostComment> commentList = commentDao.readAllPostComments(postNum);
+	
+	// 좋아요
+	LikeDAO likeDao = new LikeDAO();
 	
 	List<String> imageList = dao.splitImages(post.getPostUrl());
 %>
@@ -46,7 +50,34 @@
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/detail.js"></script>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script>
+    $(function () {
+  	  $('#share').on('click', function () {
+	      shareKakao();
+	  });
+
+	  function shareKakao(id) {
+	      // Kakao Javascript key
+	      Kakao.init('667e3ef354b2246f627c0e2295367de5');
+	     
+	      // 카카오링크 버튼 생성
+	      Kakao.Link.createDefaultButton({
+	        container: '#share',
+	        objectType: 'feed',
+	        content: {
+	          title: "All Review",
+	          description: "<%= post.getContent() %>",
+	          imageUrl: "<%= post.getPostUrl() %>",
+	          link: {
+	        	  mobileWebUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostNum() %>",
+		             webUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostNum() %>"
+	          }
+	        }
+	      });
+	    }
+    
+    });
     </script>
 </head>
 
@@ -68,7 +99,7 @@
          <% } else { %>
         	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="myProfile.jsp"><span>프로필</span></a></li>
+            <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
          <% } %>
         </ul>
@@ -115,7 +146,8 @@
                 <p><%= post.getContent() %></p>
                 
                 <div id="image_list">
-                    <button><span>left</span></button>
+                <% if (post.getIsMultipleImg()) { %>
+                	<button><span>left</span></button>
                     <button><span>right</span></button>
                     <ul>
                     <% for (int i = 0; i < imageList.size(); i++) { %>
@@ -130,6 +162,16 @@
                     	<li class="on"><span><%= i + 1 %></span></li>
                     <% } %>
                     </ol>
+                <% } else { %>
+                	<ul>
+                    
+                        <li>
+                            <img src="<%= post.getPostUrl() %>">
+                        </li>
+                    
+                    </ul>
+                <% } %>
+                    
                 </div>
                 
                 <div id="tag_container">
@@ -141,14 +183,23 @@
 
                 <!-- 좋아요, 댓글, 공유 -->
                 <div class="like_container">
-                    <div>
-                        <span>like</span><span><%= post.getLikeNum() %></span>
+                <% if (likeDao.isLiked(postNum, userID).getUserId() == null) { %>
+                	<div style="background-image: url('icons/heart-regular.svg')">
+                <% } else { %>
+                	<div style="background-image: url('icons/icon_heart_red.png')">
+                <% } %>
+                    <% if (userID == null) { %>
+                    	<a href="userLogin.jsp"><span>like</span><span><%= post.getLikeNum() %></span></a>
+                    <% } else { %>
+                    	<a href="likeAction.jsp?postNum=<%= postNum %>"><span>like</span><span><%= post.getLikeNum() %></span></a>
+                    <% } %>
                     </div>
                     <div>
                         <span>comment</span><span><%= post.getCommentNum() %></span>
                     </div>
                     <div>
                         <span>share</span>
+                        <div id="share">카카오톡으로 공유하기</div>
                     </div>
                 </div>
 
@@ -193,7 +244,7 @@
                 <div class="comment_box">
                 <% for(PostComment comment : commentList) { %>
                     <div class="profile_box">
-                        <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><img src="<%= comment.getUserImgUrl() %>"></a>
+                        <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><img src="<%= comment.getUserProfileImage() %>"></a>
                         <div>
 
                             <div>
@@ -204,8 +255,8 @@
                                 <div class="comment_menu">
                                     <span>더보기</span>
                                     <ul>
-                                        <li onClick="location.href='deleteComment.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentNum() %>'">삭제하기</li>
-                                        <li onClick="location.href='updateCommentForm.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentNum() %>'">수정하기</li>
+                                        <li onClick="location.href='deleteComment.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentIndex() %>'">삭제하기</li>
+                                        <li onClick="location.href='updateCommentForm.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentIndex() %>'">수정하기</li>
                                     </ul>
                                 </div>
                                 <% } %>
