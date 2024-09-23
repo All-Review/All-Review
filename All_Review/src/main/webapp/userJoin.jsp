@@ -11,6 +11,7 @@
         <script src="https://code.jquery.com/jquery.min.js"></script>
 
         <script src="js/1234.js"></script> <!-- 임시용 -->
+        <script src="js/pwmatch.js"></script>
 
     </head>
 
@@ -24,7 +25,9 @@
                     <input type="text" name="user_name" id="name" class="account" placeholder="이름">
                     <input type="text" name="user_nickname" id="nickname" class="account" placeholder="닉네임">
                     <input type="password" name="user_password" id="password" class="account" placeholder="비밀번호">
+                    <input type="password" id="confirm_password" class="account" placeholder="비밀번호 재확인">
                     <input type="text" name="user_email" id="email" class="account" placeholder="이메일">
+                    <span id="passwordMatchMessage" style="color:red;"></span>
                     <button type="submit" id="userJoin" class="account">회원가입</button>
                 </form>
 
