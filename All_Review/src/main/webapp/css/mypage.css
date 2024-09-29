@@ -9,6 +9,7 @@
 .profile_box > img {
     width: 80px;
     height: 80px;
+    border-radius: 50%;
 }
 
 .profile_box > div {
@@ -33,20 +34,60 @@
     margin-left: auto;
 }
 
-.profile_box > ul > li {
+.profile_box > ul > .mypage_button {
     width: 20px;
     height: 20px;
     cursor: pointer;
+    position: relative;
 }
 
-.profile_box > ul > li:nth-child(1) {
+.profile_box > ul > .mypage_button:nth-child(1) {
     background: url("../icons/user-regular.svg") no-repeat;
     margin-right: 10px;
 }
 
-.profile_box > ul > li:nth-child(2) {
+.profile_box > ul > .mypage_button:nth-child(2) {
     background: url("../icons/icon_setting.png") no-repeat;
     background-size: contain;
+}
+
+.profile_box > ul > .mypage_button > ul {
+    position: absolute;
+    top: 30px;
+    border: 1px solid #dadada;
+    border-radius: 4px;
+    padding: 10px 0;
+    display: none;
+    background-color: white;
+    z-index: 1;
+    text-align: center;
+}
+
+.profile_box > ul > .mypage_button > ul > li {
+    width: 80px;
+    padding: 8px 20px;
+}
+
+.profile_box > ul > .mypage_button:nth-child(1) > ul > li:first-child {
+    color: #ff335a;
+}
+
+.profile_box > ul > .mypage_button > ul > li:hover {
+    font-weight: bold;
+}
+
+.profile_box > ul > li > button {
+    width: 95px;
+    height: 35px;
+    border: none;
+    background-color: #76c100;
+    color: white;
+    border-radius: 4px;
+}
+
+.profile_box > ul > li > button:hover {
+    background-color: #3d9929;
+    cursor: pointer;
 }
 
 .profile_box > ul > li > span {

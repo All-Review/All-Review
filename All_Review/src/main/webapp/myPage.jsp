@@ -4,12 +4,16 @@
 <%@page import="Search.*"%>
 <%@page import="java.util.List" %>
 <%
-	String userID = (String) session.getAttribute("userID");
+	String userID = request.getParameter("userID");
+
+	if (userID == null) {
+		userID = (String) session.getAttribute("userID");
+	}
 
 	// 로그인 안되어있으면 로그인페이지로
-	if (userID == null) {
-		response.sendRedirect(request.getContextPath() + "/userLogin.jsp");
-	}
+	//if (userID == null) {
+	//	response.sendRedirect(request.getContextPath() + "/userLogin.jsp");
+	//}
 
 	PostDAO dao = new PostDAO();
 	List<Post> postList = dao.readAllPostsByUser(userID);
@@ -39,8 +43,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="js/content_detail.js"></script>
     <script src="js/image_gallery.js"></script>
+    <script src="js/mypage.js"></script>
     <script>
         $(function () {
         });
@@ -48,30 +52,35 @@
 </head>
 
 <body>
-		<%
-				
-		%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
-            <li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+        <% if (userID == null) { %>
+            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
+            <li><a href="userLogin.jsp"><span>프로필</span></a></li>
+            <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
+         <% } else { %>
+        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
             <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
+         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
-				if(userID == null) {
+				if(userID.equals((String) session.getAttribute("userID"))) {
 			%>
-            <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
-            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
+			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+            
             <%
 				} else {
 			%>
-			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+			<li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
+            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
 			<%
 				}
 			%>
@@ -88,8 +97,23 @@
             </div>
 
             <ul>
-                <li><span>privacy setting</span></li>
-                <li><span>setting</span></li>
+            <% if (userID.equals((String) session.getAttribute("userID"))) { %>
+                <li class="mypage_button">
+                    <span>privacy setting</span>
+                    <ul>
+                        <li onClick="location.href='#'">탈퇴하기</li>
+                        <li onClick="location.href='#'">로그아웃</li>
+                    </ul>
+                </li>
+                <li class="mypage_button">
+                    <span>setting</span>
+                    <ul>
+                        <li onClick="location.href='#'">프로필 수정</li>
+                    </ul>
+                </li>
+            <% } else { %>
+            	<li><button>팔로우하기</button></li>
+            <% } %>
             </ul>
         </div>
 
