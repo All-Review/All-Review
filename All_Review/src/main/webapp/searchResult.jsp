@@ -215,13 +215,13 @@
 		<% } else  { %>
 				<% for (Post p : postList) { %>
             <div>
-                <img src="<%= p.getPostUrl() %>">
+                <img src="<%= p.getImagePath() %>">
                 <a class="gallery_overlay">
                     <div>
-                    <% for (int i = 0; i < (int)p.getRate(); i++) { %>
+                    <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
                         <img src="icons/star_white.png">
                     <% }
-                    if (p.getRate() % 1 != 0.0) { %>
+                    if (p.getPostRate() % 1 != 0.0) { %>
                     	<img src="icons/star_half_white.png">
                     <% }
                     

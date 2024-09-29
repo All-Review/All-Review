@@ -24,7 +24,7 @@
 	// 좋아요
 	LikeDAO likeDao = new LikeDAO();
 	
-	List<String> imageList = dao.splitImages(post.getPostUrl());
+	List<String> imageList = dao.splitImages(post.getImagePath());
 %>
 <!DOCTYPE html>
 <html>
@@ -67,11 +67,11 @@
 	        objectType: 'feed',
 	        content: {
 	          title: "All Review",
-	          description: "<%= post.getContent() %>",
-	          imageUrl: "<%= post.getPostUrl() %>",
+	          description: "<%= post.getPostContent() %>",
+	          imageUrl: "<%= post.getImagePath() %>",
 	          link: {
-	        	  mobileWebUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostNum() %>",
-		             webUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostNum() %>"
+	        	  mobileWebUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostId() %>",
+		             webUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostId() %>"
 	          }
 	        }
 	      });
@@ -135,15 +135,15 @@
                 </div>
                 <!-- star -->
                 <div class="star">
-                    <% for (int i = 0; i < (int)post.getRate(); i++) { %>
+                    <% for (int i = 0; i < (int)post.getPostRate(); i++) { %>
                         <img src="icons/star_colored.png">
                     <% }
-                    if (post.getRate() % 1 != 0.0) { %>
+                    if (post.getPostRate() % 1 != 0.0) { %>
                     	<img src="icons/star_half.png">
                     <% } %>
                 </div>
                 <!-- 글 내용 -->
-                <p><%= post.getContent() %></p>
+                <p><%= post.getPostContent() %></p>
                 
                 <div id="image_list">
                 <% if (post.getIsMultipleImg()) { %>
@@ -166,7 +166,7 @@
                 	<ul>
                     
                         <li>
-                            <img src="<%= post.getPostUrl() %>">
+                            <img src="<%= post.getImagePath() %>">
                         </li>
                     
                     </ul>
