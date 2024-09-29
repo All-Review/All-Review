@@ -60,7 +60,7 @@
             
             <div>
                 <!-- 댓글 쓰기 -->
-                 <form action="updateComment.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentNum() %>" method="post" id="comment_form">
+                 <form action="updateComment.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentIndex() %>" method="post" id="comment_form">
                     <img src="images/KakaoTalk_20240503_135834006.jpg">
                     <input name="comment" type="text" placeholder="댓글 쓰기" autocomplete="off" value="<%= comment.getCommentContent() %>">
 

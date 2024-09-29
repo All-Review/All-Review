@@ -1,60 +1,63 @@
 package post;
 
 public class Post {
-	private int postNum;
+	private int postID;
 	private String userID;
-	private String content;
-	private String postUrl;
+	private String postContent;
+	private String imagePath;
 	private String postTag;
-	private double rate;
+	private double postRate;
 	private int commentNum;
 	private int likeNum;
+	private boolean isMultipleImg;
 	
 	public Post() {}
 	
-	public Post(int postNum, String userID, String postUrl, String postTag, double rate, int commentNum, int likeNum) {
+	public Post(int postID, String userID, String imagePath, String postTag, double postRate, int commentNum, int likeNum, boolean isMultipleImg) {
 		super();
 		this.userID = userID;
-		this.postNum = postNum;
-		this.postUrl = postUrl;
+		this.postID = postID;
+		this.imagePath = imagePath;
 		this.postTag = postTag;
-		this.rate = rate;
+		this.postRate = postRate;
 		this.commentNum = commentNum;
 		this.likeNum = likeNum;
+		this.isMultipleImg = isMultipleImg;
 	}
 	
-	public Post(int postNum, String userID, String content, String postUrl, String postTag, double rate, int commentNum, int likeNum) {
+	public Post(int postID, String userID, String postContent, String imagePath, String postTag, double postRate, int commentNum, int likeNum, boolean isMultipleImg) {
 		super();
-		this.postNum = postNum;
+		this.postID = postID;
 		this.userID = userID;
-		this.content = content;
-		this.postUrl = postUrl;
+		this.postContent = postContent;
+		this.imagePath = imagePath;
 		this.postTag = postTag;
-		this.rate = rate;
+		this.postRate = postRate;
 		this.commentNum = commentNum;
 		this.likeNum = likeNum;
+		this.isMultipleImg = isMultipleImg;
 	}
 	
-	public int getPostNum () {
-		return postNum;
+	public int getPostId () {
+		return postID;
 	}
 	
 	public String getUserID() {
 		return userID;
 	}
 	
-	public String getContent () {
-		return content;
+	public String getPostContent () {
+		return postContent;
 	}
-	public void setContent (String content) {
-		this.content = content;
+	public void setPostContent (String postContent) {
+		this.postContent = postContent;
 	}
 	
-	public String getPostUrl () {
-		return postUrl;
+	public String getImagePath () {
+		return imagePath;
 	}
-	public void setPostUrl (String postUrl) {
-		this.postUrl = postUrl;
+	public void setImagePath (String imagePath) {
+		this.imagePath = imagePath;
 	}
 	
 	public String getPostTag () {
@@ -64,11 +67,11 @@ public class Post {
 		this.postTag = postTag;
 	}
 	
-	public double getRate () {
-		return rate;
+	public double getPostRate () {
+		return postRate;
 	}
-	public void setRate (double rate) {
-		this.rate = rate;
+	public void setPostRate (double postRate) {
+		this.postRate = postRate;
 	}
 	
 	public int getCommentNum () {
@@ -83,6 +86,13 @@ public class Post {
 	}
 	public void setLikeNum (int likeNum) {
 		this.likeNum = likeNum;
+	}
+	
+	public boolean getIsMultipleImg () {
+		return isMultipleImg;
+	}
+	public void setIsMultipleImg (boolean isMultipleImg) {
+		this.isMultipleImg = isMultipleImg;
 	}
 
 }
