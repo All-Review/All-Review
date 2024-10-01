@@ -62,18 +62,18 @@
                 </div>
                 <!-- star -->
                 <div class="star">
-                <% for (int i = 0; i < (int)dao.readOnePost(26).getRate(); i++) { %>
+                <% for (int i = 0; i < (int)dao.readOnePost(26).getPostRate(); i++) { %>
                     <img src="icons/star_colored.png">
                 <% }
-                if (dao.readOnePost(26).getRate() % 1 != 0.0) { %>
+                if (dao.readOnePost(26).getPostRate() % 1 != 0.0) { %>
                     <img src="icons/star_half.png">
                 <% }
-                for (int i = (int)dao.readOnePost(26).getRate() + 1 ; i < 5; i ++) {%>
+                for (int i = (int)dao.readOnePost(26).getPostRate() + 1 ; i < 5; i ++) {%>
                     <img src="icons/star_gray.png">
                 <% } %>
                 </div>
                 <!-- 글 내용 -->
-                <p><%= dao.readOnePost(26).getContent() %></p>
+                <p><%= dao.readOnePost(26).getPostContent() %></p>
                 <!-- 좋아요, 댓글, 공유 -->
                 <div class="like_container">
                     <div>
@@ -194,13 +194,13 @@
 		<div class="image_box">
 <% for (Post p : postList) { %>
             <div>
-                <img src="<%= p.getPostUrl() %>">
-                <a class="gallery_overlay" onclick="location=searchJsp.jsp?postNum=<%=p.getPostNum()%>">
+                <img src="<%= p.getImagePath() %>">
+                <a class="gallery_overlay" onclick="location=searchJsp.jsp?postNum=<%=p.getPostId()%>">
                     <div>
-                    <% for (int i = 0; i < (int)p.getRate(); i++) { %>
+                    <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
                         <img src="icons/star_white.png">
                     <% }
-                    if (p.getRate() % 1 != 0.0) { %>
+                    if (p.getPostRate() % 1 != 0.0) { %>
                     	<img src="icons/star_half_white.png">
                     <% }
                     

@@ -2,7 +2,7 @@
 
 body {
     font-family: "Noto Sans KR", sans-serif;
-  }
+}
 
 ::-webkit-scrollbar {
     display: none;
@@ -10,11 +10,10 @@ body {
 
 #content {
     box-sizing: border-box;
-    /*padding: 0 90px;*/
+    padding: 0 90px;
     width: 70%;
     margin: 0 auto;
-    padding-left: 15%; /* 사이드바 너비만큼 패딩 */
-  }
+}
 
 #toggle {
     display: flex;

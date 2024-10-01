@@ -19,6 +19,17 @@
     object-fit: cover;
 }
 
+#content > .image_box > div > span {
+    background: url("../icons/clone-regular_white.svg") no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    opacity: .8;
+}
+
 /* 마우스오버 시 별점, 좋아요, 댓글 수 표시 */
 #content > .image_box > div > a {
     display: none;

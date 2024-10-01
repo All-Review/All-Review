@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/image_gallery.css">
     <link rel="stylesheet" href="css/search.css">
-    <link rel="stylesheet" href="css/overay.css">
     <link rel="stylesheet" href="css/setting.css">
 
     <!-- google web font -->
@@ -38,7 +37,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="js/content_detail.js"></script>
     <script src="js/image_gallery.js"></script>
     <script src="js/search.js"></script>
     <script src="js/setting.js"></script>
@@ -53,10 +51,17 @@
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
-            <li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+        <% if (userID == null) { %>
+            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
+            <li><a href="userLogin.jsp"><span>프로필</span></a></li>
+            <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
+         <% } else { %>
+        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="#"><span>프로필</span></a></li>
+            <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
+         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
@@ -119,13 +124,21 @@
 		<div class="image_box">
 <% for (Post p : postList) { %>
             <div>
-                <img src="<%= p.getPostUrl() %>">
-                <a class="gallery_overlay">
+            <% if (p.getIsMultipleImg()) { 
+            	List<String> imageList = dao.splitImages(p.getImagePath());
+            %>
+            	<img src="<%= imageList.get(0) %>">
+            	<span></span>
+            <% } else { %>
+            	<img src="<%= p.getImagePath() %>">
+            <% } %>
+                
+                <a href="detail.jsp?postNum=<%= p.getPostId() %>" class="gallery_overlay">
                     <div>
-                    <% for (int i = 0; i < (int)p.getRate(); i++) { %>
+                    <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
                         <img src="icons/star_white.png">
                     <% }
-                    if (p.getRate() % 1 != 0.0) { %>
+                    if (p.getPostRate() % 1 != 0.0) { %>
                     	<img src="icons/star_half_white.png">
                     <% }
                     

@@ -13,15 +13,7 @@
     align-items: center;
     flex-direction: column;
     box-sizing: border-box;
-
-    /* background-color: rgba(0, 0, 0, 0.7); */
-
-    /* display: none; */
 }
-
-/* #login_container.on {
-    display: flex;
-} */
 
 #mainBox {
     display: flex;

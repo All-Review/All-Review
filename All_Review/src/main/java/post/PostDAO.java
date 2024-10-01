@@ -33,7 +33,8 @@ public class PostDAO {
                         rs.getString(5),
                         rs.getDouble(6),
                         rs.getInt(7),
-                        rs.getInt(8)
+                        rs.getInt(8),
+                        rs.getBoolean(9)
                 );
             }
     		
@@ -61,7 +62,8 @@ public class PostDAO {
                 		rs.getString(5),
                         rs.getDouble(6),
                         rs.getInt(7),
-                        rs.getInt(8)
+                        rs.getInt(8),
+                        rs.getBoolean(9)
                 );
                 result.add(p);
             }
@@ -92,7 +94,8 @@ public class PostDAO {
                 		rs.getString(5),
                         rs.getDouble(6),
                         rs.getInt(7),
-                        rs.getInt(8)
+                        rs.getInt(8),
+                        rs.getBoolean(9)
                 );
                 result.add(p);
             }
@@ -108,7 +111,7 @@ public class PostDAO {
 	public double getAverageRate(List<Post> postLists) {
 		double sum = 0;
 		for (int i = 0; i < postLists.size(); i++) {
-			sum += postLists.get(i).getRate();
+			sum += postLists.get(i).getPostRate();
 		}
 		double result = sum / postLists.size();
 		return result;
@@ -133,7 +136,8 @@ public class PostDAO {
                 		rs.getString(5),
                         rs.getDouble(6),
                         rs.getInt(7),
-                        rs.getInt(8)
+                        rs.getInt(8),
+                        rs.getBoolean(9)
                 );
                 result.add(p);
             }
@@ -163,6 +167,45 @@ public class PostDAO {
 			e.printStackTrace();
 		}
 		return -1;
+	}
+	
+	// 좋아요 클릭 시 게시물의 좋아요 개수 업데이트
+		public int updateLikeNum (int postNum, Post post, boolean isLiked) {
+			String sql = "update post set like_num=? where post_num=?";
+			try {
+	    		Connection conn = DatabaseUtil.getConnection();
+	    		PreparedStatement pstmt = conn.prepareStatement(sql);
+	    		// 좋아요 누른 상태면 -1, 안누른 상태면 +1
+	    		if (isLiked) {
+	        		pstmt.setInt(1, post.getLikeNum() - 1);
+	    		} else {
+	        		pstmt.setInt(1, post.getLikeNum() + 1);
+	    		}
+	    		pstmt.setInt(2, postNum);
+	    		return pstmt.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return -1;
+		}
+	
+	// 게시물 이미지 여러장일 때 각각의 배열에 넣기
+	public List<String> splitImages (String str) {
+		String[] arr = str.split("");
+		ArrayList<String> lists = new ArrayList<>();
+		String temp = "";
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i].equals(",")) {
+                lists.add(temp);
+                temp = "";
+            } else {
+                temp += arr[i];
+            }
+            if (i == arr.length - 1) {
+                lists.add(temp);
+            }
+        }
+        return lists;
 	}
 
 }

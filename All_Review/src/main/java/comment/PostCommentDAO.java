@@ -11,14 +11,14 @@ import util.DatabaseUtil;
 public class PostCommentDAO {
 	// 댓글 작성
 	public int createComment (PostComment comment) {
-		String sql = "insert into comments (post_num, comment_num, user_id, user_nickname, user_img_url, comment_content, comment_rate, comment_created_at) values (?, (SELECT comment_seq('COMMENT_SEQ') FROM dual), ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into comments (post_index, comment_index, user_id, user_nickname, user_profileimage, comment_content, comment_rate, comment_created_at) values (?, (SELECT comment_seq('COMMENT_SEQ') FROM dual), ?, ?, ?, ?, ?, ?)";
 		try {
     		Connection conn = DatabaseUtil.getConnection();
     		PreparedStatement pstmt = conn.prepareStatement(sql);
-    		pstmt.setInt(1, comment.getPostNum());
+    		pstmt.setInt(1, comment.getPostIndex());
     		pstmt.setString(2, comment.getUserId());
     		pstmt.setString(3, comment.getNickname());
-    		pstmt.setString(4, comment.getUserImgUrl());
+    		pstmt.setString(4, comment.getUserProfileImage());
     		pstmt.setString(5, comment.getCommentContent());
     		pstmt.setDouble(6, comment.getCommentRate());
     		pstmt.setString(7, comment.getCommentCreateAt());
@@ -30,13 +30,13 @@ public class PostCommentDAO {
 	}
 	
 	// 댓글 목록 읽어오기
-	public List<PostComment> readAllPostComments(int postNum) {
-		String sql = "select * from comments where post_num=?";
+	public List<PostComment> readAllPostComments(int postIndex) {
+		String sql = "select * from comments where post_index=?";
 		List<PostComment> result = new ArrayList<>();
     	try {
     		Connection conn = DatabaseUtil.getConnection();
     		PreparedStatement pstmt = conn.prepareStatement(sql);
-    		pstmt.setInt(1, postNum);
+    		pstmt.setInt(1, postIndex);
             ResultSet rs = pstmt.executeQuery();
             
             while(rs.next()) {
@@ -61,13 +61,13 @@ public class PostCommentDAO {
 	}
 	
 	// 댓글 하나 찾기
-	public PostComment readOneComment (int commentNum) {
-    	String sql = "select * from comments where comment_num=?";
+	public PostComment readOneComment (int commentIndex) {
+    	String sql = "select * from comments where comment_index=?";
     	PostComment comment = new PostComment();
     	try {
     		Connection conn = DatabaseUtil.getConnection();
     		PreparedStatement pstmt = conn.prepareStatement(sql);
-    		pstmt.setInt(1, commentNum);
+    		pstmt.setInt(1, commentIndex);
             ResultSet rs = pstmt.executeQuery();
             
             if(rs.next()) {
@@ -90,14 +90,14 @@ public class PostCommentDAO {
 	}
 	
 	// 댓글 수정
-	public int updateComment (int commentNum, String commentContent, double commentRate) {
-		String sql = "update comments set comment_content=?, comment_rate=? where comment_num=?";
+	public int updateComment (int commentIndex, String commentContent, double commentRate) {
+		String sql = "update comments set comment_content=?, comment_rate=? where comment_index=?";
 		try {
     		Connection conn = DatabaseUtil.getConnection();
     		PreparedStatement pstmt = conn.prepareStatement(sql);
     		pstmt.setString(1, commentContent);
     		pstmt.setDouble(2, commentRate);
-    		pstmt.setInt(3, commentNum);
+    		pstmt.setInt(3, commentIndex);
     		return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -106,13 +106,13 @@ public class PostCommentDAO {
 	}
 	
 	// 댓글 삭제
-	public int deleteComment (int postNum, int commentNum) {
-		String sql = "delete from comments where post_num=? and comment_num=?";
+	public int deleteComment (int postIndex, int commentIndex) {
+		String sql = "delete from comments where post_index=? and comment_index=?";
 		try {
     		Connection conn = DatabaseUtil.getConnection();
     		PreparedStatement pstmt = conn.prepareStatement(sql);
-    		pstmt.setInt(1, postNum);
-    		pstmt.setInt(2, commentNum);
+    		pstmt.setInt(1, postIndex);
+    		pstmt.setInt(2, commentIndex);
     		return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
