@@ -9,7 +9,7 @@ public class UserDTO {
     private String user_nickname;
     private String user_profileImage;
     private String user_introduce;
-    private int user_postNum;
+    private int user_post_num;
 
     public String getUser_id() {
 		return user_id;
@@ -67,16 +67,16 @@ public class UserDTO {
 		this.user_introduce = user_introduce;
 	}
 
-	public int getUser_postNum() {
-		return user_postNum;
+	public int getUser_post_num() {
+		return user_post_num;
 	}
 
-	public void setUser_postNum(int user_postNum) {
-		this.user_postNum = user_postNum;
+	public void setUser_post_num(int user_post_num) {
+		this.user_post_num = user_post_num;
 	}
 	
 	public UserDTO(String user_id, String user_password, String user_email, String user_name, String user_nickname,
-			String user_profileImage, String user_introduce, int user_postNum) {
+			String user_profileImage, String user_introduce, int user_post_num) {
 		super();
 		this.user_id = user_id;
 		this.user_password = user_password;
@@ -85,6 +85,6 @@ public class UserDTO {
 		this.user_nickname = user_nickname;
 		this.user_profileImage = user_profileImage;
 		this.user_introduce = user_introduce;
-		this.user_postNum = user_postNum;
+		this.user_post_num = user_post_num;
 	}
 }
