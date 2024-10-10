@@ -2,8 +2,8 @@
 <%@ page import="java.io.PrintWriter"%>
 <%
 	session.invalidate();
-// 	response.sendRedirect("index.jsp");
+ 	response.sendRedirect("index.jsp");
 %>
 <script>
-	location.href = 'index.jsp';
+	//location.href = 'index.jsp';
 </script>
