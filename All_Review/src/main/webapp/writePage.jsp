@@ -52,33 +52,13 @@
             width: 100%;
             height: 300px;
             overflow: hidden;
-            position: relative;
         }
 
         #image_preview img {
             max-width: 100%;
             max-height: 100%;
-            display: none;
-        }
-
-        #prev, #next {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        #prev {
-            left: 0;
-        }
-
-        #next {
-            right: 0;
+            display: block;
+            margin: 0 auto;
         }
 
         .form-group {
@@ -170,84 +150,31 @@
             display: none;
         }
     </style>
-    <script>
-    let currentIndex = 0;
-    let imageElements = [];
+   <script>
+        function handleChange(event) {
+            const files = event.target.files;
+            const preview = document.getElementById('image_preview');
+            preview.innerHTML = '';
 
-    function handleChange(event) {
-        const files = event.target.files;
-        const preview = document.getElementById('image_preview');
-        preview.innerHTML = ''; // 미리보기 초기화
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
 
-        if (files.length === 0) {
-            preview.innerHTML = '<p>이미지 미리보기</p>';
-            return;
-        }
-
-        Array.from(files).forEach((file, index) => {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.maxWidth = '100%';
-                img.style.maxHeight = '100%';
-                img.setAttribute('data-index', index);
-
-                // 첫 번째 이미지만 표시하고 나머지는 숨김
-                if (index !== 0) {
-                    img.style.display = 'none';
-                } else {
-                    img.style.display = 'block';
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '100%';
+                    preview.appendChild(img);
                 }
 
-                preview.appendChild(img);
-            };
-
-            reader.readAsDataURL(file);
-        });
-
-        imageElements = Array.from(preview.getElementsByTagName('img'));
-        currentIndex = 0;
-
-        // 이미지가 2개 이상일 때만 슬라이더 버튼 추가
-        if (imageElements.length > 1) {
-            addNavigation(preview);
-        }
-    }
-
-    function addNavigation(preview) {
-        // 이전, 다음 버튼이 이미 있으면 다시 추가하지 않음
-        if (document.getElementById('prev') || document.getElementById('next')) {
-            return;
+                reader.readAsDataURL(file);
+            });
         }
 
-        const prevButton = document.createElement('button');
-        prevButton.id = 'prev';
-        prevButton.textContent = '‹';
-        prevButton.onclick = showPrevImage;
-
-        const nextButton = document.createElement('button');
-        nextButton.id = 'next';
-        nextButton.textContent = '›';
-        nextButton.onclick = showNextImage;
-
-        preview.appendChild(prevButton);
-        preview.appendChild(nextButton);
-    }
-
-    function showPrevImage() {
-        imageElements[currentIndex].style.display = 'none';
-        currentIndex = (currentIndex - 1 + imageElements.length) % imageElements.length;
-        imageElements[currentIndex].style.display = 'block';
-    }
-
-    function showNextImage() {
-        imageElements[currentIndex].style.display = 'none';
-        currentIndex = (currentIndex + 1) % imageElements.length;
-        imageElements[currentIndex].style.display = 'block';
-    }
-           
+        function showForm() {
+            document.getElementById('post_form').style.display = 'flex';
+            document.getElementById('overlay').style.display = 'block';
+        }
     </script>
 </head>
 <body>
@@ -264,8 +191,8 @@
                 <div class="error" id="titleError">제목을 입력해주세요.</div>
             </div>
             <div class="form-group">
-                <label for="images">이미지 업로드 </label>
-                <input type="file" name="files" id="images" accept="image/*" multiple onchange="handleChange(event)" />
+                <label for="images">이미지 업로드</label>
+                <input type="file" name="files[]" id="images" accept="image/*" multiple onchange="handleChange(event)" />
             </div>
             <div class="form-group">
                 <label for="caption">설명</label>

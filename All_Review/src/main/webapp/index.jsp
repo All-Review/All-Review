@@ -1,11 +1,69 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="ko">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.sql.*, java.io.*, java.util.*" %>
+<%@ page import="post.Post" %>
 
+
+<%
+    
+    String dbURL = "jdbc:mysql://localhost:3306/SSS";
+    String dbID = "root";
+    String dbPassword = "123123";
+    Connection conn = null;
+    Statement statement = null;
+    ResultSet resultSet = null;
+    List<Post> posts = new ArrayList<>();
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver"); 
+        conn = DriverManager.getConnection(dbURL, dbID, dbPassword); 
+
+        
+        String sql = "SELECT * FROM post";
+        statement = conn.createStatement();
+        resultSet = statement.executeQuery(sql);
+
+        while (resultSet.next()) {
+            int postId = resultSet.getInt("post_num");
+            String userId = resultSet.getString("user_id");
+            String caption = resultSet.getString("post_content");
+            String postTag = resultSet.getString("post_tag");
+            double rating = resultSet.getDouble("post_rate");
+            boolean isMultipleImg = resultSet.getBoolean("is_multiple_img");
+
+            List<String> images = new ArrayList<>();
+            
+            String imageSql = "SELECT image_path FROM images WHERE post_id = ?";
+            PreparedStatement imageStmt = conn.prepareStatement(imageSql);
+            imageStmt.setInt(1, postId);
+            ResultSet imageRs = imageStmt.executeQuery();
+            while (imageRs.next()) {
+                images.add(imageRs.getString("image_path"));
+            }
+
+           
+            Post post = new Post(postId, userId, caption, postTag, rating, 0, 0, isMultipleImg, images);
+            posts.add(post);
+        }
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
+        
+        try {
+            if (resultSet != null) resultSet.close();
+            if (statement != null) statement.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+%>
+
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>게시물 목록</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main_content.css">
@@ -13,479 +71,71 @@
     <link rel="stylesheet" href="css/overlay.css">
     <link rel="stylesheet" href="css/setting.css">
     <link rel="stylesheet" href="css/displaySize.css">
-    <!-- google web font -->
+    <link rel="stylesheet" href="css/deleteui.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/content_detail.js"></script>
     <script src="js/setting.js"></script>
-    <script>
-    </script>
 </head>
-
 <body>
-		<%
-			String userID = (String) session.getAttribute("userID");	
-		%>
+    <%
+        String userID = (String) session.getAttribute("userID");
+    %>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
-            <li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li><a href="alert_page.html"><span>알림</span></a></li>
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
             <li><a href="#"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
         </ul>
         <ul id="sidebarUserIcon">
-	        <%
-				if(userID == null) {
-			%>
+            <%
+                if (userID == null) {
+            %>
             <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
             <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
             <%
-				} else {
-			%>
-			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
-			<%
-				}
-			%>
+                } else {
+            %>
+            <li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+            <%
+                }
+            %>
         </ul>
     </aside>
 
-    <!-- 중앙 컨텐츠 -->
     <div id="content">
-        <ul id="toggle">
-            <li>추천</li>
-            <li>팔로우</li>
+        <ul>
+            <%
+            for (Post post : posts) {
+                int postId = post.getPostId();
+                List<String> images = post.getImages();
+            %>
+                <li>
+                    <h2>게시물 ID: <%= postId %></h2>
+                    <p>내용: <%= post.getPostContent() %></p>
+                    <div>
+                        <%
+                        for (String image : images) {
+                        %>
+                            <img src="<%= image %>" alt="Image" style="width:100px;height:auto;"/>
+                        <%
+                        }
+                        %>
+                    </div>
+                </li>
+            <%
+            }
+            %>
         </ul>
-
-        <div class="content_container">
-            <a href="detail.jsp?postNum=37">
-                <img src="images/15fd24a290e3154d44f486b0720b0692_res.jpeg">
-            </a>
-            <div>
-                <!-- profile -->
-                <div class="profile_box">
-                    <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                    <div>
-                        <span>농담곰</span>
-                        <span>nongdam_review</span>
-                    </div>
-                    <span>3시간</span>
-                </div>
-                <!-- star -->
-                <div class="star">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_half.png">
-                </div>
-                <!-- 글 내용 -->
-                <p>안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다</p>
-                <!-- 좋아요, 댓글, 공유 -->
-                <div class="like_container">
-                    <div>
-                        <span>like</span><span>31</span>
-                    </div>
-                    <div>
-                        <span>comment</span><span>8</span>
-                    </div>
-                    <div>
-                        <span>share</span>
-                    </div>
-                </div>
-
-                <!-- 댓글영역 -->
-                <div class="comment_box">
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.재미</span>
-                        </div>
-                        
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.도움이</span>
-                        </div>
-                        
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <span>댓글 8개 모두 보기</span>
-                </div>
-                <!-- /댓글 -->
-            </div>
-
-        </div>
-        <!-- /content_container -->
-
-        <div class="content_container">
-            <img src="images/KakaoTalk_20240503_135834006.jpg">
-            <div>
-                <!-- profile -->
-                <div class="profile_box">
-                    <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                    <div>
-                        <span>농담곰</span>
-                        <span>nongdam_review</span>
-                    </div>
-                    <span>3시간</span>
-                </div>
-                <!-- star -->
-                <div class="star">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_gray.png">
-                    <img src="icons/star_gray.png">
-                </div>
-                <!-- 글 내용 -->
-                <p>안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다</p>
-                <!-- 좋아요, 댓글, 공유 -->
-                <div class="like_container">
-                    <div>
-                        <span>like</span>
-                    </div>
-                    <div>
-                        <span>comment</span>
-                    </div>
-                    <div>
-                        <span>share</span>
-                    </div>
-                </div>
-
-                <!-- 댓글영역 -->
-                <div class="comment_box">
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.재미</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.도움이</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <span>댓글 8개 모두 보기</span>
-                </div>
-                <!-- /댓글 -->
-            </div>
-
-        </div>
-        <!-- /content_container -->
-
-        <div class="content_container">
-            <img src="images/15fd24a290e3154d44f486b0720b0692_res.jpeg">
-            <div>
-                <!-- profile -->
-                <div class="profile_box">
-                    <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                    <div>
-                        <span>농담곰</span>
-                        <span>nongdam_review</span>
-                    </div>
-                    <span>3시간</span>
-                </div>
-                <!-- star -->
-                <div class="star">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_half.png">
-                    <img src="icons/star_gray.png">
-                    <img src="icons/star_gray.png">
-                </div>
-                <!-- 글 내용 -->
-                <p>안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다</p>
-                <!-- 좋아요, 댓글, 공유 -->
-                <div class="like_container">
-                    <div>
-                        <span>like</span>
-                    </div>
-                    <div>
-                        <span>comment</span>
-                    </div>
-                    <div>
-                        <span>share</span>
-                    </div>
-                </div>
-
-                <!-- 댓글영역 -->
-                <div class="comment_box">
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.재미</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.도움이</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <span>댓글 8개 모두 보기</span>
-                </div>
-                <!-- /댓글 -->
-            </div>
-
-        </div>
-        <!-- /content_container -->
-
-    </div>
-    <!-- /content -->
-
-    <div id="popular">
-        <h3>실시간 검색어</h3>
-        <ol>
-            <li>
-                <a href="">
-                    <div>
-                        <span>HTML</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>광주 맛집</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>하얀 농담곰</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>컴퓨터</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>데이터베이스</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>커피</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기7번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기8번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기9번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기10번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-        </ol>
-    </div>
-    
-    <div id="setting_container">
-        <div id="settingBox">
-            <h1><span>설정</span><p>설정</p></h1>
-            <button class="close"><span>닫기</span></button>
-
-            <div id="setBox">
-                <div id="switchBox">
-                    <label>
-                        <span>알람</span>
-                        <input id="alertSwitch" role="switch" type="checkbox"/>
-                    </label>
-                </div>
-            </div>
-
-        </div>
     </div>
 </body>
-
 </html>
+
