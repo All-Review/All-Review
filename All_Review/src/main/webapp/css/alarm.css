@@ -1,0 +1,61 @@
+@charset "UTF-8";
+#content > h3 {
+    text-align: center;
+    font-size: 22px;
+    padding: 40px 0;
+}
+
+#toggle > li > a {
+    padding: 10px;
+}
+
+#content > .alarm_list {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#content > .alarm_list::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    background-color: #dadada;
+    left: 0;
+    right: 0;
+    bottom: -11px;
+}
+
+#content > .alarm_list > img {
+    width: 60px;
+    border-radius: 50%;
+    margin-right: 18px;
+}
+
+#content > .alarm_list > p {
+    padding-left: 25px;
+    background: url("../icons/icon_comment_gray.png") no-repeat;
+    background-size: 19px;
+    font-size: 14px;
+}
+
+#content > .alarm_list > p.alarm_like {
+    background: url("../icons/icon_heart_red.png") no-repeat;
+    background-size: 20px;
+}
+
+#content > .alarm_list > p.alarm_follow {
+    background: url("../icons/icon_user_gray.png") no-repeat;
+    background-size: 14.5px;
+}
+
+#content > .alarm_list > p > span {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#content > .alarm_list > span {
+    margin-left: auto;
+    font-size: 14px;
+    color: #666;
+}

@@ -130,7 +130,7 @@
                     <img src="images/KakaoTalk_20240503_135834006_10.jpg">
                     <div>
                         <span>농담곰</span>
-                        <span>nongdam_review</span>
+                        <span><%= post.getUserID() %></span>
                     </div>
                 </div>
                 <!-- star -->
@@ -205,10 +205,11 @@
 
                 <!-- 댓글 쓰기 -->
                 <% if (userID == null) { %>
-                	<form action="./userLogin.jsp" id="comment_form">
+                	<form action="./createComment.jsp?postNum=<%= postNum %>&receiverID=<%= post.getUserID() %>" method="post" id="comment_form">
+                	<!-- <form action="./userLogin.jsp" id="comment_form"> -->
                 	<img src="images/user_default_profile.png">
                 <% } else { %>
-                	<form action="./createComment.jsp?postNum=<%= postNum %>" method="post" id="comment_form">
+                	<form action="./createComment.jsp?postNum=<%= postNum %>&receiverID=<%= post.getUserID() %>" method="post" id="comment_form">
                 	<img src="images/KakaoTalk_20240503_135834006.jpg">
                 <% } %>
                     
@@ -251,7 +252,7 @@
                                 <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><span><%= comment.getNickname() %></span></a>
                                 <span><%= comment.getUserId() %></span>
                                 <span><%= comment.getCommentCreateAt() %></span>
-                                <% if(comment.getUserId().equals(userID)) { %>
+                                <% // if(comment.getUserId().equals(userID)) { %>
                                 <div class="comment_menu">
                                     <span>더보기</span>
                                     <ul>
@@ -259,7 +260,7 @@
                                         <li onClick="location.href='updateCommentForm.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentIndex() %>'">수정하기</li>
                                     </ul>
                                 </div>
-                                <% } %>
+                                <% // } %>
                             </div>
     
                             <span><%= comment.getCommentContent() %></span>

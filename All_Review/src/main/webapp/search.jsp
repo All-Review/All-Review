@@ -44,7 +44,8 @@
 
 <body>
 		<%
-			String userID = (String) session.getAttribute("userID");	
+			// String userID = (String) session.getAttribute("userID");	
+			String userID = "myID";	
 		%>
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
@@ -57,7 +58,7 @@
             <li><a href="userLogin.jsp"><span>프로필</span></a></li>
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
-        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+        	<li><a href="alarm.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
             <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
