@@ -85,12 +85,24 @@
     background-image: url('https://i.imgur.com/aHTKfSr.png');
 }
 
+#name {
+	background-image: url('https://i.imgur.com/aHTKfSr.png');
+}
+
+#nickname {
+	background-image: url('https://i.imgur.com/aHTKfSr.png');
+}
+
 #password {
     background-image: url('https://i.imgur.com/wC7Z1tm.png');
 }
 
+#confirm_password {
+	background-image: url('https://i.imgur.com/wC7Z1tm.png');
+}
+
 #email {
-    background-image: url('https://i.imgur.com/aHTKfSr.png');
+    background-image: url('https://i.imgur.com/mFvGtnb.png');
 }
 
 
