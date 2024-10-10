@@ -1,5 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<%@ page import="user.UserDAO" %>
+<%@ page import="java.io.PrintWriter"%>
+<%@ page import="javax.servlet.http.HttpSession" %>
+<%@ page import="javax.servlet.http.HttpServletRequest" %>
+<%@ page import="javax.servlet.http.HttpServletResponse" %>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -26,9 +31,10 @@
 </head>
 
 <body>
-		<%
-			String userID = (String) session.getAttribute("userID");	
-		%>
+	<%
+		HttpSession session1 = request.getSession();
+	    String user_id = (String) session.getAttribute("user_id");
+	%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
@@ -42,7 +48,7 @@
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
-				if(userID == null) {
+				if(user_id == null) {
 			%>
             <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
             <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>

@@ -10,22 +10,6 @@
 	String user_password = request.getParameter("user_password");
 	String user_email = request.getParameter("user_email");
 	
-	if(request.getParameter("user_id") != null) {
-		user_id = request.getParameter("user_id");
-	}
-	if(request.getParameter("user_name") != null) {
-		user_password = request.getParameter("user_name");
-	}
-	if(request.getParameter("user_nickname") != null) {
-		user_email = request.getParameter("user_nickname");
-	}
-	if(request.getParameter("user_password") != null) {
-		user_email = request.getParameter("user_password");
-	}
-	if(request.getParameter("user_email") != null) {
-		user_email = request.getParameter("user_email");
-	}
-	
 	if(user_id == null || user_name == null || user_nickname == null || user_password == null || user_email == null) {
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
