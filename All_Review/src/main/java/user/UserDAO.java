@@ -9,7 +9,9 @@ import util.DatabaseUtil;
 public class UserDAO {
 	
 	public int login(String user_id, String user_password) { // 로그인
+
 		String SQL = "SELECT user_password FROM user WHERE user_id = ?";
+
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -38,7 +40,9 @@ public class UserDAO {
 	}
 	
 	public int join(UserDTO user) { // 회원가입
+
 		String SQL = "INSERT INTO user (user_id, user_password, user_email, user_name, user_nickname, user_profileimage, user_introduce, user_post_num) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
