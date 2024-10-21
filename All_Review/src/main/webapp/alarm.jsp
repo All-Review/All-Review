@@ -82,11 +82,11 @@
 		<div class="alarm_list">
             <img src="images/KakaoTalk_20240503_135834006_12.jpg">
         <% if (alarm.getAlarmType().equals("comment")) { %>
-            <p class="alarm_comment"><span><%= alarm.getSenderID() %></span>님이 댓글을 남겼습니다.</p>
+            <p class="alarm_comment"><a href="detail.jsp?postNum=<%= alarm.getPostIndex() %>"><span><%= alarm.getSenderID() %></span>님이 댓글을 남겼습니다.</a></p>
         <% } else if (alarm.getAlarmType().equals("like")) { %>
-        	<p class="alarm_like"><span><%= alarm.getSenderID() %></span>님이 좋아요를 눌렀습니다.</p>
+        	<p class="alarm_like"><a href="detail.jsp?postNum=<%= alarm.getPostIndex() %>"><span><%= alarm.getSenderID() %></span>님이 좋아요를 눌렀습니다.</a></p>
         <% } else if (alarm.getAlarmType().equals("follow")) { %>
-        	<p class="alarm_follow"><span><%= alarm.getSenderID() %></span>님이 회원님을 팔로우하기 시작했습니다.</p>
+        	<p class="alarm_follow"><a href="detail.jsp?postNum=<%= alarm.getPostIndex() %>"><span><%= alarm.getSenderID() %></span>님이 회원님을 팔로우하기 시작했습니다.</a></p>
         <% } %>
             <span>3시간</span>
         </div>

@@ -188,11 +188,11 @@
                 <% } else { %>
                 	<div style="background-image: url('icons/icon_heart_red.png')">
                 <% } %>
-                    <% // if (userID == null) { %>
-                    	<!-- <a href="userLogin.jsp"><span>like</span><span><%= post.getLikeNum() %></span></a> -->
-                    <% // } else { %>
+                    <% if (userID == null) { %>
+                    	<a href="userLogin.jsp"><span>like</span><span><%= post.getLikeNum() %></span></a>
+                    <% } else { %>
                     	<a href="likeAction.jsp?postNum=<%= postNum %>&receiverID=<%= post.getUserID() %>"><span>like</span><span><%= post.getLikeNum() %></span></a>
-                    <% // } %>
+                    <% } %>
                     </div>
                     <div>
                         <span>comment</span><span><%= post.getCommentNum() %></span>
@@ -205,8 +205,7 @@
 
                 <!-- 댓글 쓰기 -->
                 <% if (userID == null) { %>
-                	<form action="./createComment.jsp?postNum=<%= postNum %>&receiverID=<%= post.getUserID() %>" method="post" id="comment_form">
-                	<!-- <form action="./userLogin.jsp" id="comment_form"> -->
+                	<form action="./userLogin.jsp" id="comment_form">
                 	<img src="images/user_default_profile.png">
                 <% } else { %>
                 	<form action="./createComment.jsp?postNum=<%= postNum %>&receiverID=<%= post.getUserID() %>" method="post" id="comment_form">

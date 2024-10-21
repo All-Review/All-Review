@@ -49,7 +49,7 @@
 <body>
 		<%
 			String userID = (String) session.getAttribute("userID");	
-			//System.out.println(userID);
+			System.out.println(userID);
 			// String userID = "myID";	
 		%>
     <aside id="sidebar">
