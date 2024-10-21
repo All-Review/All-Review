@@ -188,11 +188,11 @@
                 <% } else { %>
                 	<div style="background-image: url('icons/icon_heart_red.png')">
                 <% } %>
-                    <% if (userID == null) { %>
-                    	<a href="userLogin.jsp"><span>like</span><span><%= post.getLikeNum() %></span></a>
-                    <% } else { %>
-                    	<a href="likeAction.jsp?postNum=<%= postNum %>"><span>like</span><span><%= post.getLikeNum() %></span></a>
-                    <% } %>
+                    <% // if (userID == null) { %>
+                    	<!-- <a href="userLogin.jsp"><span>like</span><span><%= post.getLikeNum() %></span></a> -->
+                    <% // } else { %>
+                    	<a href="likeAction.jsp?postNum=<%= postNum %>&receiverID=<%= post.getUserID() %>"><span>like</span><span><%= post.getLikeNum() %></span></a>
+                    <% // } %>
                     </div>
                     <div>
                         <span>comment</span><span><%= post.getCommentNum() %></span>

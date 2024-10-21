@@ -32,7 +32,8 @@
     // 알림 생성
     String receiverID = request.getParameter("receiverID");
     AlarmDAO alarmDAO = new AlarmDAO();
-    alarmDAO.createAlarm(receiverID, userID, "comment");
+    alarmDAO.createAlarm(postNum, receiverID, userID, "comment");
+    alarmDAO.updateAlarmNum(alarmDAO.readAlarmNum(receiverID), receiverID, true);
     
     // 게시물 댓글 개수 업데이트
     PostDAO postDao = new PostDAO();

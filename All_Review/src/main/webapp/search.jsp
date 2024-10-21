@@ -1,3 +1,4 @@
+<%@page import="alarm.AlarmDAO"%>
 <%@page import="java.util.Collections"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
@@ -16,6 +17,9 @@
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
 	List<SearchHistory> searchList = searchDAO.readSearchLists();
 	List<SearchHistoryAll> searchListAll = searchDAO.readSearchListsAllDesc();
+	
+	// 알림
+	AlarmDAO alarmDAO = new AlarmDAO();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -44,8 +48,9 @@
 
 <body>
 		<%
-			// String userID = (String) session.getAttribute("userID");	
-			String userID = "myID";	
+			String userID = (String) session.getAttribute("userID");	
+			//System.out.println(userID);
+			// String userID = "myID";	
 		%>
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
@@ -53,12 +58,16 @@
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
         <% if (userID == null) { %>
-            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li><a href="userLogin.jsp"><span>알림</span><span id="alarm_num">9</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
             <li><a href="userLogin.jsp"><span>프로필</span></a></li>
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
-        	<li><a href="alarm.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+         	<% if (alarmDAO.readAlarmNum("yuns") == 0) { %>
+         		<li><a href="alarm.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+         	<% } else { %>
+         		<li><a href="alarm.jsp"><span>알림</span><span id="alarm_num"><%= alarmDAO.readAlarmNum("yuns") %></span></a></li> <!-- href 속성 다시 설정 -->
+         	<% } %>
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
             <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>

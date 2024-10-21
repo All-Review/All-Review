@@ -13,7 +13,11 @@
 	List<SearchHistoryAll> searchListAll = searchDao.readSearchListsAllDesc();
 	
 	// 알람
+	String userID = (String) session.getAttribute("userID");	
 	AlarmDAO alarmDao = new AlarmDAO();
+	alarmDao.clearAlarmNum("yuns");
+	System.out.println(userID);
+	// List<Alarm> alarmList = alarmDao.readAllAlarms(userID);
 	List<Alarm> alarmList = alarmDao.readAllAlarms("yuns");
 %>
 <!DOCTYPE html>
@@ -29,7 +33,7 @@
 </head>
 <body>
 		<%
-			String userID = (String) session.getAttribute("userID");	
+			
 		%>
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
@@ -81,7 +85,7 @@
             <p class="alarm_comment"><span><%= alarm.getSenderID() %></span>님이 댓글을 남겼습니다.</p>
         <% } else if (alarm.getAlarmType().equals("like")) { %>
         	<p class="alarm_like"><span><%= alarm.getSenderID() %></span>님이 좋아요를 눌렀습니다.</p>
-        <% } else { %>
+        <% } else if (alarm.getAlarmType().equals("follow")) { %>
         	<p class="alarm_follow"><span><%= alarm.getSenderID() %></span>님이 회원님을 팔로우하기 시작했습니다.</p>
         <% } %>
             <span>3시간</span>
