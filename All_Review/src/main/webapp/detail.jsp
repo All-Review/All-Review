@@ -83,7 +83,7 @@
 
 <body>
 		<%
-			String user_id = (String) session.getAttribute("user_id");
+			String userID = (String) session.getAttribute("userID");
 		%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
@@ -91,7 +91,7 @@
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
-        <% if (user_id == null) { %>
+        <% if (userID == null) { %>
             <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
             <li><a href="userLogin.jsp"><span>프로필</span></a></li>
@@ -105,7 +105,7 @@
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
-				if(user_id == null) {
+				if(userID == null) {
 			%>
             <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
             <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
@@ -183,12 +183,12 @@
 
                 <!-- 좋아요, 댓글, 공유 -->
                 <div class="like_container">
-                <% if (likeDao.isLiked(postNum, user_id).getUserId() == null) { %>
+                <% if (likeDao.isLiked(postNum, userID).getUserId() == null) { %>
                 	<div style="background-image: url('icons/heart-regular.svg')">
                 <% } else { %>
                 	<div style="background-image: url('icons/icon_heart_red.png')">
                 <% } %>
-                    <% if (user_id == null) { %>
+                    <% if (userID == null) { %>
                     	<a href="userLogin.jsp"><span>like</span><span><%= post.getLikeNum() %></span></a>
                     <% } else { %>
                     	<a href="likeAction.jsp?postNum=<%= postNum %>"><span>like</span><span><%= post.getLikeNum() %></span></a>
@@ -204,7 +204,7 @@
                 </div>
 
                 <!-- 댓글 쓰기 -->
-                <% if (user_id == null) { %>
+                <% if (userID == null) { %>
                 	<form action="./userLogin.jsp" id="comment_form">
                 	<img src="images/user_default_profile.png">
                 <% } else { %>
@@ -251,7 +251,7 @@
                                 <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><span><%= comment.getNickname() %></span></a>
                                 <span><%= comment.getUserId() %></span>
                                 <span><%= comment.getCommentCreateAt() %></span>
-                                <% if(comment.getUserId().equals(user_id)) { %>
+                                <% if(comment.getUserId().equals(userID)) { %>
                                 <div class="comment_menu">
                                     <span>더보기</span>
                                     <ul>
