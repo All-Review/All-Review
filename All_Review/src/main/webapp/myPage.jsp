@@ -4,10 +4,10 @@
 <%@page import="Search.*"%>
 <%@page import="java.util.List" %>
 <%
-	String user_id = request.getParameter("user_id");
+	String userID = request.getParameter("userID");
 
-	if (user_id == null) {
-		user_id = (String) session.getAttribute("user_id");
+	if (userID == null) {
+		userID = (String) session.getAttribute("userID");
 	}
 
 	// 로그인 안되어있으면 로그인페이지로
@@ -16,7 +16,7 @@
 	//}
 
 	PostDAO dao = new PostDAO();
-	List<Post> postList = dao.readAllPostsByUser(user_id);
+	List<Post> postList = dao.readAllPostsByUser(userID);
 
 	// 실시간 검색어
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
@@ -58,7 +58,7 @@
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
-        <% if (user_id == null) { %>
+        <% if (userID == null) { %>
             <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
             <li><a href="userLogin.jsp"><span>프로필</span></a></li>
@@ -72,7 +72,7 @@
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
-				if(user_id.equals((String) session.getAttribute("user_id"))) {
+				if(userID.equals((String) session.getAttribute("userID"))) {
 			%>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
             
@@ -92,12 +92,12 @@
             <img src="images/KakaoTalk_20240503_135834006_10.jpg">
             <div>
                 <span>농담곰</span>
-                <span><%= user_id %></span>
+                <span><%= userID %></span>
                 <span>설명 칸입니다. 안녕하세요 농담곰입니다</span>
             </div>
 
             <ul>
-            <% if (user_id.equals((String) session.getAttribute("user_id"))) { %>
+            <% if (userID.equals((String) session.getAttribute("userID"))) { %>
                 <li class="mypage_button">
                     <span>privacy setting</span>
                     <ul>

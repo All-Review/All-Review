@@ -6,12 +6,12 @@
     Logger logger = Logger.getLogger("LoginLogger");
     request.setCharacterEncoding("UTF-8");
     
-    String user_id = request.getParameter("user_id");
-    String user_password = request.getParameter("user_password");
+    String userID = request.getParameter("userID");
+    String userPassword = request.getParameter("userPassword");
 
-    logger.info("Attempting to log in with user_id: " + user_id);
+    logger.info("Attempting to log in with userID: " + userID);
 
-    if (user_id == null || user_password == null || user_id.isEmpty() || user_password.isEmpty()) {
+    if (userID == null || userPassword == null || userID.isEmpty() || userPassword.isEmpty()) {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter script = response.getWriter();
         script.println("<script>");
@@ -23,12 +23,12 @@
     }
 
     UserDAO userDAO = new UserDAO();
-    int result = userDAO.login(user_id, user_password);
+    int result = userDAO.login(userID, userPassword);
     
     if (result == 1) {
         // 로그인 성공
-        session.setAttribute("user_id", user_id); // 세션에 사용자 ID 저장
-        logger.info("User " + user_id + " logged in successfully."); // 로그 기록
+        session.setAttribute("userID", userID); // 세션에 사용자 ID 저장
+        logger.info("User " + userID + " logged in successfully."); // 로그 기록
         response.sendRedirect("index.jsp");
     } else if (result == 0) {
         // 비밀번호 틀림
