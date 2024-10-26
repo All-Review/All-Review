@@ -72,7 +72,7 @@
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
-				if(userID.equals((String) session.getAttribute("userID"))) {
+				if(userID != null && userID.equals((String) session.getAttribute("userID"))) {
 			%>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
             
@@ -97,7 +97,7 @@
             </div>
 
             <ul>
-            <% if (userID.equals((String) session.getAttribute("userID"))) { %>
+            <% if (userID != null && userID.equals((String) session.getAttribute("userID"))) { %>
                 <li class="mypage_button">
                     <span>privacy setting</span>
                     <ul>
@@ -112,15 +112,15 @@
                     </ul>
                 </li>
             <% } else { %>
-            	<li><button>팔로우하기</button></li>
+            	<li><button onClick="location.href='followAction.jsp'">팔로우하기</button></li>
             <% } %>
             </ul>
         </div>
 
         <div>
             <a href="#" class="check">게시물 26</a>
-            <a href="#">팔로워 312</a>
-            <a href="#">팔로우 126</a>
+            <a href="follower.jsp">팔로워 312</a>
+            <a href="following.jsp">팔로우 126</a>
         </div>
 
         <div class="image_box">
