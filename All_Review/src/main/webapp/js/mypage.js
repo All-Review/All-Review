@@ -9,4 +9,23 @@ $(function () {
         });
     });
     
+	// 팔로우 중이면 마우스 올렸을 때 취소로
+	const $followBtn = $('#content > .follow_list > button.following');
+	$followBtn.on('mouseover', function () {
+	    $(this).text("팔로우 취소");
+	});
+	
+	$followBtn.on('mouseout', function () {
+	    $(this).text("팔로우 중");
+	});
+	
+	const $myPageFollowBtn = $('.profile_box > ul > li > button.following');
+	$myPageFollowBtn.on('mouseover', function () {
+	    $(this).text("팔로우 취소");
+	});
+
+	$myPageFollowBtn.on('mouseout', function () {
+	    $(this).text("팔로우 중");
+	});
+	
 });

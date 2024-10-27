@@ -1,16 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="post.*"%>
+<%@page import="Search.*"%>
 <%@page import="follow.*"%>
 <%@page import="java.util.List" %>
 <%
-	String userID = request.getParameter("userID");
-
-	if (userID == null) {
-		userID = (String) session.getAttribute("userID");
-	}
-
-	FollowDAO followDao = new FollowDAO();
 	String otherUserID = request.getParameter("otherUserID");
+	String userID = (String) session.getAttribute("userID");
+	
+	PostDAO dao = new PostDAO();
+	List<Post> postList = dao.readAllPostsByUser(otherUserID);
+
+	// 실시간 검색어
+	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
+	List<SearchHistory> searchList = searchDAO.readSearchLists();
+	List<SearchHistoryAll> searchListAll = searchDAO.readSearchListsAllDesc();
+
+	// 팔로우
+	FollowDAO followDao = new FollowDAO();
 	
 	List<Follow> followingList = null;
 	if (otherUserID == null) {
@@ -106,8 +113,6 @@
                         <li onClick="location.href='#'">프로필 수정</li>
                     </ul>
                 </li>
-            <% } else { %>
-            	<li><button>팔로우하기</button></li>
             <% } %>
             </ul>
         </div>
@@ -122,14 +127,14 @@
 		<div class="follow_list">
             <img src="images/KakaoTalk_20240503_135834006_12.jpg">
             <div>
-                <a href="">테스트 닉네임</a>
+                <a href="userMyPage.jsp?otherUserID=<%= follow.getFollowing() %>">테스트 닉네임</a>
                 <span><%= follow.getFollowing() %></span>
                 <span>안녕하세요</span>
             </div>
             <% if (followDao.isFollowing(userID, follow.getFollowing())) { %>
             <button onClick="" class="following">팔로우 중</button>
             <% }  else { %>
-            <button onClick="location.href='followAction.jsp'">팔로우하기</button>
+            <button onClick="location.href='followAction.jsp?otherUserID=<%= follow.getFollowing() %>'">팔로우하기</button>
             <% } %>
         </div>
 	<% } %>
@@ -138,96 +143,29 @@
     <div id="popular">
         <h3>실시간 검색어</h3>
         <ol>
+        <% for (int i = 0; i < searchListAll.size() && i <= 10; i++) {
+        	List<Post> tagList = dao.readSearchedPosts(searchListAll.get(i).getSearchWord());
+        	if (tagList.size() == 0) {
+        		continue;
+        	} else {
+        %>
             <li>
-                <a href="">
+                <a href="searchResult.jsp?search=<%= searchListAll.get(i).getSearchWord() %>">
                     <div>
-                        <span>HTML</span>
-                        <span>201 게시물</span>
+                        <span><%= searchListAll.get(i).getSearchWord() %></span>
+                        <span><%= tagList.size() %> 게시물</span>
                     </div>
-                    <span>평점 3.0</span>
+                    <% if (tagList.size() == 0) { %>
+                    <span>평점 0</span>
+                    <% } else { %>
+                    <span>평점 <%= String.format("%.2f", dao.getAverageRate(tagList)) %></span>
+                    <% } %>
                 </a>
             </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>광주 맛집</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>하얀 농담곰</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>컴퓨터</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>데이터베이스</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>커피</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기7번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기8번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기9번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기10번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
+         <% 
+         
+        		}  // --else
+        }  //  --for %>
         </ol>
     </div>
     <!-- /#popular -->

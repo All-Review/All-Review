@@ -80,6 +80,8 @@
 
 #content > .follow_list > button.following:hover {
     background-color: transparent;
+    border: 1px solid #ff335a;
+    color: #ff335a;
 }
 
 #content > .follow_list > button:hover {

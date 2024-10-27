@@ -98,6 +98,8 @@
 
 .profile_box > ul > li > button.following:hover {
     background-color: transparent;
+    border: 1px solid #ff335a;
+    color: #ff335a;
 }
 
 .profile_box > ul > li > span {

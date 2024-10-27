@@ -117,13 +117,6 @@
                         <li onClick="location.href='#'">프로필 수정</li>
                     </ul>
                 </li>
-            <% } else { %>
-            	<% if (followDao.isFollowing(userID, otherUserID)) { %>
-            		<li><button onClick="" class="following">팔로우 중</button></li>
-            	<% }  else { %>
-            		<li><button onClick="location.href='followAction.jsp?otherUserID=<%= otherUserID %>'">팔로우하기</button></li>
-            	<% } %>
-            	
             <% } %>
             </ul>
         </div>

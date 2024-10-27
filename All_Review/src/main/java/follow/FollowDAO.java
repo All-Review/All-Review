@@ -111,4 +111,19 @@ public class FollowDAO {
 		return false;
 	}
 	
+	// 내 팔로우 목록에서 삭제
+	public int deletefollowing (String follower, String following) {
+		String sql = "delete from follow where follower=? and following=?";
+		try {
+    		Connection conn = DatabaseUtil.getConnection();
+    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		pstmt.setString(1, follower);
+    		pstmt.setString(2, following);
+    		return pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	
 }
