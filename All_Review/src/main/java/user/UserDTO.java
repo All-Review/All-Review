@@ -1,90 +1,91 @@
+
 package user;
 
 public class UserDTO {
 
-    private String user_id;
-    private String user_password;
-    private String user_email;
-    private String user_name;
-    private String user_nickname;
-    private String user_profileImage;
-    private String user_introduce;
-    private int user_postNum;
+    private String userID;
+    private String userPassword;
+    private String userEmail;
+    private String userName;
+    private String userNickname;
+    private String userProfileImage;
+    private String userIntroduce;
+    private int userPostNum;
 
-    public String getUser_id() {
-		return user_id;
+    public String getUserID() {
+		return userID;
 	}
 
-	public void setUser_id(String user_id) {
-		this.user_id = user_id;
+	public void setUserID(String userID) {
+		this.userID = userID;
 	}
 
-	public String getUser_password() {
-		return user_password;
+	public String getUserPassword() {
+		return userPassword;
 	}
 
-	public void setUser_password(String user_password) {
-		this.user_password = user_password;
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	}
 
-	public String getUser_email() {
-		return user_email;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
-	public void setUser_email(String user_email) {
-		this.user_email = user_email;
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
-	public String getUser_name() {
-		return user_name;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public String getUser_nickname() {
-		return user_nickname;
+	public String getUserNickname() {
+		return userNickname;
 	}
 
-	public void setUser_nickname(String user_nickname) {
-		this.user_nickname = user_nickname;
+	public void setUserNickname(String userNickname) {
+		this.userNickname = userNickname;
 	}
 
-	public String getUser_profileImage() {
-		return user_profileImage;
+	public String getUserProfileImage() {
+		return userProfileImage;
 	}
 
-	public void setUser_profileImage(String user_profileImage) {
-		this.user_profileImage = user_profileImage;
+	public void setUserProfileImage(String userProfileImage) {
+		this.userProfileImage = userProfileImage;
 	}
 
-	public String getUser_introduce() {
-		return user_introduce;
+	public String getUserIntroduce() {
+		return userIntroduce;
 	}
 
-	public void setUser_introduce(String user_introduce) {
-		this.user_introduce = user_introduce;
+	public void setUserIntroduce(String userIntroduce) {
+		this.userIntroduce = userIntroduce;
 	}
 
-	public int getUser_postNum() {
-		return user_postNum;
+	public int getUserPostNum() {
+		return userPostNum;
 	}
 
-	public void setUser_postNum(int user_postNum) {
-		this.user_postNum = user_postNum;
+	public void setUserPostNum(int userPostNum) {
+		this.userPostNum = userPostNum;
 	}
 	
-	public UserDTO(String user_id, String user_password, String user_email, String user_name, String user_nickname,
-			String user_profileImage, String user_introduce, int user_postNum) {
+	public UserDTO(String userID, String userPassword, String userEmail, String userName, String userNickname,
+			String userProfileImage, String userIntroduce, int userPostNum) {
 		super();
-		this.user_id = user_id;
-		this.user_password = user_password;
-		this.user_email = user_email;
-		this.user_name = user_name;
-		this.user_nickname = user_nickname;
-		this.user_profileImage = user_profileImage;
-		this.user_introduce = user_introduce;
-		this.user_postNum = user_postNum;
+		this.userID = userID;
+		this.userPassword = userPassword;
+		this.userEmail = userEmail;
+		this.userName = userName;
+		this.userNickname = userNickname;
+		this.userProfileImage = userProfileImage;
+		this.userIntroduce = userIntroduce;
+		this.userPostNum = userPostNum;
 	}
 }

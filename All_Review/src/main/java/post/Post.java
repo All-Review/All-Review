@@ -1,43 +1,39 @@
 package post;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Post {
-    private int postID;
-    private String userID;
-    private String postContent;
-    private String imagePath;
-    private String postTag;
-    private double postRate;
-    private int commentNum;
-    private int likeNum;
-    private boolean isMultipleImg;
+    private int postNum;  // 게시물 번호
+    private String userID;  // 사용자 ID
+    private String postContent;  // 게시물 내용
+    private String postImgUrl;  // 이미지 URL 문자열
+    private String postTag;  // 게시물 태그
+    private double postRate;  // 게시물 평점
+    private int commentNum;  // 댓글 개수
+    private int likeNum;  // 좋아요 개수
+    private boolean isMultipleImg;  // 다중 이미지 여부
+    private List<String> images;  // 이미지 리스트
 
-    public Post() {}
-
-    public Post(int postID, String userID, String imagePath, String postTag, double postRate, int commentNum, int likeNum, boolean isMultipleImg) {
-        this.userID = userID;
-        this.postID = postID;
-        this.imagePath = imagePath;
-        this.postTag = postTag;
-        this.postRate = postRate;
-        this.commentNum = commentNum;
-        this.likeNum = likeNum;
-        this.isMultipleImg = isMultipleImg;
-    }
-
-    public Post(int postID, String userID, String postContent, String imagePath, String postTag, double postRate, int commentNum, int likeNum, boolean isMultipleImg) {
-        this.postID = postID;
+    // 생성자
+    public Post(int postNum, String userID, String postContent, String postImgUrl, 
+                String postTag, double postRate, int commentNum, int likeNum, 
+                boolean isMultipleImg) {
+        this.postNum = postNum;
         this.userID = userID;
         this.postContent = postContent;
-        this.imagePath = imagePath;
+        this.postImgUrl = postImgUrl;
         this.postTag = postTag;
         this.postRate = postRate;
         this.commentNum = commentNum;
         this.likeNum = likeNum;
         this.isMultipleImg = isMultipleImg;
+        this.images = new ArrayList<>();
     }
 
-    public int getPostID() {
-        return postID; // 메소드 이름 수정
+    // Getter 메서드들
+    public int getPostNum() {
+        return postNum;
     }
 
     public String getUserID() {
@@ -47,56 +43,44 @@ public class Post {
     public String getPostContent() {
         return postContent;
     }
-    
-    public void setPostContent(String postContent) {
-        this.postContent = postContent;
-    }
 
-    public String getImagePath() {
-        return imagePath;
-    }
-    
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public String getPostImgUrl() {
+        return postImgUrl;
     }
 
     public String getPostTag() {
         return postTag;
     }
-    
-    public void setPostTag(String postTag) {
-        this.postTag = postTag;
-    }
 
     public double getPostRate() {
         return postRate;
-    }
-    
-    public void setPostRate(double postRate) {
-        this.postRate = postRate;
     }
 
     public int getCommentNum() {
         return commentNum;
     }
-    
-    public void setCommentNum(int commentNum) {
-        this.commentNum = commentNum;
-    }
 
     public int getLikeNum() {
         return likeNum;
     }
-    
-    public void setLikeNum(int likeNum) {
-        this.likeNum = likeNum;
-    }
 
-    public boolean getIsMultipleImg() {
+    public boolean isMultipleImg() {
         return isMultipleImg;
     }
-    
-    public void setIsMultipleImg(boolean isMultipleImg) {
-        this.isMultipleImg = isMultipleImg;
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    // 이미지 추가 메서드
+    public void addImage(String imageUrl) {
+        if (this.images == null) {
+            this.images = new ArrayList<>();
+        }
+        this.images.add(imageUrl);
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 }
