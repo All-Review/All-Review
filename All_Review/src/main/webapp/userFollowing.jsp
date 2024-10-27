@@ -1,4 +1,3 @@
-<%@page import="follow.FollowDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="post.*"%>
@@ -8,7 +7,7 @@
 <%
 	String otherUserID = request.getParameter("otherUserID");
 	String userID = (String) session.getAttribute("userID");
-
+	
 	PostDAO dao = new PostDAO();
 	List<Post> postList = dao.readAllPostsByUser(otherUserID);
 
@@ -16,9 +15,16 @@
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
 	List<SearchHistory> searchList = searchDAO.readSearchLists();
 	List<SearchHistoryAll> searchListAll = searchDAO.readSearchListsAllDesc();
-	
+
 	// 팔로우
 	FollowDAO followDao = new FollowDAO();
+	
+	List<Follow> followingList = null;
+	if (otherUserID == null) {
+		followingList = followDao.readAllFollowings(userID);
+	} else {
+		followingList = followDao.readAllFollowings(otherUserID);
+	}
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -31,8 +37,7 @@
     <link rel="stylesheet" href="css/main_content.css">
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/mypage.css">
-    <link rel="stylesheet" href="css/image_gallery.css">
-    <link rel="stylesheet" href="css/overlay.css">
+    <link rel="stylesheet" href="css/follow.css">
 
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,16 +45,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="js/content_detail.js"></script>
     <script src="js/image_gallery.js"></script>
     <script src="js/mypage.js"></script>
-    <script>
-        $(function () {
-        });
-    </script>
 </head>
 
 <body>
-    <!-- 왼쪽 네비게이션 바 -->
+
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
@@ -69,15 +71,14 @@
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
-				if(userID != null && userID.equals((String) session.getAttribute("userID"))) {
+				if(userID == null) {
 			%>
-			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
-            
+            <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
+            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
             <%
 				} else {
 			%>
-			<li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
-            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
+			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
 			%>
@@ -105,44 +106,28 @@
         </div>
 
         <div>
-            <a href="userMyPage?otherUserID=<%= otherUserID %>" class="check">게시물 26</a>
+            <a href="userMyPage.jsp?otherUserID=<%= otherUserID %>">게시물 26</a>
             <a href="userFollower.jsp?otherUserID=<%= otherUserID %>">팔로워 312</a>
-            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>">팔로우 126</a>
+            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>" class="check">팔로우 126</a>
         </div>
-
-        <div class="image_box">
-<% for (Post p : postList) { %>
-            <div>
-                <img src="<%= p.getImagePath() %>">
-                <a href="detail.jsp?postNum=<%= p.getPostId() %>" class="gallery_overlay">
-                    <div>
-                    <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
-                        <img src="icons/star_white.png">
-                    <% }
-                    if (p.getPostRate() % 1 != 0.0) { %>
-                    	<img src="icons/star_half_white.png">
-                    <% }
-                    
-                    %>
-                    </div>
-    
-                    <div>
-                        <div>
-                            <span>like</span>
-                            <span><%= p.getLikeNum() %></span>
-                        </div>
-                        <div>
-                            <span>comment</span>
-                            <span><%= p.getCommentNum() %></span>
-                        </div>
-                    </div>
-                </a>
-            </div>
         
-<% } %>
+	<% for (Follow follow : followingList) { %>
+		<div class="follow_list">
+            <img src="images/KakaoTalk_20240503_135834006_12.jpg">
+            <div>
+            <% if (!follow.getFollower().equals(userID)) { %>
+                <a href="userMyPage.jsp?otherUserID=<%= follow.getFollower() %>">테스트 닉네임</a>
+            <% } else { %>
+            	<a href="myPage.jsp">테스트 닉네임</a>
+            <% } %>
+                <span><%= follow.getFollower() %></span>
+                <span>안녕하세요</span>
+            </div>
+            <% if (!follow.getFollower().equals(userID)) { %>
+                <button onClick="location.href='followAction.jsp?otherUserID=<%= otherUserID %>'">팔로우하기</button>
+            <% } %>
         </div>
-        <!-- /.image_box -->
-    </div>
+	<% } %>
     <!-- /content -->
 
     <div id="popular">
