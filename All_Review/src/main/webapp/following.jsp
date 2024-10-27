@@ -10,7 +10,14 @@
 	}
 
 	FollowDAO followDao = new FollowDAO();
-	List<Follow> followingList = followDao.readAllFollowings(userID);
+	String otherUserID = request.getParameter("otherUserID");
+	
+	List<Follow> followingList = null;
+	if (otherUserID == null) {
+		followingList = followDao.readAllFollowings(userID);
+	} else {
+		followingList = followDao.readAllFollowings(otherUserID);
+	}
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -76,7 +83,11 @@
             <img src="images/KakaoTalk_20240503_135834006_10.jpg">
             <div>
                 <span>농담곰</span>
-                <span><%= userID %></span>
+                <% if (otherUserID == null) { %>
+                	<span><%= userID %></span>
+                <% } else { %>
+                	<span><%= otherUserID %></span>
+                <% } %>
                 <span>설명 칸입니다. 안녕하세요 농담곰입니다</span>
             </div>
 
@@ -112,10 +123,14 @@
             <img src="images/KakaoTalk_20240503_135834006_12.jpg">
             <div>
                 <a href="">테스트 닉네임</a>
-                <span><%= follow.getFollower() %></span>
+                <span><%= follow.getFollowing() %></span>
                 <span>안녕하세요</span>
             </div>
+            <% if (followDao.isFollowing(userID, follow.getFollowing())) { %>
+            <button onClick="" class="following">팔로우 중</button>
+            <% }  else { %>
             <button onClick="location.href='followAction.jsp'">팔로우하기</button>
+            <% } %>
         </div>
 	<% } %>
     <!-- /content -->

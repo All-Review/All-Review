@@ -27,13 +27,13 @@ public class FollowDAO {
 	}
 	
 	// 나를 팔로우중인 사람 목록 읽어오기
-	public List<Follow> readAllFollowers(String user_id) {
+	public List<Follow> readAllFollowers(String userID) {
 		String sql = "select * from follow where following=?";
 		List<Follow> result = new ArrayList<>();
     	try {
     		Connection conn = DatabaseUtil.getConnection();
     		PreparedStatement pstmt = conn.prepareStatement(sql);
-    		pstmt.setString(1, user_id);
+    		pstmt.setString(1, userID);
             ResultSet rs = pstmt.executeQuery();
             
             while(rs.next()) {
@@ -52,13 +52,13 @@ public class FollowDAO {
 	}
 	
 	// 내가 팔로우중인 사람 목록 읽어오기
-	public List<Follow> readAllFollowings(String user_id) {
+	public List<Follow> readAllFollowings(String userID) {
 		String sql = "select * from follow where follower=?";
 		List<Follow> result = new ArrayList<>();
     	try {
     		Connection conn = DatabaseUtil.getConnection();
     		PreparedStatement pstmt = conn.prepareStatement(sql);
-    		pstmt.setString(1, user_id);
+    		pstmt.setString(1, userID);
             ResultSet rs = pstmt.executeQuery();
             
             while(rs.next()) {
@@ -75,4 +75,40 @@ public class FollowDAO {
 		
 		return result;
 	}
+	
+	// 내가 팔로우 하고 있는 사람인지 확인
+	public boolean isFollowing (String follower, String following) {
+		String sql = "select * from follow where follower=? and following=?";
+		List<Follow> result = new ArrayList<>();
+    	try {
+    		if (follower == null) {
+    			return false;
+    		}
+    		Connection conn = DatabaseUtil.getConnection();
+    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		pstmt.setString(1, follower);
+    		pstmt.setString(2, following);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+            	Follow follow = new Follow(
+                		rs.getString(1),
+                		rs.getString(2)
+                );
+                result.add(follow);
+                
+            }
+            
+            if (result.size() > 0) {
+        		return true;
+        	}
+            
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 }

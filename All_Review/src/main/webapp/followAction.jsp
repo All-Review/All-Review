@@ -8,12 +8,13 @@
 	
 	// 팔로우 추가
 	String userID = (String) session.getAttribute("userID");
+	String otherUserID = request.getParameter("otherUserID");
 	if (userID == null) {
 		System.out.print("fail");
 		response.sendRedirect(request.getContextPath() + "/userLogin.jsp");
 	} else {
-		followDao.createFollow(userID, "yuns");
-		response.sendRedirect(request.getContextPath() + "/myPage.jsp");
+		followDao.createFollow(userID, otherUserID);
+		response.sendRedirect(request.getContextPath() + "/userMyPage.jsp?otherUserID=" + otherUserID);
 	}
     
     

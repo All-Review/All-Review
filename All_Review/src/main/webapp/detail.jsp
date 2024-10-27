@@ -244,11 +244,11 @@
                 <div class="comment_box">
                 <% for(PostComment comment : commentList) { %>
                     <div class="profile_box">
-                        <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><img src="<%= comment.getUserProfileImage() %>"></a>
+                        <a href="userMyPage.jsp?otherUserID=<%= comment.getUserId() %>"><img src="<%= comment.getUserProfileImage() %>"></a>
                         <div>
 
                             <div>
-                                <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><span><%= comment.getNickname() %></span></a>
+                                <a href="userMyPage.jsp?otherUserID=<%= comment.getUserId() %>"><span><%= comment.getNickname() %></span></a>
                                 <span><%= comment.getUserId() %></span>
                                 <span><%= comment.getCommentCreateAt() %></span>
                                 <% if(comment.getUserId().equals(userID)) { %>
