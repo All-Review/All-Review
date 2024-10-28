@@ -107,8 +107,8 @@
 
         <div>
             <a href="userMyPage.jsp?otherUserID=<%= otherUserID %>">게시물 26</a>
-            <a href="userFollower.jsp?otherUserID=<%= otherUserID %>">팔로워 312</a>
-            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>" class="check">팔로우 126</a>
+            <a href="userFollower.jsp?otherUserID=<%= otherUserID %>">팔로워 <%= followDao.getFollowerNum(otherUserID) %></a>
+            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>" class="check">팔로우 <%= followDao.getFollowingNum(otherUserID) %></a>
         </div>
         
 	<% for (Follow follow : followingList) { %>
@@ -116,15 +116,19 @@
             <img src="images/KakaoTalk_20240503_135834006_12.jpg">
             <div>
             <% if (!follow.getFollower().equals(userID)) { %>
-                <a href="userMyPage.jsp?otherUserID=<%= follow.getFollower() %>">테스트 닉네임</a>
+                <a href="userMyPage.jsp?otherUserID=<%= follow.getFollowing() %>">테스트 닉네임</a>
             <% } else { %>
             	<a href="myPage.jsp">테스트 닉네임</a>
             <% } %>
-                <span><%= follow.getFollower() %></span>
+                <span><%= follow.getFollowing() %></span>
                 <span>안녕하세요</span>
             </div>
-            <% if (!follow.getFollower().equals(userID)) { %>
-                <button onClick="location.href='followAction.jsp?otherUserID=<%= otherUserID %>'">팔로우하기</button>
+            <% if (!follow.getFollowing().equals(userID)) { %>
+                <% if (followDao.isFollowing(userID, follow.getFollowing())) { %>
+            		<button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= follow.getFollowing() %>'" class="following">팔로우 중</button>
+            	<% }  else { %>
+            		<button onClick="location.href='followAction.jsp?otherUserID=<%= follow.getFollowing() %>'">팔로우하기</button>
+            	<% } %>
             <% } %>
         </div>
 	<% } %>

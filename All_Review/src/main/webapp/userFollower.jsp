@@ -107,8 +107,8 @@
 
         <div>
             <a href="userMyPage.jsp?otherUserID=<%= otherUserID %>">게시물 26</a>
-            <a href="userFollower.jsp?otherUserID=<%= otherUserID %>" class="check">팔로워 312</a>
-            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>">팔로우 126</a>
+            <a href="userFollower.jsp?otherUserID=<%= otherUserID %>" class="check">팔로워 <%= followDao.getFollowerNum(otherUserID) %></a>
+            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>">팔로우 <%= followDao.getFollowingNum(otherUserID) %></a>
         </div>
         
 	<% for (Follow follow : followerList) { %>
@@ -124,7 +124,11 @@
                 <span>안녕하세요</span>
             </div>
             <% if (!follow.getFollower().equals(userID)) { %>
-                <button onClick="location.href='followAction.jsp?otherUserID=<%= otherUserID %>'">팔로우하기</button>
+                <% if (followDao.isFollowing(userID, follow.getFollower())) { %>
+            		<button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= follow.getFollower() %>'" class="following">팔로우 중</button>
+            	<% }  else { %>
+            		<button onClick="location.href='followAction.jsp?otherUserID=<%= follow.getFollower() %>'">팔로우하기</button>
+            	<% } %>
             <% } %>
         </div>
 	<% } %>

@@ -11,6 +11,7 @@
 	String otherUserID = request.getParameter("otherUserID");
 	
 	followDao.deletefollowing(userID, otherUserID);
+	
     
     response.sendRedirect(request.getContextPath() + "/userMyPage.jsp?otherUserID=" + otherUserID);
 
