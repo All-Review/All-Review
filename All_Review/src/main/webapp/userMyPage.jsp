@@ -6,20 +6,11 @@
 <%@page import="follow.*"%>
 <%@page import="java.util.List" %>
 <%
-	String otherUserID = null;
-
-	// if (userID == null) {
-	// 	userID = (String) session.getAttribute("userID");
-	// }
-
+	String otherUserID = request.getParameter("otherUserID");
 	String userID = (String) session.getAttribute("userID");
-	// 로그인 안되어있으면 로그인페이지로
-	//if (userID == null) {
-	//	response.sendRedirect(request.getContextPath() + "/userLogin.jsp");
-	//}
 
 	PostDAO dao = new PostDAO();
-	List<Post> postList = dao.readAllPostsByUser(userID);
+	List<Post> postList = dao.readAllPostsByUser(otherUserID);
 
 	// 실시간 검색어
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
@@ -98,33 +89,25 @@
             <img src="images/KakaoTalk_20240503_135834006_10.jpg">
             <div>
                 <span>농담곰</span>
-                <span><%= userID %></span>
+                <span><%= otherUserID %></span>
                 <span>설명 칸입니다. 안녕하세요 농담곰입니다</span>
             </div>
 
             <ul>
-            <% if (userID != null && userID.equals((String) session.getAttribute("userID"))) { %>
-                <li class="mypage_button">
-                    <span>privacy setting</span>
-                    <ul>
-                        <li onClick="location.href='#'">탈퇴하기</li>
-                        <li onClick="location.href='#'">로그아웃</li>
-                    </ul>
-                </li>
-                <li class="mypage_button">
-                    <span>setting</span>
-                    <ul>
-                        <li onClick="location.href='#'">프로필 수정</li>
-                    </ul>
-                </li>
-            <% } %>
+            	<% if (followDao.isFollowing(userID, otherUserID)) { %>
+            		<li><button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= otherUserID %>'" class="following">팔로우 중</button></li>
+            	<% } else if (userID == null) { %>
+            		<li><button onClick="location.href='userLogin.jsp'">팔로우하기</button></li>
+            	<% } else { %>
+            		<li><button onClick="location.href='followAction.jsp?otherUserID=<%= otherUserID %>'">팔로우하기</button></li>
+            	<% } %>
             </ul>
         </div>
 
         <div>
-            <a href="myPage.jsp" class="check">게시물 26</a>
-            <a href="follower.jsp">팔로워 <%= followDao.getFollowerNum(userID) %></a>
-            <a href="following.jsp">팔로우 <%= followDao.getFollowingNum(userID) %></a>
+            <a href="userMyPage?otherUserID=<%= otherUserID %>" class="check">게시물 26</a>
+            <a href="userFollower.jsp?otherUserID=<%= otherUserID %>">팔로워 <%= followDao.getFollowerNum(otherUserID) %></a>
+            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>">팔로우 <%= followDao.getFollowingNum(otherUserID) %></a>
         </div>
 
         <div class="image_box">

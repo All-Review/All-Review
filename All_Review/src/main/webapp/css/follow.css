@@ -1,0 +1,89 @@
+#toggle > li > a {
+    padding: 10px;
+}
+
+#content > .follow_list {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+#content > .follow_list::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    background-color: #dadada;
+    left: 0;
+    right: 0;
+    bottom: -11px;
+}
+
+#content > .follow_list > img {
+    width: 60px;
+    border-radius: 50%;
+    margin-right: 18px;
+}
+
+#content > .follow_list > div {
+    /* padding-left: 25px; */
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+#content > .follow_list > div > a {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    /* margin-bottom: 8px; */
+}
+#content > .follow_list > div > span {
+    margin-bottom: 8px;
+}
+
+#content > .follow_list > div > span:nth-child(2) {
+    color: #333;
+}
+
+/* #content > .follow_list > p.alarm_like {
+    background: url("../icons/icon_heart_red.png") no-repeat;
+    background-size: 20px;
+}
+
+#content > .follow_list > p.alarm_follow {
+    background: url("../icons/icon_user_gray.png") no-repeat;
+    background-size: 14.5px;
+} */
+
+#content > .follow_list > p > a > span {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+#content > .follow_list > button {
+    margin-left: auto;
+    width: 90px;
+    height: 40px;
+    cursor: pointer;
+    border: none;
+    background-color: #76c100;
+    color: white;
+    border-radius: 5px;
+}
+
+#content > .follow_list > button.following {
+    background-color: transparent;
+    color: #3d9929;
+    border: 1px solid #3d9929;
+}
+
+#content > .follow_list > button.following:hover {
+    background-color: transparent;
+    border: 1px solid #ff335a;
+    color: #ff335a;
+}
+
+#content > .follow_list > button:hover {
+    background-color: #3d9929;
+}
