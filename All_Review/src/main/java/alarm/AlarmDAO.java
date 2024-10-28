@@ -76,7 +76,6 @@ public class AlarmDAO {
                 );
                 result.add(alarm);
             }
-    		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

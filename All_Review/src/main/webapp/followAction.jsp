@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="post.*, follow.*"%>
+<%@page import="post.*, follow.*, alarm.*"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 	
@@ -16,7 +16,10 @@
 		followDao.createFollow(userID, otherUserID);
 		response.sendRedirect(request.getContextPath() + "/userMyPage.jsp?otherUserID=" + otherUserID);
 	}
-    
-    
-
+	
+    // 알림 생성
+    String receiverID = request.getParameter("otherUserID");
+    AlarmDAO alarmDAO = new AlarmDAO();
+    alarmDAO.createAlarm(0, receiverID, userID, "follow");
+    alarmDAO.updateAlarmNum(alarmDAO.readAlarmNum(receiverID), receiverID, true);
 %>
