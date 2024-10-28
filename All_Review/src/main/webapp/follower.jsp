@@ -131,10 +131,10 @@
                 <span><%= follow.getFollower() %></span>
                 <span>안녕하세요</span>
             </div>
-            <% if (followDao.isFollowing(userID, follow.getFollowing())) { %>
-            <button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= follow.getFollowing() %>'" class="following">팔로우 중</button>
+            <% if (followDao.isFollowing(userID, follow.getFollower())) { %>
+            <button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= follow.getFollower() %>'" class="following">팔로우 중</button>
             <% }  else { %>
-            <button onClick="location.href='followAction.jsp?otherUserID=<%= follow.getFollowing() %>'">팔로우하기</button>
+            <button onClick="location.href='followAction.jsp?otherUserID=<%= follow.getFollower() %>'">팔로우하기</button>
             <% } %>
         </div>
 	<% } %>
