@@ -106,8 +106,8 @@
 
         <div>
             <a href="userMyPage?otherUserID=<%= otherUserID %>" class="check">게시물 26</a>
-            <a href="userFollower.jsp?otherUserID=<%= otherUserID %>">팔로워 312</a>
-            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>">팔로우 126</a>
+            <a href="userFollower.jsp?otherUserID=<%= otherUserID %>">팔로워 <%= followDao.getFollowerNum(otherUserID) %></a>
+            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>">팔로우 <%= followDao.getFollowingNum(otherUserID) %></a>
         </div>
 
         <div class="image_box">

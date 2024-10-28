@@ -123,8 +123,8 @@
 
         <div>
             <a href="myPage.jsp" class="check">게시물 26</a>
-            <a href="follower.jsp">팔로워 312</a>
-            <a href="following.jsp">팔로우 126</a>
+            <a href="follower.jsp">팔로워 <%= followDao.getFollowerNum(userID) %></a>
+            <a href="following.jsp">팔로우 <%= followDao.getFollowingNum(userID) %></a>
         </div>
 
         <div class="image_box">
