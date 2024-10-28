@@ -2,10 +2,11 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@page import="post.*, comment.*, java.util.Date"%>
+<%@page import="post.*, comment.*, alarm.*, java.util.Date"%>
 <%
 	request.setCharacterEncoding("UTF-8");
 
+	String userID = (String) session.getAttribute("userID");
 	String commentContent = request.getParameter("comment");
 	int postNum = Integer.parseInt(request.getParameter("postNum"));
 	double commentRate;
@@ -32,6 +33,12 @@
     PostDAO postDao = new PostDAO();
     Post post = postDao.readOnePost(postNum);
     postDao.updateCommentNum(postNum, post, false);
+    
+    // 알림 생성
+    String receiverID = post.getUserID();
+    AlarmDAO alarmDAO = new AlarmDAO();
+    alarmDAO.createAlarm(postNum, receiverID, userID, "comment");
+    alarmDAO.updateAlarmNum(alarmDAO.readAlarmNum(receiverID), receiverID, true);
     
     response.sendRedirect(request.getContextPath() + "/detail.jsp?postNum=" + postNum);
 

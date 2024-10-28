@@ -37,6 +37,8 @@ public class AlarmDAO {
     		return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return -1;
 	}
@@ -53,6 +55,8 @@ public class AlarmDAO {
     		return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return -1;
 	}
@@ -78,6 +82,8 @@ public class AlarmDAO {
             }
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		
 		return result;
@@ -99,6 +105,8 @@ public class AlarmDAO {
     		return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return -1;
 	}
@@ -113,6 +121,8 @@ public class AlarmDAO {
     		return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return -1;
 	}
@@ -132,6 +142,8 @@ public class AlarmDAO {
             }
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		
 		return result;
