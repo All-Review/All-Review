@@ -171,123 +171,50 @@
             display: none;
         }
     </style>
-    <script>
-    let currentIndex = 0;
-    let imageElements = [];
 
-    function handleChange(event) {
-        const files = event.target.files;
-        const preview = document.getElementById('image_preview');
-        preview.innerHTML = ''; // 미리보기 초기화
-
-        if (files.length === 0) {
-            preview.innerHTML = '<p>이미지 미리보기</p>';
-            return;
-        }
-
-        Array.from(files).forEach((file, index) => {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.maxWidth = '100%';
-                img.style.maxHeight = '100%';
-                img.setAttribute('data-index', index);
-
-                // 첫 번째 이미지만 표시하고 나머지는 숨김
-                if (index !== 0) {
-                    img.style.display = 'none';
-                } else {
-                    img.style.display = 'block';
-                }
-
-                preview.appendChild(img);
-            };
-
-            reader.readAsDataURL(file);
-        });
-
-        imageElements = Array.from(preview.getElementsByTagName('img'));
-        currentIndex = 0;
-
-        // 이미지가 2개 이상일 때만 슬라이더 버튼 추가
-        if (imageElements.length > 1) {
-            addNavigation(preview);
-        }
-    }
-
-    function addNavigation(preview) {
-        // 이전, 다음 버튼이 이미 있으면 다시 추가하지 않음
-        if (document.getElementById('prev') || document.getElementById('next')) {
-            return;
-        }
-
-        const prevButton = document.createElement('button');
-        prevButton.id = 'prev';
-        prevButton.textContent = '‹';
-        prevButton.onclick = showPrevImage;
-
-        const nextButton = document.createElement('button');
-        nextButton.id = 'next';
-        nextButton.textContent = '›';
-        nextButton.onclick = showNextImage;
-
-        preview.appendChild(prevButton);
-        preview.appendChild(nextButton);
-    }
-
-    function showPrevImage() {
-        imageElements[currentIndex].style.display = 'none';
-        currentIndex = (currentIndex - 1 + imageElements.length) % imageElements.length;
-        imageElements[currentIndex].style.display = 'block';
-    }
-
-    function showNextImage() {
-        imageElements[currentIndex].style.display = 'none';
-        currentIndex = (currentIndex + 1) % imageElements.length;
-        imageElements[currentIndex].style.display = 'block';
-    }
-           
-    </script>
 </head>
 <body>
-    <button onclick="showForm()">업로드 폼 열기</button>
-    <div id="overlay"></div>
-    <form action="uploadAction.jsp" method="post" enctype="multipart/form-data">
-        <div id="post_form">
-            <div id="image_preview">
-                <p>이미지 미리보기</p>
-            </div>
-            <div class="form-group">
-                <label for="title">제목</label>
-                <input type="text" name="title" id="title" placeholder="제목" />
-                <div class="error" id="titleError">제목을 입력해주세요.</div>
-            </div>
-            <div class="form-group">
-                <label for="images">이미지 업로드 </label>
-                <input type="file" name="files" id="images" accept="image/*" multiple onchange="handleChange(event)" />
-            </div>
-            <div class="form-group">
-                <label for="caption">설명</label>
-                <textarea name="caption" id="caption" placeholder="설명을 입력"></textarea>
-                <div class="error" id="captionError">설명을 입력해주세요.</div>
-            </div>
-            <div class="form-group">
-                <label>별점</label>
-                <div class="rating">
-                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5">★</label>
-                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4">★</label>
-                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3">★</label>
-                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2">★</label>
-                    <input type="radio" id="star1" name="rating" value="1" /><label for="star1">★</label>
-                </div>
-            </div>
-            <div class="button-group">
-                <input type="submit" value="업로드" id="submitButton">
-                <button id="closeButton" type="button">닫기</button>
-            </div>
+    <form id="post_form" action="uploadAction.jsp" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="caption">설명</label>
+            <textarea id="caption" name="caption" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="rating">별점</label>
+            <input type="number" id="rating" name="rating" min="1" max="5" required>
+        </div>
+        <div class="form-group">
+            <label for="images">이미지 업로드</label>
+            <input type="file" id="images" name="files" accept="image/*" multiple required>
+        </div>
+        <div id="image_preview">이미지 미리보기</div>
+        <div class="button-group">
+            <button type="submit" id="submitButton">업로드</button>
         </div>
     </form>
+
+    <script>
+        const imageInput = document.getElementById('images');
+        const preview = document.getElementById('image_preview');
+
+        imageInput.addEventListener('change', (event) => {
+            preview.innerHTML = '';
+            Array.from(event.target.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '100px';
+                    img.style.marginRight = '10px';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
 </body>
 </html>

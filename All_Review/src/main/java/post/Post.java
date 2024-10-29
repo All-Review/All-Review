@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Post {
-    private int postNum;  // 게시물 번호
+    private int post_num;  // 게시물 번호
     private String userID;  // 사용자 ID
     private String postContent;  // 게시물 내용
     private String postImgUrl;  // 이미지 URL 문자열
@@ -19,7 +19,7 @@ public class Post {
     public Post(int postNum, String userID, String postContent, String postImgUrl, 
                 String postTag, double postRate, int commentNum, int likeNum, 
                 boolean isMultipleImg) {
-        this.postNum = postNum;
+        this.post_num = postNum;
         this.userID = userID;
         this.postContent = postContent;
         this.postImgUrl = postImgUrl;
@@ -33,7 +33,7 @@ public class Post {
 
     // Getter 메서드들
     public int getPostNum() {
-        return postNum;
+        return post_num;
     }
 
     public String getUserID() {
@@ -72,15 +72,52 @@ public class Post {
         return images;
     }
 
+    // Setter 메서드들
+    public void setPostNum(int post_num) {
+        this.post_num = post_num;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public void setPostContent(String postContent) {
+        this.postContent = postContent;
+    }
+
+    public void setPostImgUrl(String postImgUrl) {
+        this.postImgUrl = postImgUrl;
+    }
+
+    public void setPostTag(String postTag) {
+        this.postTag = postTag;
+    }
+
+    public void setPostRate(double postRate) {
+        this.postRate = postRate;
+    }
+
+    public void setCommentNum(int commentNum) {
+        this.commentNum = commentNum;
+    }
+
+    public void setLikeNum(int likeNum) {
+        this.likeNum = likeNum;
+    }
+
+    public void setMultipleImg(boolean isMultipleImg) {
+        this.isMultipleImg = isMultipleImg;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
     // 이미지 추가 메서드
     public void addImage(String imageUrl) {
         if (this.images == null) {
             this.images = new ArrayList<>();
         }
         this.images.add(imageUrl);
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
     }
 }

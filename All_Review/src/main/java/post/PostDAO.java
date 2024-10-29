@@ -9,27 +9,30 @@ import util.DatabaseUtil;
 public class PostDAO {
 
     // 게시물 생성
-    public int createPost(Post post) {
-        String sql = "INSERT INTO post (userID, post_content, post_img_url, post_tag, post_rate, comment_num, like_num, is_multiple_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+	public int createPost(Post post) {
+	    String sql = "INSERT INTO post (userID, post_content, post_img_url, post_tag, post_rate, is_multiple_img) VALUES (?, ?, ?, ?, ?, ?)";
+	    try (Connection conn = DatabaseUtil.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, post.getUserID());
-            pstmt.setString(2, post.getPostContent());
-            pstmt.setString(3, post.getPostImgUrl());
-            pstmt.setString(4, post.getPostTag());
-            pstmt.setDouble(5, post.getPostRate());
-            pstmt.setInt(6, post.getCommentNum());
-            pstmt.setInt(7, post.getLikeNum());
-            pstmt.setBoolean(8, post.isMultipleImg());
+	        pstmt.setString(1, post.getUserID());
+	        pstmt.setString(2, post.getPostContent());
+	        pstmt.setString(3, post.getPostImgUrl());
+	        pstmt.setString(4, post.getPostTag());
+	        pstmt.setDouble(5, post.getPostRate());
+	        pstmt.setBoolean(6, post.isMultipleImg());
 
-            return pstmt.executeUpdate();
+	        int result = pstmt.executeUpdate();
+	        if (result > 0) {
+	            System.out.println("게시물 생성 성공");
+	        }
+	        return result;
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
+	    } catch (SQLException e) {
+	        System.err.println("게시물 생성 실패: " + e.getMessage());
+	        e.printStackTrace();
+	        return -1;
+	    }
+	}
 
     // 특정 게시물 조회
     public Post readOnePost(int postNum) {

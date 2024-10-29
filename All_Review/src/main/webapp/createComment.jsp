@@ -1,5 +1,7 @@
 <%@page import="java.time.LocalDateTime"%>
 <%@page import="java.text.SimpleDateFormat"%>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.nio.charset.StandardCharsets" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="post.*, comment.*, java.util.Date"%>
@@ -7,6 +9,7 @@
 	request.setCharacterEncoding("UTF-8");
 
 	String commentContent = request.getParameter("comment");
+	 String userID = (String) session.getAttribute("userID");
 	int postNum = Integer.parseInt(request.getParameter("postNum"));
 	double commentRate;
 	String starRate = request.getParameter("star_rate");
@@ -22,6 +25,7 @@
 	// SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 	SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd  HH:mm");
 	
+	
 	// 댓글 작성
 	//System.out.println(now.toString());
     PostComment comment = new PostComment(postNum, (String) session.getAttribute("userID"), "테스트용닉네임", "images/15fd24a290e3154d44f486b0720b0692_res.jpeg", commentContent, commentRate, format1.format(date));
@@ -32,7 +36,8 @@
     PostDAO postDao = new PostDAO();
     Post post = postDao.readOnePost(postNum);
     postDao.updateCommentNum(postNum, post, false);
+    response.sendRedirect("detail.jsp?postNum=" + postNum + "&image=" + URLEncoder.encode(request.getParameter("image"), "UTF-8"));
     
-    response.sendRedirect(request.getContextPath() + "/detail.jsp?postNum=" + postNum);
+    //response.sendRedirect(request.getContextPath() + "/detail.jsp?postNum=" + postNum);
 
 %>
