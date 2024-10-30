@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import follow.Follow;
 import util.DatabaseUtil;
 
 public class AlarmDAO {
@@ -89,31 +90,9 @@ public class AlarmDAO {
 		return result;
 	}
 	
-	// 알람 개수 업데이트
-	public int updateAlarmNum (int alarmNum, String receiverID, boolean isPlus) {
-		String sql = "update alarmNum set alarm_num=? where receiverID=?";
-		try {
-    		conn = DatabaseUtil.getConnection();
-    		pstmt = conn.prepareStatement(sql);
-    		// 알람 추가하면 +1, 삭제하면 -1
-    		if (isPlus) {
-    			pstmt.setInt(1, alarmNum + 1);
-    		} else {
-    			pstmt.setInt(1, alarmNum - 1);
-    		}
-    		pstmt.setString(2, receiverID);
-    		return pstmt.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			closeConnection();
-		}
-		return -1;
-	}
-	
 	// 알람 개수 초기화
 	public int clearAlarmNum (String receiverID) {
-		String sql = "update alarmNum set alarm_num=0 where receiverID=?";
+		String sql = "update alarms set is_checked=1 where receiverID=?";
 		try {
     		conn = DatabaseUtil.getConnection();
     		pstmt = conn.prepareStatement(sql);
@@ -127,25 +106,22 @@ public class AlarmDAO {
 		return -1;
 	}
 	
-	// 알람 개수 가져오기
-	public int readAlarmNum (String receiverID) {
-		String sql = "select * from alarmNum where receiverID=?";
-		int result = 0;
-    	try {
+	// 안 읽은 알람 수 출력
+	public int getAlarmNum (String receiverID) {
+		String sql = "select count(*) from alarms where receiverId=? and is_checked=false";
+		List<Alarm> result = new ArrayList<>();
+		try {
     		conn = DatabaseUtil.getConnection();
     		pstmt = conn.prepareStatement(sql);
     		pstmt.setString(1, receiverID);
-            rs = pstmt.executeQuery();
-            
-            while(rs.next()) {
-            	result = rs.getInt(2);
-            }
+    		rs = pstmt.executeQuery();
+    		rs.next();
+    		return rs.getInt(1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			closeConnection();
 		}
-		
-		return result;
+		return -1;
 	}
 }

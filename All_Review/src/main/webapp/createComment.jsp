@@ -37,9 +37,7 @@
     // 알림 생성
     String receiverID = post.getUserID();
     AlarmDAO alarmDAO = new AlarmDAO();
-    alarmDAO.createAlarm(postNum, receiverID, userID, "comment");
-    alarmDAO.updateAlarmNum(alarmDAO.readAlarmNum(receiverID), receiverID, true);
-    
+    alarmDAO.createAlarm(postNum, receiverID, userID, "comment");  
     response.sendRedirect(request.getContextPath() + "/detail.jsp?postNum=" + postNum);
 
 %>

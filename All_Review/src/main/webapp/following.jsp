@@ -3,13 +3,18 @@
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
 <%@page import="follow.*"%>
+<%@page import="user.*"%>
 <%@page import="java.util.List" %>
+<%@page import="alarm.*"%>
 <%
-	String otherUserID = request.getParameter("otherUserID");
 	String userID = (String) session.getAttribute("userID");
 	
+	// 유저 정보
+	UserDAO userDAO = new UserDAO();
+	UserDTO user = userDAO.getUser(userID);
+	
 	PostDAO dao = new PostDAO();
-	List<Post> postList = dao.readAllPostsByUser(otherUserID);
+	List<Post> postList = dao.readAllPostsByUser(userID);
 
 	// 실시간 검색어
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
@@ -18,13 +23,10 @@
 
 	// 팔로우
 	FollowDAO followDao = new FollowDAO();
+	List<Follow> followingList = followDao.readAllFollowings(userID);
 	
-	List<Follow> followingList = null;
-	if (otherUserID == null) {
-		followingList = followDao.readAllFollowings(userID);
-	} else {
-		followingList = followDao.readAllFollowings(otherUserID);
-	}
+	// 알림
+	AlarmDAO alarmDAO = new AlarmDAO();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -58,12 +60,16 @@
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
         <% if (userID == null) { %>
-            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li><a href="userLogin.jsp"><span>알림</span></a></li>
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
             <li><a href="userLogin.jsp"><span>프로필</span></a></li>
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
-        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+        	<% if (alarmDAO.getAlarmNum(userID) == 0) { %>
+         		<li><a href="alarm.jsp"><span>알림</span></a></li>
+         	<% } else { %>
+         		<li><a href="alarm.jsp"><span>알림</span><span id="alarm_num"><%= alarmDAO.getAlarmNum(userID) %></span></a></li>
+         	<% } %>
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
             <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
@@ -87,15 +93,11 @@
 
     <div id="content">
         <div class="profile_box">
-            <img src="images/KakaoTalk_20240503_135834006_10.jpg">
+            <img src=<%= user.getUserProfileImage() %>>
             <div>
-                <span>농담곰</span>
-                <% if (otherUserID == null) { %>
-                	<span><%= userID %></span>
-                <% } else { %>
-                	<span><%= otherUserID %></span>
-                <% } %>
-                <span>설명 칸입니다. 안녕하세요 농담곰입니다</span>
+                <span><%= user.getUserNickname() %></span>
+                <span><%= userID %></span>
+                <span><%= user.getUserIntroduce() %></span>
             </div>
 
             <ul>
@@ -123,13 +125,15 @@
             <a href="following.jsp" class="check">팔로우 <%= followDao.getFollowingNum(userID) %></a>
         </div>
         
-	<% for (Follow follow : followingList) { %>
+	<% for (Follow follow : followingList) { 
+		// 다른 유저 정보
+		UserDTO otherUser = userDAO.getUser(follow.getFollowing());%>
 		<div class="follow_list">
-            <img src="images/KakaoTalk_20240503_135834006_12.jpg">
+            <img src=<%= otherUser.getUserProfileImage() %>>
             <div>
-                <a href="userMyPage.jsp?otherUserID=<%= follow.getFollowing() %>">테스트 닉네임</a>
+                <a href="userMyPage.jsp?otherUserID=<%= follow.getFollowing() %>"><%= otherUser.getUserNickname() %></a>
                 <span><%= follow.getFollowing() %></span>
-                <span>안녕하세요</span>
+                <span><%= otherUser.getUserIntroduce() %></span>
             </div>
             <% if (followDao.isFollowing(userID, follow.getFollowing())) { %>
             <button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= follow.getFollowing() %>'" class="following">팔로우 중</button>

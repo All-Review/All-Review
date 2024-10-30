@@ -22,13 +22,11 @@
 		postDao.updateLikeNum(postNum, post, false);
 		// 알림 생성
 		alarmDAO.createAlarm(postNum, receiverID, userID, "like");
-		alarmDAO.updateAlarmNum(alarmDAO.readAlarmNum(receiverID), receiverID, true);
 	} else {
 		likeDao.deleteLike(postNum, userID);
 		postDao.updateLikeNum(postNum, post, true);
 		// 알림 삭제
 		alarmDAO.deleteAlarm(postNum, receiverID, userID);
-		alarmDAO.updateAlarmNum(alarmDAO.readAlarmNum(receiverID), receiverID, false);
 	}
     
     response.sendRedirect(request.getContextPath() + "/detail.jsp?postNum=" + postNum);

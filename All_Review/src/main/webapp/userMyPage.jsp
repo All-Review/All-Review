@@ -2,12 +2,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="post.*"%>
+<%@page import="user.*" %>
 <%@page import="Search.*"%>
 <%@page import="follow.*"%>
 <%@page import="java.util.List" %>
+<%@page import="alarm.*"%>
 <%
 	String otherUserID = request.getParameter("otherUserID");
 	String userID = (String) session.getAttribute("userID");
+	
+	// 유저 정보
+	UserDAO userDAO = new UserDAO();
+	UserDTO otherUser = userDAO.getUser(otherUserID);
 
 	PostDAO dao = new PostDAO();
 	List<Post> postList = dao.readAllPostsByUser(otherUserID);
@@ -19,6 +25,9 @@
 	
 	// 팔로우
 	FollowDAO followDao = new FollowDAO();
+	
+	// 알림
+	AlarmDAO alarmDAO = new AlarmDAO();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -42,10 +51,6 @@
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/image_gallery.js"></script>
     <script src="js/mypage.js"></script>
-    <script>
-        $(function () {
-        });
-    </script>
 </head>
 
 <body>
@@ -56,12 +61,16 @@
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
         <% if (userID == null) { %>
-            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li><a href="userLogin.jsp"><span>알림</span></a></li>
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
             <li><a href="userLogin.jsp"><span>프로필</span></a></li>
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
-        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+        	<% if (alarmDAO.getAlarmNum(userID) == 0) { %>
+         		<li><a href="alarm.jsp"><span>알림</span></a></li>
+         	<% } else { %>
+         		<li><a href="alarm.jsp"><span>알림</span><span id="alarm_num"><%= alarmDAO.getAlarmNum(userID) %></span></a></li>
+         	<% } %>
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
             <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
@@ -88,9 +97,9 @@
         <div class="profile_box">
             <img src="images/KakaoTalk_20240503_135834006_10.jpg">
             <div>
-                <span>농담곰</span>
+                <span><%= otherUser.getUserNickname() %></span>
                 <span><%= otherUserID %></span>
-                <span>설명 칸입니다. 안녕하세요 농담곰입니다</span>
+                <span><%= otherUser.getUserIntroduce() %></span>
             </div>
 
             <ul>

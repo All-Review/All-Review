@@ -21,5 +21,4 @@
     String receiverID = request.getParameter("otherUserID");
     AlarmDAO alarmDAO = new AlarmDAO();
     alarmDAO.createAlarm(0, receiverID, userID, "follow");
-    alarmDAO.updateAlarmNum(alarmDAO.readAlarmNum(receiverID), receiverID, true);
 %>
