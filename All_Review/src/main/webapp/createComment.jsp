@@ -60,6 +60,12 @@
         return;
     }
     postDao.updateCommentNum(postNum, post, false);
+    
+    // 알림 생성
+    String receiverID = post.getUserID();
+    AlarmDAO alarmDAO = new AlarmDAO();
+    alarmDAO.createAlarm(postNum, receiverID, userID, "comment");  
+    response.sendRedirect(request.getContextPath() + "/detail.jsp?postNum=" + postNum);
 
     // 이미지 파라미터 처리 및 리다이렉트
     String imageParam = request.getParameter("image");

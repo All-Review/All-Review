@@ -28,7 +28,7 @@ public class FollowDAO {
 	public int createFollow (String follower, String following) {
 		String sql = "insert into follow values(?, ?)";
 		try {
-    		conn = DatabaseUtil.getConnection();
+			conn = DatabaseUtil.getConnection();
     		pstmt = conn.prepareStatement(sql);
     		pstmt.setString(1, follower);
     		pstmt.setString(2, following);
