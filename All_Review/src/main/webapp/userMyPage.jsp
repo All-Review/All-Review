@@ -43,7 +43,6 @@
     <link rel="stylesheet" href="css/mypage.css">
     <link rel="stylesheet" href="css/image_gallery.css">
     <link rel="stylesheet" href="css/overlay.css">
-    <link rel="stylesheet" href="css/displaySize.css">
 
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,10 +88,10 @@
 			%>
 			<li>
 				<div id="sidebarUserProfile">
-	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + otherUser.getUserProfileImage() %>" alt="Profile Image" />
 	                <div>
-	                    <span><%= user.getUserNickname() %></span>
-                		<span><%= user.getUserID() %></span>
+	                    <span><%= otherUser.getUserNickname() %></span>
+                		<span><%= otherUser.getUserID() %></span>
 	                </div>     
 	            </div>
             </li>
@@ -132,8 +131,8 @@
         <div class="image_box">
 <% for (Post p : postList) { %>
             <div>
-                <img src="<%= p.getImagePath() %>">
-                <a href="detail.jsp?postNum=<%= p.getPostId() %>" class="gallery_overlay">
+                <img src="<%= p.getPostImgUrl() %>">
+                <a href="detail.jsp?postNum=<%= p.getPostNum() %>" class="gallery_overlay">
                     <div>
                     <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
                         <img src="icons/star_white.png">
@@ -189,7 +188,7 @@
          <% 
          
         		}  // --else
-        }  //  --for %>
+        } }  //  --for %>
         </ol>
     </div>
     <!-- /#popular -->

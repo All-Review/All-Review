@@ -55,7 +55,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="js/content_detail.js"></script>
     <script src="js/image_gallery.js"></script>
     <script src="js/search.js"></script>
     <script src="js/setting.js"></script>
@@ -73,73 +72,6 @@
 			
 			UserDTO user = userDAO.getUser(userID);
 		%>
-    <!-- 글 상세 (오버레이 레이어) -->
-    <div id="content_detail">
-        <div class="content_container">
-            <img src="images/15fd24a290e3154d44f486b0720b0692_res.jpeg">
-            <div>
-                <!-- profile -->
-                <div class="profile_box">
-                    <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                    <div>
-                        <span>농담곰</span>
-                        <span>nongdam_review</span>
-                    </div>
-                    <span>3시간</span>
-                </div>
-                <!-- star -->
-                <div class="star">*****</div>
-                <!-- 글 내용 -->
-                <p>안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다</p>
-                <!-- 좋아요, 댓글, 공유 -->
-                <div class="like_container">
-                    <div>
-                        <span>like</span>
-                    </div>
-                    <div>
-                        <span>comment</span>
-                    </div>
-                    <div>
-                        <span>share</span>
-                    </div>
-                </div>
-
-                <!-- 댓글영역 -->
-                <div class="comment_box">
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.</span>
-                        </div>
-                        <span>3시간</span>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.재미</span>
-                        </div>
-                        <span>3시간</span>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.도움이</span>
-                        </div>
-                        <span>3시간</span>
-                    </div>
-
-                    <span>댓글 8개 모두 보기</span>
-                </div>
-                <!-- /댓글 -->
-            </div>
-        </div>
-    </div>
-
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
@@ -243,7 +175,7 @@
 		<% } else  { %>
 				<% for (Post p : postList) { %>
             <div>
-                <img src="<%= p.getImagePath() %>">
+                <img src="<%= p.getPostImgUrl() %>">
                 <a class="gallery_overlay">
                     <div>
                     <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
@@ -301,7 +233,8 @@
          <% 
          
         		}  // --else
-        }  //  --for %>
+        	} 
+         }//  --for %>
         </ol>
     </div>
     <div id="setting_container">

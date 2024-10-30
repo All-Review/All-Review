@@ -232,7 +232,7 @@
                 </div>  <!-- comment-section 끝 -->
             </div>  <!-- post-content 끝 -->
         </div>  <!-- post-container 끝 -->
-        <% } %>  
+        <% }} %>  
     </div>  <!-- content 끝 -->
  
     <script>

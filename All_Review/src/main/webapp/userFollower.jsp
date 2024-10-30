@@ -20,7 +20,6 @@
 	UserDTO user = userDAO.getUser(userID);
 	
 	// 유저 정보
-	UserDAO userDAO = new UserDAO();
 	UserDTO otherUser = userDAO.getUser(otherUserID);
 	
 	PostDAO dao = new PostDAO();
@@ -193,7 +192,8 @@
          <% 
          
         		}  // --else
-        }  //  --for %>
+        	}
+         }//  --for %>
         </ol>
     </div>
     <!-- /#popular -->

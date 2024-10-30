@@ -148,8 +148,8 @@
         <div class="image_box">
 <% for (Post p : postList) { %>
             <div>
-                <img src="<%= p.getImagePath() %>">
-                <a href="detail.jsp?postNum=<%= p.getPostId() %>" class="gallery_overlay">
+                <img src="<%= p.getPostImgUrl() %>">
+                <a href="detail.jsp?postNum=<%= p.getPostNum() %>" class="gallery_overlay">
                     <div>
                     <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
                         <img src="icons/star_white.png">

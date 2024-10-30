@@ -26,7 +26,7 @@
 	// 좋아요
 	LikeDAO likeDao = new LikeDAO();
 	
-	List<String> imageList = dao.splitImages(post.getImagePath());
+	List<String> imageList = dao.splitImages(post.getPostImgUrl());
 %>
 <!DOCTYPE html>
 <html>
@@ -70,10 +70,10 @@
 	        content: {
 	          title: "All Review",
 	          description: "<%= post.getPostContent() %>",
-	          imageUrl: "<%= post.getImagePath() %>",
+	          imageUrl: "<%= post.getPostImgUrl() %>",
 	          link: {
-	        	  mobileWebUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostId() %>",
-		             webUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostId() %>"
+	        	  mobileWebUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostNum() %>",
+		             webUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostNum() %>"
 	          }
 	        }
 	      });
@@ -165,31 +165,11 @@
                 <p><%= post.getPostContent() %></p>
                 
                 <div id="image_list">
-                <% if (post.getIsMultipleImg()) { %>
-                	<button><span>left</span></button>
-                    <button><span>right</span></button>
-                    <ul>
-                    <% for (int i = 0; i < imageList.size(); i++) { %>
-                        <li>
-                            <img src="<%= imageList.get(i) %>">
-                        </li>
-                    <% } %>
-                    </ul>
-
-                    <ol>
-                    <% for (int i = 0; i < imageList.size(); i++) { %>
-                    	<li class="on"><span><%= i + 1 %></span></li>
-                    <% } %>
-                    </ol>
-                <% } else { %>
                 	<ul>
-                    
                         <li>
-                            <img src="<%= post.getImagePath() %>">
+                            <img src="<%= post.getPostImgUrl() %>">
                         </li>
-                    
                     </ul>
-                <% } %>
                     
                 </div>
                 
