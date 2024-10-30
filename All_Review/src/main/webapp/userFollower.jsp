@@ -56,6 +56,7 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/mypage.css">
     <link rel="stylesheet" href="css/follow.css">
+    <link rel="stylesheet" href="css/displaySize.css">
 
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

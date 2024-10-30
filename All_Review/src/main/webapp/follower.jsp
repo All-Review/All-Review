@@ -9,10 +9,14 @@
 <%@page import="java.util.List" %>
 <%@page import="alarm.*"%>
 <%
-	String userID = (String) session.getAttribute("userID");
+	String userID = request.getParameter("userID");
 	
-	// 유저 정보
+	if (userID == null) {
+		userID = (String) session.getAttribute("userID");
+	}
+	
 	UserDAO userDAO = new UserDAO();
+	
 	UserDTO user = userDAO.getUser(userID);
 	
 	PostDAO dao = new PostDAO();
@@ -40,6 +44,7 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main_content.css">
     <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/displaySize.css">
     <link rel="stylesheet" href="css/mypage.css">
     <link rel="stylesheet" href="css/follow.css">
 
