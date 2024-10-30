@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import follow.Follow;
 import util.DatabaseUtil;
 
 public class PostDAO {
@@ -82,8 +84,8 @@ public class PostDAO {
 	public int updateCommentNum (int postNum, Post post, boolean isDelete) {
 		String sql = "update post set comment_num=? where post_num=?";
 		try {
-    		Connection conn = DatabaseUtil.getConnection();
-    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		conn = DatabaseUtil.getConnection();
+    		pstmt = conn.prepareStatement(sql);
     		// 댓글 삭제면 -1, 댓글 추가면 +1
     		if (isDelete) {
         		pstmt.setInt(1, post.getCommentNum() - 1);
@@ -104,8 +106,8 @@ public class PostDAO {
 			public int updateLikeNum (int postNum, Post post, boolean isLiked) {
 				String sql = "update post set like_num=? where post_num=?";
 				try {
-		    		Connection conn = DatabaseUtil.getConnection();
-		    		PreparedStatement pstmt = conn.prepareStatement(sql);
+		    		conn = DatabaseUtil.getConnection();
+		    		pstmt = conn.prepareStatement(sql);
 		    		// 좋아요 누른 상태면 -1, 안누른 상태면 +1
 		    		if (isLiked) {
 		        		pstmt.setInt(1, post.getLikeNum() - 1);
@@ -187,10 +189,10 @@ public class PostDAO {
 		List<Post> result = new ArrayList<>();
 		
     	try {
-    		Connection conn = DatabaseUtil.getConnection();
-    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		conn = DatabaseUtil.getConnection();
+    		pstmt = conn.prepareStatement(sql);
     		pstmt.setString(1, tagString);
-            ResultSet rs = pstmt.executeQuery();
+            rs = pstmt.executeQuery();
             
             while(rs.next()) {
                 Post p = new Post(
@@ -209,6 +211,8 @@ public class PostDAO {
     		
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		
 		return result;
@@ -217,7 +221,7 @@ public class PostDAO {
 	// 특정 유저의모든 게시물 조회
 	public List<Post> readAllPostsByUser(String userID) {
 		List<Post> result = new ArrayList<>();
-		String sql = "SELECT * FROM post where user_id=?";
+		String sql = "SELECT * FROM post where userID=?";
     	try {
     		conn = DatabaseUtil.getConnection();
     		pstmt = conn.prepareStatement(sql);
@@ -240,9 +244,29 @@ public class PostDAO {
             }
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return result;
 	}
 
+	// 특정 유저의 게시물 수 출력
+	public int getUserPostNum (String userID) {
+		String sql = "select count(*) from post where userID=?";
+		List<Post> result = new ArrayList<>();
+		try {
+    		conn = DatabaseUtil.getConnection();
+    		pstmt = conn.prepareStatement(sql);
+    		pstmt.setString(1, userID);
+    		rs = pstmt.executeQuery();
+    		rs.next();
+    		return rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection();
+		}
+		return -1;
+	}
 
 }

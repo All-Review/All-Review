@@ -3,6 +3,7 @@
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
 <%@page import="user.*"%>
+<%@page import="follow.*"%>
 <%@page import="java.util.List" %>
 <%
 	String userID = request.getParameter("userID");
@@ -34,6 +35,9 @@
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
 	List<SearchHistory> searchList = searchDAO.readSearchLists();
 	List<SearchHistoryAll> searchListAll = searchDAO.readSearchListsAllDesc();
+	
+	// 팔로우
+	FollowDAO followDao = new FollowDAO();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -140,9 +144,9 @@
         </div>
 
         <div>
-            <a href="#" class="check">게시물 26</a>
-            <a href="#">팔로워 312</a>
-            <a href="#">팔로우 126</a>
+            <a href="myPage.jsp" class="check">게시물 <%= dao.getUserPostNum(userID) %></a>
+            <a href="follower.jsp">팔로워 <%= followDao.getFollowerNum(userID) %></a>
+            <a href="following.jsp">팔로우 <%= followDao.getFollowingNum(userID) %></a>
         </div>
 
         <div class="image_box">

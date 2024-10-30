@@ -72,12 +72,12 @@
 			
 			UserDTO user = userDAO.getUser(userID);
 		%>
+    <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
-
         <% if (userID == null) { %>
             <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
@@ -85,10 +85,10 @@
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
         	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
-
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="#"><span>프로필</span></a></li>
+            <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
+         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
@@ -233,7 +233,6 @@
          <% 
          
         		}  // --else
-        	} 
          }//  --for %>
         </ol>
     </div>

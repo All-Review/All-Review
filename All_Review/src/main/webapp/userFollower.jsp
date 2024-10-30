@@ -70,34 +70,31 @@
 
 <body>
 
+    <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
         <% if (userID == null) { %>
-            <li><a href="userLogin.jsp"><span>알림</span></a></li>
+            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
             <li><a href="userLogin.jsp"><span>프로필</span></a></li>
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
-        	<% if (alarmDAO.getAlarmNum(userID) == 0) { %>
-         		<li><a href="alarm.jsp"><span>알림</span></a></li>
-         	<% } else { %>
-         		<li><a href="alarm.jsp"><span>알림</span><span id="alarm_num"><%= alarmDAO.getAlarmNum(userID) %></span></a></li>
-         	<% } %>
+        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="#"><span>프로필</span></a></li>
+            <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
+         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
-
-        <%
-            if (userID == null) {
-        %>
+	        <%
+				if(userID == null) {
+			%>
             <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
             <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
-        <%
+            <%
 				} else {
 			%>
 			<li>
@@ -118,7 +115,7 @@
 
     <div id="content">
         <div class="profile_box">
-            <img src="images/KakaoTalk_20240503_135834006_10.jpg">
+            <img src="<%= otherUser.getUserProfileImage() %>">
             <div>
                 <span><%= otherUser.getUserNickname() %></span>
                 <span><%= otherUserID %></span>
@@ -137,7 +134,7 @@
         </div>
 
         <div>
-            <a href="userMyPage.jsp?otherUserID=<%= otherUserID %>">게시물 26</a>
+            <a href="userMyPage.jsp?otherUserID=<%= otherUserID %>">게시물 <%= dao.getUserPostNum(otherUserID) %></a>
             <a href="userFollower.jsp?otherUserID=<%= otherUserID %>" class="check">팔로워 <%= followDao.getFollowerNum(otherUserID) %></a>
             <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>">팔로우 <%= followDao.getFollowingNum(otherUserID) %></a>
         </div>
@@ -146,7 +143,7 @@
 		// 다른 유저 정보
 		UserDTO otherUserFollow = userDAO.getUser(follow.getFollower());%>
 		<div class="follow_list">
-            <img src=<%= otherUserFollow.getUserProfileImage() %>>
+            <img src="<%= otherUserFollow.getUserProfileImage() %>">
             <div>
             <% if (!follow.getFollower().equals(userID)) { %>
                 <a href="userMyPage.jsp?otherUserID=<%= follow.getFollower() %>"><%= otherUserFollow.getUserNickname() %></a>
@@ -192,7 +189,6 @@
          <% 
          
         		}  // --else
-        	}
          }//  --for %>
         </ol>
     </div>
