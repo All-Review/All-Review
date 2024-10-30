@@ -32,6 +32,8 @@
     SearchHistoryDAO searchDao = new SearchHistoryDAO();
     List<SearchHistoryAll> searchListAll = searchDao.readSearchListsAllDesc();
     
+    LikeDAO likeDao = new LikeDAO();
+    
     // 댓글 작성 요청 처리
     if (request.getMethod().equalsIgnoreCase("POST") && request.getParameter("comment") != null) {
         String commentContent = request.getParameter("comment");
@@ -51,6 +53,7 @@
     <link rel="stylesheet" href="css/overlay.css">
     <link rel="stylesheet" href="css/setting.css">
     <link rel="stylesheet" href="css/mainpost.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/displaySize.css">
     <link rel="stylesheet" href="css/alert.css">
     <!-- google web font -->
@@ -124,6 +127,7 @@
                         <span class="nickname"><%= p.getPostTag() %></span>
                         <span>·</span>
                         <span>⭐️ <%= p.getPostRate() %> / 5</span>
+                        
                     </div>
                 </div>
                 <p class="post-text"><%= p.getPostContent() %></p>
@@ -131,12 +135,28 @@
                 <!-- 좋아요 및 댓글 아이콘 -->
                 <div class="post-footer">
                     <div class="icon">
-                        <img src="images/like_icon.png" alt="좋아요">
+				        <form action="likeAction.jsp" method="post" style="display: inline;">
+				            <input type="hidden" name="postNum" value="<%= p.getPostNum() %>">
+				            <button type="submit" class="like-icon-button" style="background: none; border: none;">
+				                <img src="<%= likeDao.isLiked(p.getPostNum(), userID).getUserId() == null ? "images/like_off.png" : "images/like_on.png" %>" 
+				                     alt="좋아요" class="like-icon">
+				            </button>
+				        </form>
                     </div>
                     <div class="icon">
                         <img src="images/comment_icon.png" alt="댓글">
                         <span><%= commentDao.readAllPostComments(p.getPostNum()).size() %></span>
                     </div>
+                    
+                    <% if (userID != null && userID.equals(p.getUserID())) { %>
+					    <!-- 삭제 아이콘 버튼: 게시물 작성자에게만 표시 -->
+					    <form action="deletePost.jsp" method="post" style="display: inline;">
+					        <input type="hidden" name="postNum" value="<%= p.getPostNum() %>">
+					        <button type="submit" class="delete-icon-button">
+					            <i class="fa fa-trash"></i>  <!-- Font Awesome 아이콘 -->
+					        </button>
+					    </form>
+					<% } %>
                 </div>
 
                 <!-- 댓글 섹션 -->

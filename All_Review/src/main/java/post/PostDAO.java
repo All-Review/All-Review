@@ -84,6 +84,26 @@ public class PostDAO {
 		}
 		return -1;
 	}
+	
+	// 좋아요 클릭 시 게시물의 좋아요 개수 업데이트
+			public int updateLikeNum (int postNum, Post post, boolean isLiked) {
+				String sql = "update post set like_num=? where post_num=?";
+				try {
+		    		Connection conn = DatabaseUtil.getConnection();
+		    		PreparedStatement pstmt = conn.prepareStatement(sql);
+		    		// 좋아요 누른 상태면 -1, 안누른 상태면 +1
+		    		if (isLiked) {
+		        		pstmt.setInt(1, post.getLikeNum() - 1);
+		    		} else {
+		        		pstmt.setInt(1, post.getLikeNum() + 1);
+		    		}
+		    		pstmt.setInt(2, postNum);
+		    		return pstmt.executeUpdate();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return -1;
+			}
 
     // 모든 게시물 조회
     public List<Post> readAllPosts() {
@@ -118,5 +138,21 @@ public class PostDAO {
     public List<String> splitImages(String postImgUrl) {
         return Arrays.asList(postImgUrl.split(","));
     }
+    
+ // 게시물 삭제 메서드
+    public int deletePost(int postNum) {
+        String sql = "DELETE FROM post WHERE post_num = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, postNum);
+            return pstmt.executeUpdate(); 
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;  // 오류 발생 시 -1 반환
+        }
+    }
+
 
 }

@@ -28,8 +28,55 @@
     <meta charset="UTF-8">
     <title>게시물 상세 페이지</title>
     <link rel="stylesheet" href="css/detail.css">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/main_content.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/overlay.css">
+    <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/image_gallery.css">
+    <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="css/displaySize.css">
+    <link rel="stylesheet" href="css/alert.css">
 </head>
 <body>
+		<%
+			String userID = (String) session.getAttribute("userID");
+		%>
+ <!-- 왼쪽 네비게이션 바 -->
+ 
+    <aside id="sidebar">
+        <a href="index.jsp"><span>All Review 올리</span></a>
+        <ul id="sidebarIcon">
+            <li><a href="index.jsp"><span>홈</span></a></li>
+            <li><a href="search.jsp"><span>검색</span></a></li>
+        <% if (userID == null) { %>
+            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
+            <li><a href="userLogin.jsp"><span>프로필</span></a></li>
+            <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
+         <% } else { %>
+        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li id="settingBtn"><a href="#"><span>설정</span></a></li>
+            <li><a href="myPage.jsp"><span>프로필</span></a></li>
+            <li><a href="writePage.jsp"><span>게시하기</span></a></li>
+         <% } %>
+        </ul>
+        <ul id="sidebarUserIcon">
+	        <%
+				if(userID == null) {
+			%>
+            <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
+            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
+            <%
+				} else {
+			%>
+			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+			<%
+				}
+			%>
+        </ul>
+    </aside>
     <div class="detail-container">
         <!-- 이미지 출력 -->
         <div class="image-container">
