@@ -86,7 +86,7 @@
 <body>
 		<%
 			String userID = request.getParameter("userID");
-			
+	
 			if (userID == null) {
 				userID = (String) session.getAttribute("userID");
 			}

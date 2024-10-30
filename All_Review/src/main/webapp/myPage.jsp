@@ -1,12 +1,11 @@
-<%@page import="follow.FollowDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
 <%@page import="user.*"%>
-<%@page import="follow.*"%>
 <%@page import="java.util.List" %>
 <%
+	String userID = request.getParameter("userID");
 
 	if (userID == null) {
 		userID = (String) session.getAttribute("userID");
@@ -15,13 +14,8 @@
 	UserDAO userDAO = new UserDAO();
 	
 	UserDTO user = userDAO.getUser(userID);
+	
 
-	// if (userID == null) {
-	// 	userID = (String) session.getAttribute("userID");
-	// }
-
-
-	String userID = (String) session.getAttribute("userID");
 	// 로그인 안되어있으면 로그인페이지로
 	//if (userID == null) {
 	//	response.sendRedirect(request.getContextPath() + "/userLogin.jsp");
@@ -40,9 +34,6 @@
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
 	List<SearchHistory> searchList = searchDAO.readSearchLists();
 	List<SearchHistoryAll> searchListAll = searchDAO.readSearchListsAllDesc();
-	
-	// 팔로우
-	FollowDAO followDao = new FollowDAO();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -128,9 +119,7 @@
             </div>
 
             <ul>
-
-            <% if (userID != null && userID.equals((String) session.getAttribute("userID"))) { %>
-
+            <% if (userID.equals((String) session.getAttribute("userID"))) { %>
                 <li class="mypage_button">
                     <span>privacy setting</span>
                     <ul>
@@ -144,14 +133,16 @@
                         <li id="editProfile">프로필 수정</li>
                     </ul>
                 </li>
+            <% } else { %>
+            	<li><button>팔로우하기</button></li>
             <% } %>
             </ul>
         </div>
 
         <div>
-            <a href="myPage.jsp" class="check">게시물 26</a>
-            <a href="follower.jsp">팔로워 <%= followDao.getFollowerNum(userID) %></a>
-            <a href="following.jsp">팔로우 <%= followDao.getFollowingNum(userID) %></a>
+            <a href="#" class="check">게시물 26</a>
+            <a href="#">팔로워 312</a>
+            <a href="#">팔로우 126</a>
         </div>
 
         <div class="image_box">
