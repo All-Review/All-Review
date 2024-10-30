@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
+<%@page import="user.*"%>
 <%@page import="java.util.List" %>
 <%
 	String userID = request.getParameter("userID");
@@ -9,6 +10,11 @@
 	if (userID == null) {
 		userID = (String) session.getAttribute("userID");
 	}
+	
+	UserDAO userDAO = new UserDAO();
+	
+	UserDTO user = userDAO.getUser(userID);
+	
 
 	// 로그인 안되어있으면 로그인페이지로
 	//if (userID == null) {
@@ -17,6 +23,12 @@
 
 	PostDAO dao = new PostDAO();
 	List<Post> postList = dao.readAllPostsByUser(userID);
+	
+	
+	
+	//String userNickname = userDAO.getUserNicknameById(userID);
+	//String userIntroduce = userDAO.getUserIntroduceById(userID);
+	//String userProfileimage = userDAO.getUserProfileimageById(userID);
 
 	// 실시간 검색어
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
@@ -33,9 +45,12 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main_content.css">
     <link rel="stylesheet" href="css/sidebar.css">
+	<link rel="stylesheet" href="css/displaySize.css">
     <link rel="stylesheet" href="css/mypage.css">
     <link rel="stylesheet" href="css/image_gallery.css">
     <link rel="stylesheet" href="css/overlay.css">
+    <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/profileEditOverlay.css">
 
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,10 +60,9 @@
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/image_gallery.js"></script>
     <script src="js/mypage.js"></script>
-    <script>
-        $(function () {
-        });
-    </script>
+    <script src="js/checkFileSize.js"></script>
+    <script src="js/profileEditOverlay.js"></script>
+
 </head>
 
 <body>
@@ -72,15 +86,23 @@
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
-				if(userID.equals((String) session.getAttribute("userID"))) {
+				if(userID == null) {
 			%>
-			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
-            
+            <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
+            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
             <%
 				} else {
 			%>
-			<li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
-            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
+			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
 			%>
@@ -89,11 +111,11 @@
 
     <div id="content">
         <div class="profile_box">
-            <img src="images/KakaoTalk_20240503_135834006_10.jpg">
+            <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
             <div>
-                <span>농담곰</span>
-                <span><%= userID %></span>
-                <span>설명 칸입니다. 안녕하세요 농담곰입니다</span>
+                <span><%= user.getUserNickname() %></span>
+                <span><%= user.getUserID() %></span>
+                <span><%= user.getUserIntroduce() %></span>
             </div>
 
             <ul>
@@ -101,14 +123,14 @@
                 <li class="mypage_button">
                     <span>privacy setting</span>
                     <ul>
-                        <li onClick="location.href='#'">탈퇴하기</li>
-                        <li onClick="location.href='#'">로그아웃</li>
+                        <li onClick="location.href='deleteUser.jsp'">탈퇴하기</li>
+                        <li onClick="location.href='userLogout.jsp'">로그아웃</li>
                     </ul>
                 </li>
                 <li class="mypage_button">
                     <span>setting</span>
                     <ul>
-                        <li onClick="location.href='#'">프로필 수정</li>
+                        <li id="editProfile">프로필 수정</li>
                     </ul>
                 </li>
             <% } else { %>
@@ -187,6 +209,32 @@
         </ol>
     </div>
     <!-- /#popular -->
+    
+    
+    <!-- 프로필 수정 오버레이 -->
+	<div id="profileEditOverlay">
+		<div id="profileEditBox">
+		<button class="close" id="closeProfileEdit"><span>닫기</span></button>
+		<h2>프로필 수정</h2>
+			        
+			<form method="post" action="./userUpdateAction.jsp" id="editBox" enctype="multipart/form-data">
+				<div id="profileImageContainer">
+					<img id="profileImagePreview" src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="프로필 이미지" />
+					<div class="overlayText">이미지<br>선택하기</div>
+				</div>
+				<input type="file" name="newImage" id="newImageUpload" accept="image/*"/>
+					            
+				<label for="nickname">닉네임</label>
+				<input type="text" name="newNickname" id="nickname" value="<%= user.getUserNickname() %>" placeholder="닉네임">
+					            
+				<label for="description">자기소개</label>
+				<textarea name="newIntroduce" id="description" rows="4" placeholder="자기소개"><%= user.getUserIntroduce() %></textarea>
+					            
+				<span id="fileSizeMessage" style="color:red;"></span>
+				<button type="submit" id="userUpdate" class="account">수정</button>
+			</form>
+		</div>
+	</div>
 
 </body>
 

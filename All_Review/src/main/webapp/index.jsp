@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %>
-<%@ page import="user.UserDAO" %>
+<%@ page import="user.*" %>
 <%@ page import="java.io.PrintWriter"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
 <%@ page import="javax.servlet.http.HttpServletRequest" %>
@@ -24,7 +24,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="js/content_detail.js"></script>
+    <script src="js/detail.js"></script>
     <script src="js/setting.js"></script>
     <script>
     </script>
@@ -34,6 +34,14 @@
 	<%
 		HttpSession session1 = request.getSession();
 	    String userID = (String) session.getAttribute("userID");
+	    
+	    UserDAO userDAO = new UserDAO();
+	    
+	    UserDTO user = userDAO.getUser(userID);
+	    
+		//String userNickname = userDAO.getUserNicknameById(userID);
+		//String userIntroduce = userDAO.getUserIntroduceById(userID);
+		//String userProfileimage = userDAO.getUserProfileimageById(userID);
 	%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
@@ -62,6 +70,15 @@
             <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}

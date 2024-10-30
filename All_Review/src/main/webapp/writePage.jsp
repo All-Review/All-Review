@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="user.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/setting.css">
     <link rel="stylesheet" href="css/sidebar.css">
+	<link rel="stylesheet" href="css/displaySize.css">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/writePage.js"></script>
@@ -18,7 +20,15 @@
 </head>
 <body>
     	<%
-			String userID = (String) session.getAttribute("userID");	
+	    	String userID = request.getParameter("userID");
+	    	
+	    	if (userID == null) {
+	    		userID = (String) session.getAttribute("userID");
+	    	}
+	    	
+	    	UserDAO userDAO = new UserDAO();
+	    	
+	    	UserDTO user = userDAO.getUser(userID);
 		%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
@@ -47,6 +57,15 @@
             <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
