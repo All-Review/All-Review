@@ -10,6 +10,7 @@
 <% 
 // test
 // test2
+	
 	PostDAO dao = new PostDAO();
 	List<Post> postList = dao.readAllPosts();
 
@@ -30,6 +31,7 @@
     <link rel="stylesheet" href="css/image_gallery.css">
     <link rel="stylesheet" href="css/search.css">
     <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/displaySize.css">
 
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,11 +42,20 @@
     <script src="js/image_gallery.js"></script>
     <script src="js/search.js"></script>
     <script src="js/setting.js"></script>
+    <script src="js/logout.js"></script>
 </head>
 
 <body>
 		<%
-			String userID = (String) session.getAttribute("userID");
+			String userID = request.getParameter("userID");
+			
+			if (userID == null) {
+				userID = (String) session.getAttribute("userID");
+			}
+			
+			UserDAO userDAO = new UserDAO();
+			
+			UserDTO user = userDAO.getUser(userID);
 		%>
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
@@ -72,6 +83,15 @@
             <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}

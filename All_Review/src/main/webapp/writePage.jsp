@@ -1,4 +1,6 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="user.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +11,7 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/setting.css">
     <link rel="stylesheet" href="css/sidebar.css">
+	  <link rel="stylesheet" href="css/displaySize.css">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/writePage.js"></script>
@@ -18,7 +21,15 @@
 </head>
 <body>
     	<%
-			String userID = (String) session.getAttribute("userID");	
+	    	String userID = request.getParameter("userID");
+	    	
+	    	if (userID == null) {
+	    		userID = (String) session.getAttribute("userID");
+	    	}
+	    	
+	    	UserDAO userDAO = new UserDAO();
+	    	
+	    	UserDTO user = userDAO.getUser(userID);
 		%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
@@ -47,6 +58,15 @@
             <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
@@ -56,34 +76,33 @@
 
     <!-- 중앙 컨텐츠 -->
     <div id="content">
-	    <form action="uploadAction.jsp" method="post" enctype="multipart/form-data">
-	        <div id="post_form">
-	            <div id="image_preview">
-	                <img id="preview" />
-	            </div>
-	            <div class="form-group">
-	                <label for="title">제목</label>
-	                <input type="text" name="title" id="title" placeholder=" 제목" />
-	            </div>
-	            <div class="form-group">
-	                <label for="image">이미지 업로드</label>
-	                <input type="file" name="file" id="image" accept="image/*" onchange="handleChange(event)" />
-	            </div>
-	            <div class="form-group">
-	                <label for="caption">설명</label>
-	                <textarea name="caption" id="caption" placeholder="설명을 입력"></textarea>
-	            </div>
-	            <div class="button-group">
-	                <input type="submit" value="업로드" id="submitButton">
-	                <button id="closeButton" type="button">닫기</button>
-	            </div>
-	        </div>
-	    </form>
+	    <form id="post_form" action="uploadAction.jsp" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="caption">설명</label>
+            <textarea id="caption" name="caption" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="rating">별점</label>
+            <input type="number" id="rating" name="rating" min="1" max="5" required>
+        </div>
+        <div class="form-group">
+            <label for="images">이미지 업로드</label>
+            <input type="file" id="images" name="files" accept="image/*" multiple required>
+        </div>
+        <div id="image_preview">이미지 미리보기</div>
+        <div class="button-group">
+            <button type="submit" id="submitButton">업로드</button>
+        </div>
+    </form>
     </div>
     <!-- /content -->
 
     <div id="popular">
     </div>
 </body>
-</body>
 </html>
+

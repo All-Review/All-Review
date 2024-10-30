@@ -3,12 +3,21 @@
 <%@page import="post.*"%>
 <%@page import="user.*" %>
 <%@page import="Search.*"%>
+<%@page import="user.*" %>
 <%@page import="follow.*"%>
 <%@page import="alarm.*"%>
 <%@page import="java.util.List" %>
 <%
 	String otherUserID = request.getParameter("otherUserID");
-	String userID = (String) session.getAttribute("userID");
+	String userID = request.getParameter("userID");
+	
+	if (userID == null) {
+		userID = (String) session.getAttribute("userID");
+	}
+	
+	UserDAO userDAO = new UserDAO();
+	
+	UserDTO user = userDAO.getUser(userID);
 	
 	// 유저 정보
 	UserDAO userDAO = new UserDAO();
@@ -78,19 +87,28 @@
          		<li><a href="alarm.jsp"><span>알림</span><span id="alarm_num"><%= alarmDAO.getAlarmNum(userID) %></span></a></li>
          	<% } %>
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="myPage.jsp"><span>프로필</span></a></li>
+            <li><a href="#"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
-         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
-	        <%
-				if(userID == null) {
-			%>
+
+        <%
+            if (userID == null) {
+        %>
             <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
             <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
-            <%
+        <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}

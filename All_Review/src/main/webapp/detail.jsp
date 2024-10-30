@@ -9,6 +9,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% 
+	
+	
 	PostDAO dao = new PostDAO();
 	int postNum = Integer.parseInt(request.getParameter("postNum"));
 	Post post = dao.readOnePost(postNum);
@@ -83,7 +85,15 @@
 
 <body>
 		<%
-			String userID = (String) session.getAttribute("userID");
+			String userID = request.getParameter("userID");
+	
+			if (userID == null) {
+				userID = (String) session.getAttribute("userID");
+			}
+			
+			UserDAO userDAO = new UserDAO();
+			
+			UserDTO user = userDAO.getUser(userID);
 		%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
@@ -112,6 +122,15 @@
             <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
@@ -244,11 +263,11 @@
                 <div class="comment_box">
                 <% for(PostComment comment : commentList) { %>
                     <div class="profile_box">
-                        <a href="userMyPage.jsp?otherUserID=<%= comment.getUserId() %>"><img src="<%= comment.getUserProfileImage() %>"></a>
+                        <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><img src="<%= comment.getUserProfileImage() %>"></a>
                         <div>
 
                             <div>
-                                <a href="userMyPage.jsp?otherUserID=<%= comment.getUserId() %>"><span><%= comment.getNickname() %></span></a>
+                                <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><span><%= comment.getNickname() %></span></a>
                                 <span><%= comment.getUserId() %></span>
                                 <span><%= comment.getCommentCreateAt() %></span>
                                 <% if(comment.getUserId().equals(userID)) { %>

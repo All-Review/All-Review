@@ -29,6 +29,8 @@ public class PostCommentDAO {
 		return -1;
 	}
 	
+
+	
 	// 댓글 목록 읽어오기
 	public List<PostComment> readAllPostComments(int postIndex) {
 		String sql = "select * from comments where post_index=?";

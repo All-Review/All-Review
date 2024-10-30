@@ -1,6 +1,7 @@
 <%@page import="user.UserDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="user.*" %>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
 <%@page import="follow.*"%>
@@ -72,19 +73,28 @@
          		<li><a href="alarm.jsp"><span>알림</span><span id="alarm_num"><%= alarmDAO.getAlarmNum(userID) %></span></a></li>
          	<% } %>
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="myPage.jsp"><span>프로필</span></a></li>
+            <li><a href="#"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
-         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
-	        <%
-				if(userID == null) {
-			%>
+
+        <%
+            if (userID == null) {
+        %>
             <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
             <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
-            <%
+        <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
@@ -137,9 +147,9 @@
                 <span><%= otherUser.getUserIntroduce() %></span>
             </div>
             <% if (followDao.isFollowing(userID, follow.getFollower())) { %>
-            <button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= follow.getFollowing() %>'" class="following">팔로우 중</button>
+            <button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= follow.getFollower() %>'" class="following">팔로우 중</button>
             <% }  else { %>
-            <button onClick="location.href='followAction.jsp?otherUserID=<%= follow.getFollowing() %>'">팔로우하기</button>
+            <button onClick="location.href='followAction.jsp?otherUserID=<%= follow.getFollower() %>'">팔로우하기</button>
             <% } %>
         </div>
 	<% } %>
