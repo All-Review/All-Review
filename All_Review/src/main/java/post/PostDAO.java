@@ -7,6 +7,19 @@ import java.util.List;
 import util.DatabaseUtil;
 
 public class PostDAO {
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	
+	// 커넥션 해제
+    private void closeConnection () {
+        if (rs != null) try { rs.close(); } catch (Exception ignored) { }
+        if (pstmt != null) try { pstmt.close(); } catch (Exception ignored) { }
+        if (conn != null) try { conn.close(); } catch (Exception ignored) { }
+        rs = null;
+        pstmt = null;
+        conn = null;
+    }
 
     // 게시물 생성
 	public int createPost(Post post) {
@@ -81,6 +94,8 @@ public class PostDAO {
     		return pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			closeConnection();
 		}
 		return -1;
 	}
@@ -101,6 +116,8 @@ public class PostDAO {
 		    		return pstmt.executeUpdate();
 				} catch (Exception e) {
 					e.printStackTrace();
+				} finally {
+					closeConnection();
 				}
 				return -1;
 			}
@@ -153,6 +170,79 @@ public class PostDAO {
             return -1;  // 오류 발생 시 -1 반환
         }
     }
+    
+	// 게시물들의 평균 평점
+	public double getAverageRate(List<Post> postLists) {
+		double sum = 0;
+		for (int i = 0; i < postLists.size(); i++) {
+			sum += postLists.get(i).getPostRate();
+		}
+		double result = sum / postLists.size();
+		return result;
+	}
+	
+	// 태그 검색
+	public List<Post> readSearchedPosts (String tagString) {
+		String sql = "select * from post where post_tag=?";
+		List<Post> result = new ArrayList<>();
+		
+    	try {
+    		Connection conn = DatabaseUtil.getConnection();
+    		PreparedStatement pstmt = conn.prepareStatement(sql);
+    		pstmt.setString(1, tagString);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+                Post p = new Post(
+                		rs.getInt(1),
+                		rs.getString(2),
+                		rs.getString(3),
+                		rs.getString(4),
+                		rs.getString(5),
+                        rs.getDouble(6),
+                        rs.getInt(7),
+                        rs.getInt(8),
+                        rs.getBoolean(9)
+                );
+                result.add(p);
+            }
+    		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	// 특정 유저의모든 게시물 조회
+	public List<Post> readAllPostsByUser(String userID) {
+		List<Post> result = new ArrayList<>();
+		String sql = "SELECT * FROM post where user_id=?";
+    	try {
+    		conn = DatabaseUtil.getConnection();
+    		pstmt = conn.prepareStatement(sql);
+    		pstmt.setString(1, userID);
+            rs = pstmt.executeQuery();
+            
+            while(rs.next()) {
+            	Post post = new Post(
+                		rs.getInt(1),
+                		rs.getString(2),
+                		rs.getString(3),
+                		rs.getString(4),
+                		rs.getString(5),
+                        rs.getDouble(6),
+                        rs.getInt(7),
+                        rs.getInt(8),
+                        rs.getBoolean(9)
+                );
+                result.add(post);
+            }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 
 }
