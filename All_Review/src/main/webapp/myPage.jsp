@@ -6,11 +6,13 @@
 <%@page import="follow.*"%>
 <%@page import="java.util.List" %>
 <%
+
 	String otherUserID = null;
 
 	// if (userID == null) {
 	// 	userID = (String) session.getAttribute("userID");
 	// }
+
 
 	String userID = (String) session.getAttribute("userID");
 	// 로그인 안되어있으면 로그인페이지로
@@ -78,7 +80,9 @@
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
+
 				if(userID != null && userID.equals((String) session.getAttribute("userID"))) {
+
 			%>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
             
@@ -103,7 +107,9 @@
             </div>
 
             <ul>
+
             <% if (userID != null && userID.equals((String) session.getAttribute("userID"))) { %>
+
                 <li class="mypage_button">
                     <span>privacy setting</span>
                     <ul>

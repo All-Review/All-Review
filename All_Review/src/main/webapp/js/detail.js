@@ -86,5 +86,11 @@ $(function () {
 
         });
     });
+	
+	function openImageDetail(postNum, imageUrl) {
+	    const encodedImageUrl = encodeURIComponent(imageUrl); // 이미지 URL 인코딩
+	    console.log(`Navigating to detailPage.jsp?postNum=${postNum}&imageUrl=${encodedImageUrl}`); // 디버깅용 로그
+	    window.location.href = `detailPage.jsp?postNum=${postNum}&imageUrl=${encodedImageUrl}`;
+	}
     
 });

@@ -1,13 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*" %>
-<%@ page import="user.UserDAO" %>
-<%@ page import="java.io.PrintWriter"%>
+<%@ page import="java.sql.*, java.util.*, util.DatabaseUtil" %>
+<%@page import="post.*"%>
+<%@page import="Search.*"%>
+<%@page import="util.*"%>
+<%@page import="user.*" %>
+<%@page import="comment.*" %>
+<%@page import="like.*"%>
+<%@ page import="java.net.URLEncoder" %>
+<%@ page import="java.nio.charset.StandardCharsets" %>
+<%@page import="java.util.Collections"%>
 <%@ page import="javax.servlet.http.HttpSession" %>
-<%@ page import="javax.servlet.http.HttpServletRequest" %>
-<%@ page import="javax.servlet.http.HttpServletResponse" %>
+<%@ page import="Search.SearchHistoryDAO" %>
+<%@ page import="Search.SearchHistoryAll" %>
+
+<%
+    PostDAO postDAO = new PostDAO();
+    List<Post> posts = postDAO.readAllPosts();
+    List<String> images;
+    String postNumStr = request.getParameter("postNum");
+    int postNum = 0; 
+    Post post = postDAO.readOnePost(postNum);
+
+    // 세션에서 사용자 ID 가져오기
+    String user_id = (String) session.getAttribute("user_id");
+
+    // 댓글 
+    PostCommentDAO commentDao = new PostCommentDAO();
+    List<PostComment> commentList = commentDao.readAllPostComments(postNum);
+    
+    // 실시간 검색어 가져오기
+    SearchHistoryDAO searchDao = new SearchHistoryDAO();
+    List<SearchHistoryAll> searchListAll = searchDao.readSearchListsAllDesc();
+    
+    LikeDAO likeDao = new LikeDAO();
+    
+    // 댓글 작성 요청 처리
+    if (request.getMethod().equalsIgnoreCase("POST") && request.getParameter("comment") != null) {
+        String commentContent = request.getParameter("comment");
+        int postNumParam = Integer.parseInt(request.getParameter("postNum"));
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -17,7 +52,10 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/overlay.css">
     <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/mainpost.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/displaySize.css">
+    <link rel="stylesheet" href="css/alert.css">
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,10 +69,9 @@
 </head>
 
 <body>
-	<%
-		HttpSession session1 = request.getSession();
-	    String userID = (String) session.getAttribute("userID");
-	%>
+
+<% String userID = (String) session.getAttribute("userID"); %>
+
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
@@ -48,457 +85,165 @@
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
         	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="myPage.jsp"><span>프로필</span></a></li>
+            <li><a href="#"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
-         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
-	        <%
-				if(userID == null) {
-			%>
+
+        <%
+            if (userID == null) {
+        %>
+
             <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
             <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
-            <%
-				} else {
-			%>
-			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
-			<%
-				}
-			%>
+        <%
+            } else {
+        %>
+            <li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+        <%
+            }
+        %>
         </ul>
     </aside>
 
-    <!-- 중앙 컨텐츠 -->
+    <!-- 게시물 컨텐츠 -->
     <div id="content">
-        <ul id="toggle">
-            <li>추천</li>
-            <li>팔로우</li>
-        </ul>
-
-        <div class="content_container">
-            <a href="detail.jsp?postNum=37">
-                <img src="images/15fd24a290e3154d44f486b0720b0692_res.jpeg">
-            </a>
-            <div>
-                <!-- profile -->
-                <div class="profile_box">
-                    <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                    <div>
-                        <span>농담곰</span>
-                        <span>nongdam_review</span>
-                    </div>
-                    <span>3시간</span>
-                </div>
-                <!-- star -->
-                <div class="star">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_half.png">
-                </div>
-                <!-- 글 내용 -->
-                <p>안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다</p>
-                <!-- 좋아요, 댓글, 공유 -->
-                <div class="like_container">
-                    <div>
-                        <span>like</span><span>31</span>
-                    </div>
-                    <div>
-                        <span>comment</span><span>8</span>
-                    </div>
-                    <div>
-                        <span>share</span>
+        <% for (Post p : posts) { %>  <!-- 게시물 반복문 시작 -->
+        <div class="post-container">
+            
+            <!-- 게시물 이미지 슬라이더 -->
+            <div class="image-container">
+                <%
+                    images = postDAO.splitImages(p.getPostImgUrl());
+                %>
+                <div class="slider-container">
+                    <div class="slider" id="slider-<%= p.getPostNum() %>">
+                        <% for (String image : images) { %>
+                            <img src="<%= image %>" 
+                                 alt="이미지" 
+                                 style="cursor: pointer;" 
+                                 onclick="window.location.href='detail.jsp?postNum=<%= p.getPostNum() %>&image=<%= URLEncoder.encode(image, "UTF-8") %>'"/>
+                        <% } %>
                     </div>
                 </div>
+            </div>
 
-                <!-- 댓글영역 -->
-                <div class="comment_box">
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.재미</span>
-                        </div>
+            <!-- 게시물 내용 -->
+            <div class="post-content">
+                <div class="post-header">
+                    <div class="post-info">
+                        <img src="images/user_profile.png" alt="프로필 이미지" class="profile-img">
+                        <span class="nickname"><%= p.getPostTag() %></span>
+                        <span>·</span>
+                        <span>⭐️ <%= p.getPostRate() %> / 5</span>
                         
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
+                    </div>
+                </div>
+                <p class="post-text"><%= p.getPostContent() %></p>
+
+                <!-- 좋아요 및 댓글 아이콘 -->
+                <div class="post-footer">
+                    <div class="icon">
+				        <form action="likeAction.jsp" method="post" style="display: inline;">
+				            <input type="hidden" name="postNum" value="<%= p.getPostNum() %>">
+				            <button type="submit" class="like-icon-button" style="background: none; border: none;">
+				                <img src="<%= likeDao.isLiked(p.getPostNum(), userID).getUserId() == null ? "images/like_off.png" : "images/like_on.png" %>" 
+				                     alt="좋아요" class="like-icon">
+				            </button>
+				        </form>
+                    </div>
+                    <div class="icon">
+                        <img src="images/comment_icon.png" alt="댓글">
+                        <span><%= commentDao.readAllPostComments(p.getPostNum()).size() %></span>
+                    </div>
+                    
+                    <% if (userID != null && userID.equals(p.getUserID())) { %>
+					    <!-- 삭제 아이콘 버튼: 게시물 작성자에게만 표시 -->
+					    <form action="deletePost.jsp" method="post" style="display: inline;">
+					        <input type="hidden" name="postNum" value="<%= p.getPostNum() %>">
+					        <button type="submit" class="delete-icon-button">
+					            <i class="fa fa-trash"></i>  <!-- Font Awesome 아이콘 -->
+					        </button>
+					    </form>
+					<% } %>
+                </div>
+
+                <!-- 댓글 섹션 -->
+                <div class="comment-section">
+                    <!-- 댓글 작성 폼 -->
+                    <%
+                        if (userID == null) {  // 로그인하지 않은 경우
+                    %>
+                        <form action="./userLogin.jsp" id="comment_form">
+                            <img src="images/user_default_profile.png" alt="프로필 이미지">
+                            <input name="comment" type="text" placeholder="댓글 쓰기" autocomplete="off" required>
+                            <button type="submit" id="comment_submit">로그인</button>
+                        </form>
+                    <%
+                        } else {  // 로그인한 경우
+                    %>
+                        <form action="./createComment.jsp?postNum=<%= p.getPostNum() %>" method="post" id="comment_form">
+                            <img src="images/user_default_profile.png" alt="프로필 이미지">
+                            <input name="comment" type="text" placeholder="댓글 쓰기" autocomplete="off" required>
+                            <button type="submit" id="comment_submit">확인</button>
+                        </form>
+                    <%
+                        }
+                    %>
+
+                    <!-- 댓글 리스트 -->
+                    <div class="comment_box">
+                        <%
+                            List<PostComment> comments = commentDao.readAllPostComments(p.getPostNum());
+                            for (PostComment comment : comments) {
+                        %>
+                        <div class="profile_box">
+                            <a href="myPage.jsp?userID=<%= comment.getUserId() %>">
+                                <img src="<%= comment.getUserProfileImage() %>" alt="프로필 이미지">
+                            </a>
+                            <div>
+                                <a href="myPage.jsp?userID=<%= comment.getUserId() %>">
+                                    <span class="nickname"><%= comment.getNickname() %></span>
+                                </a>
+                                <div>
+                                    <span><%= comment.getCommentCreateAt() %></span>
+                                    <p><%= comment.getCommentContent() %></p>
+                                </div>
                             </div>
-                            <span>3시간</span>
                         </div>
-                    </div>
+                        <% } %>
+                    </div>  <!-- comment_box 끝 -->
+                </div>  <!-- comment-section 끝 -->
+            </div>  <!-- post-content 끝 -->
+        </div>  <!-- post-container 끝 -->
+        <% } %>  
+    </div>  <!-- content 끝 -->
+ 
+    <script>
+        const slideIndices = {};
 
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.도움이</span>
-                        </div>
-                        
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
+        function showSlide(sliderId, index) {
+            const slides = document.querySelectorAll(`#${sliderId} img`);
+            index = (index + slides.length) % slides.length;
+            slides.forEach((slide, i) => slide.style.display = i === index ? 'block' : 'none');
+            return index;
+        }
 
-                    <span>댓글 8개 모두 보기</span>
-                </div>
-                <!-- /댓글 -->
-            </div>
+        function openImagePage(imageName) {
+            window.open("ditail.jsp?name=" + imageName, "_blank");
+        }
 
-        </div>
-        <!-- /content_container -->
+        function nextSlide(postId) {
+            slideIndices[postId] = (slideIndices[postId] || 0) + 1;
+            showSlide(`slider-${postId}`, slideIndices[postId]);
+        }
 
-        <div class="content_container">
-            <img src="images/KakaoTalk_20240503_135834006.jpg">
-            <div>
-                <!-- profile -->
-                <div class="profile_box">
-                    <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                    <div>
-                        <span>농담곰</span>
-                        <span>nongdam_review</span>
-                    </div>
-                    <span>3시간</span>
-                </div>
-                <!-- star -->
-                <div class="star">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_gray.png">
-                    <img src="icons/star_gray.png">
-                </div>
-                <!-- 글 내용 -->
-                <p>안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다</p>
-                <!-- 좋아요, 댓글, 공유 -->
-                <div class="like_container">
-                    <div>
-                        <span>like</span>
-                    </div>
-                    <div>
-                        <span>comment</span>
-                    </div>
-                    <div>
-                        <span>share</span>
-                    </div>
-                </div>
-
-                <!-- 댓글영역 -->
-                <div class="comment_box">
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.재미</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.도움이</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <span>댓글 8개 모두 보기</span>
-                </div>
-                <!-- /댓글 -->
-            </div>
-
-        </div>
-        <!-- /content_container -->
-
-        <div class="content_container">
-            <img src="images/15fd24a290e3154d44f486b0720b0692_res.jpeg">
-            <div>
-                <!-- profile -->
-                <div class="profile_box">
-                    <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                    <div>
-                        <span>농담곰</span>
-                        <span>nongdam_review</span>
-                    </div>
-                    <span>3시간</span>
-                </div>
-                <!-- star -->
-                <div class="star">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_colored.png">
-                    <img src="icons/star_half.png">
-                    <img src="icons/star_gray.png">
-                    <img src="icons/star_gray.png">
-                </div>
-                <!-- 글 내용 -->
-                <p>안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다.안녕하세요. 농담곰입니다. 리뷰를해보겠습니다</p>
-                <!-- 좋아요, 댓글, 공유 -->
-                <div class="like_container">
-                    <div>
-                        <span>like</span>
-                    </div>
-                    <div>
-                        <span>comment</span>
-                    </div>
-                    <div>
-                        <span>share</span>
-                    </div>
-                </div>
-
-                <!-- 댓글영역 -->
-                <div class="comment_box">
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.재미</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <div class="profile_box">
-                        <img src="images/KakaoTalk_20240503_135834006_10.jpg">
-                        <div>
-                            <span>농담곰</span>
-                            <span>도움이 됩니다.도움이</span>
-                        </div>
-
-                        <div>
-                            <div class="comment_star">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                            </div>
-                            <span>3시간</span>
-                        </div>
-                    </div>
-
-                    <span>댓글 8개 모두 보기</span>
-                </div>
-                <!-- /댓글 -->
-            </div>
-
-        </div>
-        <!-- /content_container -->
-
-    </div>
-    <!-- /content -->
-
-    <div id="popular">
-        <h3>실시간 검색어</h3>
-        <ol>
-            <li>
-                <a href="">
-                    <div>
-                        <span>HTML</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>광주 맛집</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>하얀 농담곰</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>컴퓨터</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>데이터베이스</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>커피</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기7번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기8번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기9번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <div>
-                        <span>인기10번</span>
-                        <span>201 게시물</span>
-                    </div>
-                    <span>평점 3.0</span>
-                </a>
-            </li>
-        </ol>
-    </div>
-    
-    <div id="setting_container">
-        <div id="settingBox">
-            <h1><span>설정</span><p>설정</p></h1>
-            <button class="close"><span>닫기</span></button>
-
-            <div id="setBox">
-                <div id="switchBox">
-                    <label>
-                        <span>알람</span>
-                        <input id="alertSwitch" role="switch" type="checkbox"/>
-                    </label>
-                </div>
-            </div>
-
-        </div>
-    </div>
+        function prevSlide(postId) {
+            slideIndices[postId] = (slideIndices[postId] || 0) - 1;
+            showSlide(`slider-${postId}`, slideIndices[postId]);
+        }
+    </script>
 </body>
-
 </html>

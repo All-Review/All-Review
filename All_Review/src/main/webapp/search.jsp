@@ -44,7 +44,9 @@
 
 <body>
 		<%
+
 			String userID = (String) session.getAttribute("userID");
+
 		%>
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>

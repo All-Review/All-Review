@@ -156,6 +156,31 @@
     display: block;
     margin-right: 2px;
 }
+.delete-icon-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: relative;
+}
+
+/* 아이콘 기본 스타일 */
+.delete-icon-button i {
+    font-size: 20px;
+    color: #888;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+/* 마우스 호버 시 색상 및 크기 변경 */
+.delete-icon-button:hover i {
+    color: #ff4d4d;
+    transform: scale(1.2);
+}
+
+/* 클릭 시 간단한 눌림 효과 */
+.delete-icon-button:active i {
+    transform: scale(1.1);
+}
 
 /* 댓글 영역 별점, 시간 부분 */
 .content_container .profile_box > div:last-child {
