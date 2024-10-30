@@ -4,33 +4,31 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>upload</title>
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/writePage.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/setting.css">
-    <link rel="stylesheet" href="css/sidebar.css">
-	  <link rel="stylesheet" href="css/displaySize.css">
-
-    <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="js/writePage.js"></script>
-    <script src="js/setting.js"></script>
-    <script>
-    </script>
+	<meta charset="UTF-8">
+	<title>upload</title>
+	<link rel="stylesheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/writePage.css">
+	<link rel="stylesheet" href="css/common.css">
+	<link rel="stylesheet" href="css/setting.css">
+	<link rel="stylesheet" href="css/sidebar.css">
+	<link rel="stylesheet" href="css/displaySize.css">
+	
+	<script src="https://code.jquery.com/jquery.min.js"></script>
+	<script src="js/writePage.js"></script>
+	<script src="js/setting.js"></script>
 </head>
 <body>
     	<%
 	    	String userID = request.getParameter("userID");
-	    	
+	
 	    	if (userID == null) {
 	    		userID = (String) session.getAttribute("userID");
 	    	}
-	    	
+	
 	    	UserDAO userDAO = new UserDAO();
-	    	
+	
 	    	UserDTO user = userDAO.getUser(userID);
-		%>
+    	%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>

@@ -43,6 +43,7 @@
     <link rel="stylesheet" href="css/mypage.css">
     <link rel="stylesheet" href="css/image_gallery.css">
     <link rel="stylesheet" href="css/overlay.css">
+    <link rel="stylesheet" href="css/displaySize.css">
 
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
