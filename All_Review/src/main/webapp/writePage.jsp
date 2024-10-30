@@ -19,15 +19,15 @@
 </head>
 <body>
     	<%
-    	String userID = request.getParameter("userID");
-
-    	if (userID == null) {
-    		userID = (String) session.getAttribute("userID");
-    	}
-
-    	UserDAO userDAO = new UserDAO();
-
-    	UserDTO user = userDAO.getUser(userID);
+	    	String userID = request.getParameter("userID");
+	
+	    	if (userID == null) {
+	    		userID = (String) session.getAttribute("userID");
+	    	}
+	
+	    	UserDAO userDAO = new UserDAO();
+	
+	    	UserDTO user = userDAO.getUser(userID);
     	%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
