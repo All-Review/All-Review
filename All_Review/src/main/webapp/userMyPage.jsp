@@ -1,21 +1,24 @@
-<%@page import="java.util.Collections"%>
-<%@page import="post.*"%>
-<%@page import="Search.*"%>
-<%@page import="util.*"%>
-<%@page import="user.*" %>
-<%@page import="java.util.List" %>
+<%@page import="follow.FollowDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<% 
-// test
-// test2
-	PostDAO dao = new PostDAO();
-	List<Post> postList = dao.readAllPosts();
+<%@page import="post.*"%>
+<%@page import="Search.*"%>
+<%@page import="follow.*"%>
+<%@page import="java.util.List" %>
+<%
+	String otherUserID = request.getParameter("otherUserID");
+	String userID = (String) session.getAttribute("userID");
 
+	PostDAO dao = new PostDAO();
+	List<Post> postList = dao.readAllPostsByUser(otherUserID);
+
+	// 실시간 검색어
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
 	List<SearchHistory> searchList = searchDAO.readSearchLists();
 	List<SearchHistoryAll> searchListAll = searchDAO.readSearchListsAllDesc();
+	
+	// 팔로우
+	FollowDAO followDao = new FollowDAO();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -27,9 +30,9 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main_content.css">
     <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/mypage.css">
     <link rel="stylesheet" href="css/image_gallery.css">
-    <link rel="stylesheet" href="css/search.css">
-    <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/overlay.css">
 
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -38,16 +41,15 @@
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/image_gallery.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/setting.js"></script>
+    <script src="js/mypage.js"></script>
+    <script>
+        $(function () {
+        });
+    </script>
 </head>
 
 <body>
-		<%
-
-			String userID = (String) session.getAttribute("userID");
-
-		%>
+    <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
@@ -67,14 +69,15 @@
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
-				if(userID == null) {
+				if(userID != null && userID.equals((String) session.getAttribute("userID"))) {
 			%>
-            <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
-            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
+			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+            
             <%
 				} else {
 			%>
-			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+			<li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
+            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
 			<%
 				}
 			%>
@@ -82,59 +85,35 @@
     </aside>
 
     <div id="content">
-        <form action="./searchResult.jsp" method="post">
-            <input name="search" type="text" placeholder="검색" autocomplete="off">
-            <button type="button" id="search_delete"><span>search_delete</span></button>
-            <div id="search_dropdown">
-                <p><span>"#"</span> 검색</p>
-    
-                <ul>
-                <%
-                Collections.reverse(searchList);
-                for (int i = 0; i < searchList.size() && i < 5; i++) { %>
-                    <li>
-                        <a href="searchResult.jsp?search=<%= searchList.get(i).getSearchWord() %>">
-                            <div>
-                                <span>#<%= searchList.get(i).getSearchWord() %></span>
-                                <span>1230 게시물</span>
-                            </div>
-    
-                            <div>
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_colored.png">
-                                <img src="icons/star_half.png">
-                                <img src="icons/star_gray.png">
-                                <img src="icons/star_gray.png">
-                            </div>
-                        </a>
-                    </li>
-                   <% } %>
-                </ul>
+        <div class="profile_box">
+            <img src="images/KakaoTalk_20240503_135834006_10.jpg">
+            <div>
+                <span>농담곰</span>
+                <span><%= otherUserID %></span>
+                <span>설명 칸입니다. 안녕하세요 농담곰입니다</span>
             </div>
-        </form>
 
+            <ul>
+            	<% if (followDao.isFollowing(userID, otherUserID)) { %>
+            		<li><button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= otherUserID %>'" class="following">팔로우 중</button></li>
+            	<% } else if (userID == null) { %>
+            		<li><button onClick="location.href='userLogin.jsp'">팔로우하기</button></li>
+            	<% } else { %>
+            		<li><button onClick="location.href='followAction.jsp?otherUserID=<%= otherUserID %>'">팔로우하기</button></li>
+            	<% } %>
+            </ul>
+        </div>
 
-        <ul id="toggle">
-            <li class="check">
-                <a href="searchPopular.jsp">인기</a>
-            </li>
-            <li>
-                <a href="searchNew.jsp">신규</a>
-            </li>
-        </ul>
-        
-		<div class="image_box">
+        <div>
+            <a href="userMyPage?otherUserID=<%= otherUserID %>" class="check">게시물 26</a>
+            <a href="userFollower.jsp?otherUserID=<%= otherUserID %>">팔로워 <%= followDao.getFollowerNum(otherUserID) %></a>
+            <a href="userFollowing.jsp?otherUserID=<%= otherUserID %>">팔로우 <%= followDao.getFollowingNum(otherUserID) %></a>
+        </div>
+
+        <div class="image_box">
 <% for (Post p : postList) { %>
             <div>
-            <% if (p.getIsMultipleImg()) { 
-            	List<String> imageList = dao.splitImages(p.getImagePath());
-            %>
-            	<img src="<%= imageList.get(0) %>">
-            	<span></span>
-            <% } else { %>
-            	<img src="<%= p.getImagePath() %>">
-            <% } %>
-                
+                <img src="<%= p.getImagePath() %>">
                 <a href="detail.jsp?postNum=<%= p.getPostId() %>" class="gallery_overlay">
                     <div>
                     <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
@@ -161,7 +140,7 @@
             </div>
         
 <% } %>
-		</div>
+        </div>
         <!-- /.image_box -->
     </div>
     <!-- /content -->
@@ -194,23 +173,8 @@
         }  //  --for %>
         </ol>
     </div>
-    <div id="setting_container">
-        <div id="settingBox">
-            <h1><span>설정</span><p>설정</p></h1>
-            <button class="close"><span>닫기</span></button>
+    <!-- /#popular -->
 
-            <div id="setBox">
-                <div id="switchBox">
-                    <label>
-                        <span>알람</span>
-                        <input id="alertSwitch" role="switch" type="checkbox"/>
-                    </label>
-                </div>
-            </div>
-
-        </div>
-    </div>
 </body>
-
 
 </html>

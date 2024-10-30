@@ -1,4 +1,3 @@
-
 <%@page import="java.util.Collections"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>

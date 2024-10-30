@@ -214,6 +214,7 @@
 
 </head>
 <body>
+
     <form id="post_form" action="uploadAction.jsp" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="title">제목</label>
@@ -256,6 +257,7 @@
             });
         });
     </script>
+
 </body>
 </html>
-지금 미리보기가 왼쪽으로 쏠렷는데 중앙에 오게할수있어?
+
