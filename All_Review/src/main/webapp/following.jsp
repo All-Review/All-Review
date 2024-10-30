@@ -108,7 +108,7 @@
 
     <div id="content">
         <div class="profile_box">
-            <img src=<%= user.getUserProfileImage() %>>
+            <img src="<%= user.getUserProfileImage() %>">
             <div>
                 <span><%= user.getUserNickname() %></span>
                 <span><%= userID %></span>
@@ -135,7 +135,7 @@
         </div>
 
         <div>
-            <a href="myPage.jsp">게시물 26</a>
+            <a href="myPage.jsp">게시물 <%= dao.getUserPostNum(userID) %></a>
             <a href="follower.jsp">팔로워 <%= followDao.getFollowerNum(userID) %></a>
             <a href="following.jsp" class="check">팔로우 <%= followDao.getFollowingNum(userID) %></a>
         </div>
@@ -144,7 +144,7 @@
 		// 다른 유저 정보
 		UserDTO otherUser = userDAO.getUser(follow.getFollowing());%>
 		<div class="follow_list">
-            <img src=<%= otherUser.getUserProfileImage() %>>
+            <img src="<%= otherUser.getUserProfileImage() %>">
             <div>
                 <a href="userMyPage.jsp?otherUserID=<%= follow.getFollowing() %>"><%= otherUser.getUserNickname() %></a>
                 <span><%= follow.getFollowing() %></span>

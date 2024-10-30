@@ -3,7 +3,7 @@
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.nio.charset.StandardCharsets" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="post.*, comment.*, alarm.*, java.util.Date"%>
+<%@ page import="post.*, comment.*, alarm.*, user.*, java.util.Date"%>
 <%@ page import="javax.servlet.http.HttpServletResponse" %>
 
 <%
@@ -12,6 +12,10 @@
     // 댓글 내용과 게시물 번호 받아오기
     String commentContent = request.getParameter("comment");
     String userID = (String) session.getAttribute("userID");
+    
+    // 유저 정보
+	UserDAO userDAO = new UserDAO();
+	UserDTO user = userDAO.getUser(userID);
 
     int postNum = 0;
     try {
@@ -41,8 +45,8 @@
     PostComment comment = new PostComment(
         postNum,
         userID,
-        "테스트용닉네임",
-        "images/15fd24a290e3154d44f486b0720b0692_res.jpeg",
+        user.getUserNickname(),
+        user.getUserProfileImage(),
         commentContent,
         commentRate,
         format1.format(date)
@@ -62,10 +66,12 @@
     postDao.updateCommentNum(postNum, post, false);
     
     // 알림 생성
-    String receiverID = post.getUserID();
-    AlarmDAO alarmDAO = new AlarmDAO();
-    alarmDAO.createAlarm(postNum, receiverID, userID, "comment");  
-    response.sendRedirect(request.getContextPath() + "/detail.jsp?postNum=" + postNum);
+    if (!post.getUserID().equals(userID)) {
+        String receiverID = post.getUserID();
+        AlarmDAO alarmDAO = new AlarmDAO();
+        alarmDAO.createAlarm(postNum, receiverID, userID, "comment");  
+        response.sendRedirect(request.getContextPath() + "/detail.jsp?postNum=" + postNum);
+    }
 
     // 이미지 파라미터 처리 및 리다이렉트
     String imageParam = request.getParameter("image");

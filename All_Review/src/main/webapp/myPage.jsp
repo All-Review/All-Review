@@ -3,6 +3,8 @@
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
 <%@page import="user.*"%>
+<%@page import="follow.*"%>
+<%@page import="alarm.*"%>
 <%@page import="java.util.List" %>
 <%
 	String userID = request.getParameter("userID");
@@ -34,6 +36,12 @@
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
 	List<SearchHistory> searchList = searchDAO.readSearchLists();
 	List<SearchHistoryAll> searchListAll = searchDAO.readSearchListsAllDesc();
+	
+	// 팔로우
+	FollowDAO followDao = new FollowDAO();
+	
+	// 알림
+	AlarmDAO alarmDAO = new AlarmDAO();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -73,13 +81,17 @@
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
         <% if (userID == null) { %>
-            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li><a href="userLogin.jsp"><span>알림</span></a></li> 
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
             <li><a href="userLogin.jsp"><span>프로필</span></a></li>
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
-        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
-            <li id="settingBtn"><a href="#"><span>설정</span></a></li>
+            <% if (alarmDAO.getAlarmNum(userID) == 0) { %>
+         		<li><a href="alarm.jsp"><span>알림</span></a></li>
+         	<% } else { %>
+         		<li><a href="alarm.jsp"><span>알림</span><span id="alarm_num"><%= alarmDAO.getAlarmNum(userID) %></span></a></li>
+         	<% } %>
+         	<li id="settingBtn"><a href="#"><span>설정</span></a></li>
             <li><a href="myPage.jsp"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
          <% } %>
@@ -140,9 +152,9 @@
         </div>
 
         <div>
-            <a href="#" class="check">게시물 26</a>
-            <a href="#">팔로워 312</a>
-            <a href="#">팔로우 126</a>
+            <a href="myPage.jsp" class="check">게시물 <%= dao.getUserPostNum(userID) %></a>
+            <a href="follower.jsp">팔로워 <%= followDao.getFollowerNum(userID) %></a>
+            <a href="following.jsp">팔로우 <%= followDao.getFollowingNum(userID) %></a>
         </div>
 
         <div class="image_box">
