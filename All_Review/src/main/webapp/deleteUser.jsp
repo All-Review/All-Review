@@ -16,6 +16,7 @@
     logger.info("Attempting to delete user with userID: " + userID);
 
     UserDAO userDAO = new UserDAO();
+    
     int result = userDAO.deleteUser(userID);
 
     response.setContentType("text/html;charset=UTF-8");
