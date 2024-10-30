@@ -72,4 +72,33 @@
 	.comment_box > .profile_box > div:last-child {
 		margin: 0;
 	}
+
+	#sidebarUserProfile > div {
+		display: none;
+	}
+
+	#sidebarUserProfile {
+		margin-left: 5px;
+	}
+	
+	#LogoutBtn {
+		left: 30px
+	}
+
+	#LogoutBtn > a {
+		margin-bottom: -20px;
+		margin-left: -11px;
+	}
+}
+
+/* 650px 이하 화면 크기일 때 */
+@media  screen and (max-width: 650px) {
+	#sidebarUserProfile > img {
+		width: 35px;
+		height: 35px;
+	}
+	
+	#LogoutBtn > a {
+		margin-left: -20px;
+	}
 }

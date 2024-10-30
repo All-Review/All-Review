@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/setting.css">
     <link rel="stylesheet" href="css/sidebar.css">
-	<link rel="stylesheet" href="css/displaySize.css">
+	  <link rel="stylesheet" href="css/displaySize.css">
+
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/writePage.js"></script>
     <script src="js/setting.js"></script>

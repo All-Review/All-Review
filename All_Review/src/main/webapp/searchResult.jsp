@@ -8,6 +8,8 @@
     pageEncoding="UTF-8"%>
     
 <% 
+	
+
 	request.setCharacterEncoding("UTF-8");
 	
 	String searchWord = request.getParameter("search");
@@ -41,6 +43,7 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main_content.css">
     <link rel="stylesheet" href="css/sidebar.css">
+	<link rel="stylesheet" href="css/displaySize.css">
     <link rel="stylesheet" href="css/image_gallery.css">
     <link rel="stylesheet" href="css/search.css">
     <link rel="stylesheet" href="css/overlay.css">
@@ -60,7 +63,15 @@
 
 <body>
 		<%
-			String userID = (String) session.getAttribute("userID");	
+			String userID = request.getParameter("userID");
+			
+			if (userID == null) {
+				userID = (String) session.getAttribute("userID");
+			}
+			
+			UserDAO userDAO = new UserDAO();
+			
+			UserDTO user = userDAO.getUser(userID);
 		%>
     <!-- 글 상세 (오버레이 레이어) -->
     <div id="content_detail">
@@ -134,6 +145,7 @@
         <ul id="sidebarIcon">
             <li><a href="index.jsp"><span>홈</span></a></li>
             <li><a href="search.jsp"><span>검색</span></a></li>
+
         <% if (userID == null) { %>
             <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
             <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
@@ -141,10 +153,10 @@
             <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
          <% } else { %>
         	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+
             <li id="settingBtn"><a href="#"><span>설정</span></a></li>
-            <li><a href="myPage.jsp"><span>프로필</span></a></li>
+            <li><a href="#"><span>프로필</span></a></li>
             <li><a href="writePage.jsp"><span>게시하기</span></a></li>
-         <% } %>
         </ul>
         <ul id="sidebarUserIcon">
 	        <%
@@ -155,6 +167,15 @@
             <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
