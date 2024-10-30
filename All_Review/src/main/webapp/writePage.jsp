@@ -43,25 +43,65 @@
             z-index: 1000;
             flex-direction: column;
         }
+	/* 이미지 미리보기 칸 (설명 칸의 2.5배 높이 적용) */
+#image_preview {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;  
+    margin-bottom: 20px;
+    text-align: center;  /* 이미지 중앙 정렬 */
+    width: 80%;
+    justify-content: center;
+    align-items: center;
+    height: calc(100px * 2.5);  /* 설명 칸의 2.5배 높이 */
+    overflow: hidden;  /* 이미지가 칸을 넘지 않도록 */
+    background-color: #fafafa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
 
-        #image_preview {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 1px;
-            margin-bottom: 20px;
-            text-align: center;
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-            position: relative;
-        }
+/* 이미지 스타일: 미리보기 칸의 30% 여유 두고 중앙에 채우기 */
+#image_preview img {
+    max-height: 70%;  /* 높이를 70%로 제한해 30% 여유 */
+    max-width: 70%;   /* 너비도 동일하게 70%로 제한 */
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* 중앙 정렬 */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    cursor: pointer;
+}
 
-        #image_preview img {
-            max-width: 100%;
-            max-height: 100%;
-            display: none;
-        }
+#image_preview img:hover {
+    transform: translate(-50%, -50%) scale(1.05);  /* 호버 시 확대 */
+}
 
+/* 업로드 버튼 스타일 (연두색) */
+#submitButton {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(45deg, #8bc34a, #aed581);  /* 연두색 그라디언트 */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 10px;
+}
+
+#submitButton:hover {
+    background: linear-gradient(45deg, #7cb342, #9ccc65);  /* 호버 시 색상 변경 */
+    transform: scale(1.05);  /* 약간 확대 */
+}
+
+#submitButton:active {
+    transform: scale(0.98);  /* 클릭 시 살짝 눌리는 효과 */
+}
+	
         #prev, #next {
             position: absolute;
             top: 50%;
@@ -218,3 +258,4 @@
     </script>
 </body>
 </html>
+지금 미리보기가 왼쪽으로 쏠렷는데 중앙에 오게할수있어?
