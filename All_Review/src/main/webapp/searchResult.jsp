@@ -8,6 +8,8 @@
     pageEncoding="UTF-8"%>
     
 <% 
+	
+
 	request.setCharacterEncoding("UTF-8");
 	
 	String searchWord = request.getParameter("search");
@@ -41,6 +43,7 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main_content.css">
     <link rel="stylesheet" href="css/sidebar.css">
+	<link rel="stylesheet" href="css/displaySize.css">
     <link rel="stylesheet" href="css/image_gallery.css">
     <link rel="stylesheet" href="css/search.css">
     <link rel="stylesheet" href="css/overlay.css">
@@ -60,7 +63,15 @@
 
 <body>
 		<%
-			String userID = (String) session.getAttribute("userID");	
+			String userID = request.getParameter("userID");
+			
+			if (userID == null) {
+				userID = (String) session.getAttribute("userID");
+			}
+			
+			UserDAO userDAO = new UserDAO();
+			
+			UserDTO user = userDAO.getUser(userID);
 		%>
     <!-- 글 상세 (오버레이 레이어) -->
     <div id="content_detail">
@@ -156,6 +167,15 @@
             <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*, java.util.*, util.DatabaseUtil" %>
+<%@page import="java.sql.*, java.util.*, util.DatabaseUtil" %>
+<%@page import="java.io.PrintWriter"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
 <%@page import="util.*"%>
@@ -62,16 +63,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="js/content_detail.js"></script>
+    <script src="js/detail.js"></script>
     <script src="js/setting.js"></script>
     <script>
     </script>
 </head>
 
 <body>
-
-<% String userID = (String) session.getAttribute("userID"); %>
-
+	<%
+		HttpSession session1 = request.getSession();
+	    String userID = (String) session.getAttribute("userID");
+	    
+	    UserDAO userDAO = new UserDAO();
+	    
+	    UserDTO user = userDAO.getUser(userID);
+	%>
     <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
@@ -95,16 +101,24 @@
         <%
             if (userID == null) {
         %>
-
             <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
             <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
         <%
-            } else {
-        %>
-            <li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
-        <%
-            }
-        %>
+				} else {
+			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
+			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+			<%
+				}
+			%>
         </ul>
     </aside>
 

@@ -1,3 +1,4 @@
+<%@page import="like.*"%>
 <%@page import="java.util.Collections"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
@@ -7,43 +8,94 @@
 <%@page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, java.sql.*, post.*, comment.*" %>
-<%
-    // URL 파라미터로 전달된 게시물 번호와 이미지 URL을 받음
-    int postNum = Integer.parseInt(request.getParameter("postNum"));
-    String imageUrl = request.getParameter("image");
-
-    // 게시물 정보와 댓글 가져오기
-    PostDAO postDAO = new PostDAO();
-    Post post = postDAO.readOnePost(postNum);
-
-    PostCommentDAO commentDao = new PostCommentDAO();
-    List<PostComment> commentList = commentDao.readAllPostComments(postNum);
+<% 
+	
+	
+	PostDAO dao = new PostDAO();
+	int postNum = Integer.parseInt(request.getParameter("postNum"));
+	Post post = dao.readOnePost(postNum);
+	
+	// 실시간 검색어
+	SearchHistoryDAO searchDao = new SearchHistoryDAO();
+	List<SearchHistoryAll> searchListAll = searchDao.readSearchListsAllDesc();
+	
+	// 댓글
+	PostCommentDAO commentDao = new PostCommentDAO();
+	List<PostComment> commentList = commentDao.readAllPostComments(postNum);
+	
+	// 좋아요
+	LikeDAO likeDao = new LikeDAO();
+	
+	List<String> imageList = dao.splitImages(post.getImagePath());
 %>
-
 <!DOCTYPE html>
-<html lang="ko">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>게시물 상세 페이지</title>
-    <link rel="stylesheet" href="css/detail.css">
+    <title>Title</title>
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main_content.css">
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/overlay.css">
+    <link rel="stylesheet" href="css/detail.css">
     <link rel="stylesheet" href="css/setting.css">
     <link rel="stylesheet" href="css/image_gallery.css">
     <link rel="stylesheet" href="css/search.css">
     <link rel="stylesheet" href="css/displaySize.css">
     <link rel="stylesheet" href="css/alert.css">
+    
+    <!-- google web font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="js/detail.js"></script>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script>
+    $(function () {
+  	  $('#share').on('click', function () {
+	      shareKakao();
+	  });
+
+	  function shareKakao(id) {
+	      // Kakao Javascript key
+	      Kakao.init('667e3ef354b2246f627c0e2295367de5');
+	     
+	      // 카카오링크 버튼 생성
+	      Kakao.Link.createDefaultButton({
+	        container: '#share',
+	        objectType: 'feed',
+	        content: {
+	          title: "All Review",
+	          description: "<%= post.getPostContent() %>",
+	          imageUrl: "<%= post.getImagePath() %>",
+	          link: {
+	        	  mobileWebUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostId() %>",
+		             webUrl: "http://localhost:8080/All_Review/detail.jsp?postNum=<%= post.getPostId() %>"
+	          }
+	        }
+	      });
+	    }
+    
+    });
+    </script>
 </head>
+
 <body>
 		<%
-			String userID = (String) session.getAttribute("userID");
+			String userID = request.getParameter("userID");
+			
+			if (userID == null) {
+				userID = (String) session.getAttribute("userID");
+			}
+			
+			UserDAO userDAO = new UserDAO();
+			
+			UserDTO user = userDAO.getUser(userID);
 		%>
- <!-- 왼쪽 네비게이션 바 -->
- 
+    <!-- 왼쪽 네비게이션 바 -->
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
@@ -70,46 +122,220 @@
             <%
 				} else {
 			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
 			%>
         </ul>
     </aside>
-    <div class="detail-container">
-        <!-- 이미지 출력 -->
-        <div class="image-container">
-            <img src="<%= imageUrl %>" alt="게시물 이미지" />
-        </div>
 
-        <!-- 게시물 정보 출력 -->
-        <div class="post-content">
-            <h2>게시물 내용</h2>
-            <p><%= post.getPostContent() %></p>
-            <p><strong>태그:</strong> <%= post.getPostTag() %></p>
-            <p><strong>평점:</strong> ⭐️ <%= post.getPostRate() %> / 5</p>
-        </div>
+    <!-- 중앙 컨텐츠 -->
+    <div id="content">
+        <a href="<%= request.getHeader("referer") %>"><h3>게시물</h3></a>
+        <div class="content_container">
+            
+            <div>
+                <!-- profile -->
+                <div class="profile_box">
+                    <img src="images/KakaoTalk_20240503_135834006_10.jpg">
+                    <div>
+                        <span>농담곰</span>
+                        <span>nongdam_review</span>
+                    </div>
+                </div>
+                <!-- star -->
+                <div class="star">
+                    <% for (int i = 0; i < (int)post.getPostRate(); i++) { %>
+                        <img src="icons/star_colored.png">
+                    <% }
+                    if (post.getPostRate() % 1 != 0.0) { %>
+                    	<img src="icons/star_half.png">
+                    <% } %>
+                </div>
+                <!-- 글 내용 -->
+                <p><%= post.getPostContent() %></p>
+                
+                <div id="image_list">
+                <% if (post.getIsMultipleImg()) { %>
+                	<button><span>left</span></button>
+                    <button><span>right</span></button>
+                    <ul>
+                    <% for (int i = 0; i < imageList.size(); i++) { %>
+                        <li>
+                            <img src="<%= imageList.get(i) %>">
+                        </li>
+                    <% } %>
+                    </ul>
 
-        <!-- 댓글 리스트 -->
-        <div class="comment-section">
-            <h3>댓글</h3>
-            <ul>
-                <% for (PostComment comment : commentList) { %>
-                    <li>
-                        <span><strong><%= comment.getNickname() %></strong></span>
-                        <p><%= comment.getCommentContent() %></p>
-                        <small><%= comment.getCommentCreateAt() %></small>
-                    </li>
+                    <ol>
+                    <% for (int i = 0; i < imageList.size(); i++) { %>
+                    	<li class="on"><span><%= i + 1 %></span></li>
+                    <% } %>
+                    </ol>
+                <% } else { %>
+                	<ul>
+                    
+                        <li>
+                            <img src="<%= post.getImagePath() %>">
+                        </li>
+                    
+                    </ul>
                 <% } %>
-            </ul>
+                    
+                </div>
+                
+                <div id="tag_container">
+                    <div>
+                        <span>#<%= post.getPostTag() %></span>
+                    </div>
+                    <span>2024년 5월 10일 10:00 AM</span>
+                </div>
 
-            <!-- 댓글 작성 폼 -->
-            <form action="createComment.jsp" method="post">
-                <input type="hidden" name="postNum" value="<%= postNum %>" />
-                <textarea name="comment" placeholder="댓글을 작성하세요" required></textarea>
-                <button type="submit">댓글 작성</button>
-            </form>
+                <!-- 좋아요, 댓글, 공유 -->
+                <div class="like_container">
+                <% if (likeDao.isLiked(postNum, userID).getUserId() == null) { %>
+                	<div style="background-image: url('icons/heart-regular.svg')">
+                <% } else { %>
+                	<div style="background-image: url('icons/icon_heart_red.png')">
+                <% } %>
+                    <% if (userID == null) { %>
+                    	<a href="userLogin.jsp"><span>like</span><span><%= post.getLikeNum() %></span></a>
+                    <% } else { %>
+                    	<a href="likeAction.jsp?postNum=<%= postNum %>"><span>like</span><span><%= post.getLikeNum() %></span></a>
+                    <% } %>
+                    </div>
+                    <div>
+                        <span>comment</span><span><%= post.getCommentNum() %></span>
+                    </div>
+                    <div>
+                        <span>share</span>
+                        <div id="share">카카오톡으로 공유하기</div>
+                    </div>
+                </div>
+
+                <!-- 댓글 쓰기 -->
+                <% if (userID == null) { %>
+                	<form action="./userLogin.jsp" id="comment_form">
+                	<img src="images/user_default_profile.png">
+                <% } else { %>
+                	<form action="./createComment.jsp?postNum=<%= postNum %>" method="post" id="comment_form">
+                	<img src="images/KakaoTalk_20240503_135834006.jpg">
+                <% } %>
+                    
+                    <input name="comment" type="text" placeholder="댓글 쓰기" autocomplete="off">
+                    <div class="star_radio">
+                        <label for="star_rate_1" class="label_star" title="0.5"></label>
+                        <label for="star_rate_2" class="label_star" title="1"></label>
+                        <label for="star_rate_3" class="label_star" title="1.5"></label>
+                        <label for="star_rate_4" class="label_star" title="2"></label>
+                        <label for="star_rate_5" class="label_star" title="2.5"></label>
+                        <label for="star_rate_6" class="label_star" title="3"></label>
+                        <label for="star_rate_7" class="label_star" title="3.5"></label>
+                        <label for="star_rate_8" class="label_star" title="4"></label>
+                        <label for="star_rate_9" class="label_star" title="4.5"></label>
+                        <label for="star_rate_10" class="label_star" title="5"></label>
+                        <input type="radio" name="star_rate" id="star_rate_1" value="0.5">
+                        <input type="radio" name="star_rate" id="star_rate_2" value="1">
+                        <input type="radio" name="star_rate" id="star_rate_3" value="1.5">
+                        <input type="radio" name="star_rate" id="star_rate_4" value="2">
+                        <input type="radio" name="star_rate" id="star_rate_5" value="2.5">
+                        <input type="radio" name="star_rate" id="star_rate_6" value="3">
+                        <input type="radio" name="star_rate" id="star_rate_7" value="3.5">
+                        <input type="radio" name="star_rate" id="star_rate_8" value="4">
+                        <input type="radio" name="star_rate" id="star_rate_9" value="4.5">
+                        <input type="radio" name="star_rate" id="star_rate_10" value="5">
+                        <span class="star_rate_bg"></span>
+                      </div>
+                    <button type="submit" id="comment_submit">확인</button>
+                    <div id="comment_alert">댓글 내용을 입력하세요</div>
+                 </form>
+
+                <!-- 댓글영역 -->
+                <div class="comment_box">
+                <% for(PostComment comment : commentList) { %>
+                    <div class="profile_box">
+                        <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><img src="<%= comment.getUserProfileImage() %>"></a>
+                        <div>
+
+                            <div>
+                                <a href="myPage.jsp?userID=<%= comment.getUserId() %>"><span><%= comment.getNickname() %></span></a>
+                                <span><%= comment.getUserId() %></span>
+                                <span><%= comment.getCommentCreateAt() %></span>
+                                <% if(comment.getUserId().equals(userID)) { %>
+                                <div class="comment_menu">
+                                    <span>더보기</span>
+                                    <ul>
+                                        <li onClick="location.href='deleteComment.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentIndex() %>'">삭제하기</li>
+                                        <li onClick="location.href='updateCommentForm.jsp?postNum=<%= postNum %>&commentNum=<%= comment.getCommentIndex() %>'">수정하기</li>
+                                    </ul>
+                                </div>
+                                <% } %>
+                            </div>
+    
+                            <span><%= comment.getCommentContent() %></span>
+
+                            <div class="comment_star">
+                    			<% for (int i = 0; i < (int)comment.getCommentRate(); i++) { %>
+                    			    <img src="icons/star_colored.png">
+                    			<% }
+                    				if (comment.getCommentRate() % 1 != 0.0) { %>
+                    				<img src="icons/star_half.png">
+                    			<% } else { %>
+                    				<img src="icons/star_gray.png">
+                    			<% } 
+                    				for (int i = 0; i < 4 - (int)comment.getCommentRate(); i++) { %>
+                    			    <img src="icons/star_gray.png">
+                    			<% } %>
+                            </div>
+
+                        </div>
+                    </div>
+				<% } %>
+                </div>
+                <!-- /댓글 -->
+            </div>
+
         </div>
+        <button id="top_button">Top</button>
+    </div>
+    <!-- /content -->
+
+    <div id="popular">
+        <h3>실시간 검색어</h3>
+        <ol>
+        <% for (int i = 0; i < searchListAll.size() && i <= 10; i++) {
+        	List<Post> tagList = dao.readSearchedPosts(searchListAll.get(i).getSearchWord());
+        	if (tagList.size() == 0) {
+        		continue;
+        	} else {
+        %>
+            <li>
+                <a href="searchResult.jsp?search=<%= searchListAll.get(i).getSearchWord() %>">
+                    <div>
+                        <span><%= searchListAll.get(i).getSearchWord() %></span>
+                        <span><%= tagList.size() %> 게시물</span>
+                    </div>
+                    <% if (tagList.size() == 0) { %>
+                    <span>평점 0</span>
+                    <% } else { %>
+                    <span>평점 <%= String.format("%.2f", dao.getAverageRate(tagList)) %></span>
+                    <% } %>
+                </a>
+            </li>
+         <% 
+         
+        		}  // --else
+        }  //  --for %>
+        </ol>
     </div>
 </body>
 </html>

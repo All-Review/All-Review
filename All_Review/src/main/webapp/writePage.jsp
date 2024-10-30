@@ -1,10 +1,17 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="user.*" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>JSP 파일 업로드</title>
+    <title>upload</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/writePage.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/setting.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+	  <link rel="stylesheet" href="css/displaySize.css">
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -212,10 +219,70 @@
         }
     </style>
 
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="js/writePage.js"></script>
+    <script src="js/setting.js"></script>
+    <script>
+    </script>
 </head>
 <body>
+    	<%
+	    	String userID = request.getParameter("userID");
+	    	
+	    	if (userID == null) {
+	    		userID = (String) session.getAttribute("userID");
+	    	}
+	    	
+	    	UserDAO userDAO = new UserDAO();
+	    	
+	    	UserDTO user = userDAO.getUser(userID);
+		%>
+    <!-- 왼쪽 네비게이션 바 -->
+    <aside id="sidebar">
+        <a href="index.jsp"><span>All Review 올리</span></a>
+        <ul id="sidebarIcon">
+            <li><a href="index.jsp"><span>홈</span></a></li>
+            <li><a href="search.jsp"><span>검색</span></a></li>
+        <% if (userID == null) { %>
+            <li><a href="userLogin.jsp"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li id="settingBtn"><a href="userLogin.jsp"><span>설정</span></a></li>
+            <li><a href="userLogin.jsp"><span>프로필</span></a></li>
+            <li><a href="userLogin.jsp"><span>게시하기</span></a></li>
+         <% } else { %>
+        	<li><a href="alert_page.html"><span>알림</span></a></li> <!-- href 속성 다시 설정 -->
+            <li id="settingBtn"><a href="#"><span>설정</span></a></li>
+            <li><a href="myPage.jsp"><span>프로필</span></a></li>
+            <li><a href="writePage.jsp"><span>게시하기</span></a></li>
+         <% } %>
+        </ul>
+        <ul id="sidebarUserIcon">
+	        <%
+				if(userID == null) {
+			%>
+            <li id="loginBtn"><a href="userLogin.jsp"><span>로그인</span></a></li>
+            <li id="joinBtn"><a href="userJoin.jsp"><span>회원가입</span></a></li>
+            <%
+				} else {
+			%>
+			<li>
+				<div id="sidebarUserProfile">
+	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+	                <div>
+	                    <span><%= user.getUserNickname() %></span>
+                		<span><%= user.getUserID() %></span>
+	                </div>     
+	            </div>
+            </li>
+			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
+			<%
+				}
+			%>
+        </ul>
+    </aside>
 
-    <form id="post_form" action="uploadAction.jsp" method="post" enctype="multipart/form-data">
+    <!-- 중앙 컨텐츠 -->
+    <div id="content">
+	    <form id="post_form" action="uploadAction.jsp" method="post" enctype="multipart/form-data">
         <div class="form-group">
             <label for="title">제목</label>
             <input type="text" id="title" name="title" required>
@@ -237,27 +304,30 @@
             <button type="submit" id="submitButton">업로드</button>
         </div>
     </form>
+    </div>
+    <!-- /content -->
 
+    <div id="popular">
+    </div>
     <script>
-        const imageInput = document.getElementById('images');
-        const preview = document.getElementById('image_preview');
+          const imageInput = document.getElementById('images');
+          const preview = document.getElementById('image_preview');
 
-        imageInput.addEventListener('change', (event) => {
-            preview.innerHTML = '';
-            Array.from(event.target.files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.maxWidth = '100px';
-                    img.style.marginRight = '10px';
-                    preview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-    </script>
-
+          imageInput.addEventListener('change', (event) => {
+              preview.innerHTML = '';
+              Array.from(event.target.files).forEach(file => {
+                  const reader = new FileReader();
+                  reader.onload = (e) => {
+                      const img = document.createElement('img');
+                      img.src = e.target.result;
+                      img.style.maxWidth = '100px';
+                      img.style.marginRight = '10px';
+                      preview.appendChild(img);
+                  };
+                  reader.readAsDataURL(file);
+              });
+          });
+      </script>
 </body>
 </html>
 
