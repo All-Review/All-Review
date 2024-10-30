@@ -1,0 +1,138 @@
+/* 게시물 전체 레이아웃 */
+@charset "UTF-8";
+
+.post-container {
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+    justify-content: space-between;
+    flex-wrap: nowrap; /* 화면이 줄어들어도 줄바꿈되지 않도록 */
+}
+
+/* 이미지 영역 */
+.image-container {
+    width: 50%; /* 이미지가 절반 차지 */
+    max-width: 400px; /* 최대 크기 제한 */
+}
+
+.image-container img {
+    width: 100%; /* 이미지가 컨테이너에 맞게 */
+    height: auto;
+    border-radius: 10px;
+}
+
+/* 오른쪽 컨텐츠: 게시글과 댓글 */
+.post-content {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* 댓글과 게시글 간의 공간 분배 */
+    max-height: 300px; /* 이미지 영역과 동일한 높이로 설정 */
+    overflow: hidden;
+    min-width: 300px; /* 화면이 줄어들어도 최소 크기 유지 */
+}
+
+/* 프로필과 게시글 정보 */
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* 프로필 이미지를 원형으로 */
+}
+
+.post-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-text {
+    margin: 10px 0;
+    word-break: break-word; /* 긴 텍스트가 잘리거나 깨지지 않도록 */
+}
+
+/* 댓글 영역 */
+.comment-section {
+    flex-grow: 1; /* 남은 공간을 모두 차지 */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    overflow-y: auto; /* 댓글이 많으면 스크롤 */
+}
+
+/* 댓글 입력 폼 */
+#comment_form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: auto; /* 입력 폼이 항상 아래쪽에 위치하도록 */
+}
+
+#comment_form img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+#comment_form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+#comment_form button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 댓글 리스트 */
+.comment_box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* 개별 댓글 */
+.profile_box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.profile_box img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.profile_box div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* 레이아웃 유지: 컨테이너 최소, 최대 크기 설정 */
+@media (max-width: 768px) {
+    .post-container {
+        flex-direction: column; /* 화면이 좁아지면 세로로 배치 */
+        align-items: center;
+    }
+
+    .image-container, 
+    .post-content {
+        width: 100%; /* 세로 배치 시 전체 폭 사용 */
+    }
+}

@@ -90,6 +90,18 @@
     cursor: pointer;
 }
 
+.profile_box > ul > li > button.following {
+    background-color: transparent;
+    color: #3d9929;
+    border: 1px solid #3d9929;
+}
+
+.profile_box > ul > li > button.following:hover {
+    background-color: transparent;
+    border: 1px solid #ff335a;
+    color: #ff335a;
+}
+
 .profile_box > ul > li > span {
     display: block;
     position: absolute;

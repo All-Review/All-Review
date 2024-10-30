@@ -1,48 +1,30 @@
-<%@page import="follow.FollowDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="post.*"%>
 <%@page import="Search.*"%>
-<%@page import="user.*"%>
 <%@page import="follow.*"%>
 <%@page import="java.util.List" %>
 <%
-
-	if (userID == null) {
-		userID = (String) session.getAttribute("userID");
-	}
-	
-	UserDAO userDAO = new UserDAO();
-	
-	UserDTO user = userDAO.getUser(userID);
-
-	// if (userID == null) {
-	// 	userID = (String) session.getAttribute("userID");
-	// }
-
-
+	String otherUserID = request.getParameter("otherUserID");
 	String userID = (String) session.getAttribute("userID");
-	// 로그인 안되어있으면 로그인페이지로
-	//if (userID == null) {
-	//	response.sendRedirect(request.getContextPath() + "/userLogin.jsp");
-	//}
-
+	
 	PostDAO dao = new PostDAO();
-	List<Post> postList = dao.readAllPostsByUser(userID);
-	
-	
-	
-	//String userNickname = userDAO.getUserNicknameById(userID);
-	//String userIntroduce = userDAO.getUserIntroduceById(userID);
-	//String userProfileimage = userDAO.getUserProfileimageById(userID);
+	List<Post> postList = dao.readAllPostsByUser(otherUserID);
 
 	// 실시간 검색어
 	SearchHistoryDAO searchDAO = new SearchHistoryDAO();
 	List<SearchHistory> searchList = searchDAO.readSearchLists();
 	List<SearchHistoryAll> searchListAll = searchDAO.readSearchListsAllDesc();
-	
+
 	// 팔로우
 	FollowDAO followDao = new FollowDAO();
+	
+	List<Follow> followerList = null;
+	if (otherUserID == null) {
+		followerList = followDao.readAllFollowers(userID);
+	} else {
+		followerList = followDao.readAllFollowers(otherUserID);
+	}
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -54,12 +36,8 @@
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/main_content.css">
     <link rel="stylesheet" href="css/sidebar.css">
-	<link rel="stylesheet" href="css/displaySize.css">
     <link rel="stylesheet" href="css/mypage.css">
-    <link rel="stylesheet" href="css/image_gallery.css">
-    <link rel="stylesheet" href="css/overlay.css">
-    <link rel="stylesheet" href="css/setting.css">
-    <link rel="stylesheet" href="css/profileEditOverlay.css">
+    <link rel="stylesheet" href="css/follow.css">
 
     <!-- google web font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,15 +45,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="js/content_detail.js"></script>
     <script src="js/image_gallery.js"></script>
     <script src="js/mypage.js"></script>
-    <script src="js/checkFileSize.js"></script>
-    <script src="js/profileEditOverlay.js"></script>
-
 </head>
 
 <body>
-    <!-- 왼쪽 네비게이션 바 -->
+
     <aside id="sidebar">
         <a href="index.jsp"><span>All Review 올리</span></a>
         <ul id="sidebarIcon">
@@ -102,15 +78,6 @@
             <%
 				} else {
 			%>
-			<li>
-				<div id="sidebarUserProfile">
-	                <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
-	                <div>
-	                    <span><%= user.getUserNickname() %></span>
-                		<span><%= user.getUserID() %></span>
-	                </div>     
-	            </div>
-            </li>
 			<li id="LogoutBtn"><a href="userLogout.jsp"><span>로그아웃</span></a></li>
 			<%
 				}
@@ -120,28 +87,30 @@
 
     <div id="content">
         <div class="profile_box">
-            <img src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="Profile Image" />
+            <img src="images/KakaoTalk_20240503_135834006_10.jpg">
             <div>
-                <span><%= user.getUserNickname() %></span>
-                <span><%= user.getUserID() %></span>
-                <span><%= user.getUserIntroduce() %></span>
+                <span>농담곰</span>
+                <% if (otherUserID == null) { %>
+                	<span><%= userID %></span>
+                <% } else { %>
+                	<span><%= otherUserID %></span>
+                <% } %>
+                <span>설명 칸입니다. 안녕하세요 농담곰입니다</span>
             </div>
 
             <ul>
-
             <% if (userID != null && userID.equals((String) session.getAttribute("userID"))) { %>
-
                 <li class="mypage_button">
                     <span>privacy setting</span>
                     <ul>
-                        <li onClick="location.href='deleteUser.jsp'">탈퇴하기</li>
-                        <li onClick="location.href='userLogout.jsp'">로그아웃</li>
+                        <li onClick="location.href='#'">탈퇴하기</li>
+                        <li onClick="location.href='#'">로그아웃</li>
                     </ul>
                 </li>
                 <li class="mypage_button">
                     <span>setting</span>
                     <ul>
-                        <li id="editProfile">프로필 수정</li>
+                        <li onClick="location.href='#'">프로필 수정</li>
                     </ul>
                 </li>
             <% } %>
@@ -149,44 +118,26 @@
         </div>
 
         <div>
-            <a href="myPage.jsp" class="check">게시물 26</a>
-            <a href="follower.jsp">팔로워 <%= followDao.getFollowerNum(userID) %></a>
+            <a href="myPage.jsp">게시물 26</a>
+            <a href="follower.jsp" class="check">팔로워 <%= followDao.getFollowerNum(userID) %></a>
             <a href="following.jsp">팔로우 <%= followDao.getFollowingNum(userID) %></a>
         </div>
-
-        <div class="image_box">
-<% for (Post p : postList) { %>
-            <div>
-                <img src="<%= p.getImagePath() %>">
-                <a href="detail.jsp?postNum=<%= p.getPostId() %>" class="gallery_overlay">
-                    <div>
-                    <% for (int i = 0; i < (int)p.getPostRate(); i++) { %>
-                        <img src="icons/star_white.png">
-                    <% }
-                    if (p.getPostRate() % 1 != 0.0) { %>
-                    	<img src="icons/star_half_white.png">
-                    <% }
-                    
-                    %>
-                    </div>
-    
-                    <div>
-                        <div>
-                            <span>like</span>
-                            <span><%= p.getLikeNum() %></span>
-                        </div>
-                        <div>
-                            <span>comment</span>
-                            <span><%= p.getCommentNum() %></span>
-                        </div>
-                    </div>
-                </a>
-            </div>
         
-<% } %>
+	<% for (Follow follow : followerList) { %>
+		<div class="follow_list">
+            <img src="images/KakaoTalk_20240503_135834006_12.jpg">
+            <div>
+                <a href="userMyPage.jsp?otherUserID=<%= follow.getFollower() %>">테스트 닉네임</a>
+                <span><%= follow.getFollower() %></span>
+                <span>안녕하세요</span>
+            </div>
+            <% if (followDao.isFollowing(userID, follow.getFollower())) { %>
+            <button onClick="location.href='deleteFollowing.jsp?otherUserID=<%= follow.getFollower() %>'" class="following">팔로우 중</button>
+            <% }  else { %>
+            <button onClick="location.href='followAction.jsp?otherUserID=<%= follow.getFollower() %>'">팔로우하기</button>
+            <% } %>
         </div>
-        <!-- /.image_box -->
-    </div>
+	<% } %>
     <!-- /content -->
 
     <div id="popular">
@@ -218,32 +169,6 @@
         </ol>
     </div>
     <!-- /#popular -->
-    
-    
-    <!-- 프로필 수정 오버레이 -->
-	<div id="profileEditOverlay">
-		<div id="profileEditBox">
-		<button class="close" id="closeProfileEdit"><span>닫기</span></button>
-		<h2>프로필 수정</h2>
-			        
-			<form method="post" action="./userUpdateAction.jsp" id="editBox" enctype="multipart/form-data">
-				<div id="profileImageContainer">
-					<img id="profileImagePreview" src="<%= request.getContextPath() + "/uploadsProfileimage/" + user.getUserProfileImage() %>" alt="프로필 이미지" />
-					<div class="overlayText">이미지<br>선택하기</div>
-				</div>
-				<input type="file" name="newImage" id="newImageUpload" accept="image/*"/>
-					            
-				<label for="nickname">닉네임</label>
-				<input type="text" name="newNickname" id="nickname" value="<%= user.getUserNickname() %>" placeholder="닉네임">
-					            
-				<label for="description">자기소개</label>
-				<textarea name="newIntroduce" id="description" rows="4" placeholder="자기소개"><%= user.getUserIntroduce() %></textarea>
-					            
-				<span id="fileSizeMessage" style="color:red;"></span>
-				<button type="submit" id="userUpdate" class="account">수정</button>
-			</form>
-		</div>
-	</div>
 
 </body>
 
